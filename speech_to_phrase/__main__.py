@@ -64,10 +64,11 @@ async def main() -> None:
         token=args.hass_token, uri=args.hass_websocket_uri
     )
     _LOGGER.debug(
-        "Got %s entities, %s areas, %s floors",
+        "Got %s entities, %s area(s), %s floor(s), %s trigger sentence(s)",
         len(things.entities),
         len(things.areas),
         len(things.floors),
+        len(things.trigger_sentences),
     )
 
     for model in MODELS.values():

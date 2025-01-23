@@ -36,6 +36,7 @@ MAX_FUZZY_COST = 2.0
 async def transcribe(
     model: Model, settings: Settings, audio_stream: AsyncIterable[bytes]
 ) -> str:
+    """Transcribe text from an audio stream."""
     model_dir = (settings.models_dir / model.id).absolute()
     train_dir = (settings.train_dir / model.id).absolute()
     lang_dir = train_dir / "data" / "lang"

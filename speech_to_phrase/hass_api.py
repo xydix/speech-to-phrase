@@ -30,6 +30,7 @@ class Things:
     entities: List[Entity] = field(default_factory=list)
     areas: List[Area] = field(default_factory=list)
     floors: List[Floor] = field(default_factory=list)
+    trigger_sentences: List[str] = field(default_factory=list)
 
 
 async def get_exposed_things(token: str, uri: str) -> Things:
@@ -127,7 +128,7 @@ async def get_exposed_things(token: str, uri: str) -> Things:
             )
 
             msg = await websocket.receive_json()
-            assert msg["success"]
+            assert msg["success"], msg
             for entity_id, entity_info in msg["result"].items():
                 domain = entity_id.split(".")[0]
                 name = None
@@ -150,5 +151,13 @@ async def get_exposed_things(token: str, uri: str) -> Things:
                 things.entities.append(
                     Entity(names=[name.strip() for name in names], domain=domain)
                 )
+
+            # Get sentences from sentence triggers
+            await websocket.send_json(
+                {"id": next_id(), "type": "conversation/sentences/list"}
+            )
+            msg = await websocket.receive_json()
+            if msg["success"]:
+                things.trigger_sentences.extend(msg["result"]["trigger_sentences"])
 
     return things

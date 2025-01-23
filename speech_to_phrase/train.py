@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Set
 
 from hassil.intents import Intents
-from yaml import safe_load
+from yaml import SafeDumper, safe_dump, safe_load
 
 from .const import EPS, SIL, SPN, UNK, Settings, WordCasing
 from .g2p import LexiconDatabase
@@ -22,6 +22,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def train(model: Model, settings: Settings, things: Things) -> None:
+    """Train a speech model."""
     intents = _create_intents(model, settings, things)
     lexicon = LexiconDatabase(settings.models_dir / model.id / "lexicon.db")
     fst = _create_intents_fst(model, lexicon, intents)
@@ -116,6 +117,22 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
         }
 
     sentences_dict["lists"] = lists_dict
+
+    # Sentence triggers
+    if things.trigger_sentences:
+        intents_dict = sentences_dict.get("intents", {})
+        intents_dict["TriggerSentences"] = {
+            "data": [{"sentences": things.trigger_sentences}]
+        }
+        sentences_dict["intents"] = intents_dict
+
+    # Write YAML for debugging
+    SafeDumper.ignore_aliases = lambda *args: True  # type: ignore[assignment]
+    debug_yaml_path = settings.train_dir / model.id / "sentences.yaml"
+    with open(debug_yaml_path, "w", encoding="utf-8") as debug_yaml_file:
+        safe_dump(sentences_dict, debug_yaml_file, sort_keys=False)
+
+    _LOGGER.debug("Wrote debug YAML to %s", debug_yaml_path)
 
     return Intents.from_dict(sentences_dict)
 
