@@ -32,7 +32,7 @@ INFO = Info(
             ),
             description="Fast but limited speech-to-text",
             installed=True,
-            version="1.0.0",
+            version="0.0.1",
             models=[
                 AsrModel(
                     name=model.id,
