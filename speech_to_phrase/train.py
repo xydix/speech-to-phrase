@@ -23,15 +23,13 @@ _LOGGER = logging.getLogger(__name__)
 
 async def train(model: Model, settings: Settings, things: Things) -> None:
     """Train a speech model."""
+    model_dir = (settings.models_dir / model.id / "model").absolute()
+    train_dir = (settings.train_dir / model.id).absolute()
+    train_dir.mkdir(parents=True, exist_ok=True)
+
     intents = _create_intents(model, settings, things)
     lexicon = LexiconDatabase(settings.models_dir / model.id / "lexicon.db")
     fst = _create_intents_fst(model, lexicon, intents)
-
-    model_dir = (settings.models_dir / model.id / "model").absolute()
-    train_dir = (settings.train_dir / model.id).absolute()
-
-    # Extend PATH
-    train_dir.mkdir(parents=True, exist_ok=True)
 
     # Copy conf
     conf_dir = train_dir / "conf"

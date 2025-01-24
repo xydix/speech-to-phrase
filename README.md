@@ -1,6 +1,14 @@
 # Speech-to-phrase
 
+**NOTE:** This library is in beta! Expect things to change and break.
+
 A fast but limited speech-to-text system. Only trained phrases are able to be transcribed, but this includes your exposed entities, areas, and floors.
+
+[Home Assistant add-on](https://github.com/rhasspy/hassio-addons/blob/master/speech-to-phrase/DOCS.md)
+
+## Supported Languages
+
+- [English](#english)
 
 ## English
 
