@@ -4,7 +4,7 @@
 
 A fast but limited speech-to-text system. Only trained phrases are able to be transcribed, but this includes your exposed entities, areas, and floors.
 
-[Home Assistant add-on](https://github.com/rhasspy/hassio-addons/blob/master/speech-to-phrase/DOCS.md)
+[![Show add-on](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?addon=47701997_speech-to-phrase&repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons)
 
 ## Supported Languages
 
