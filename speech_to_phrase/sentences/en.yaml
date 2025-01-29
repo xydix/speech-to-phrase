@@ -19,12 +19,12 @@ lists:
       type: "percentage"
       from: 10
       to: 100
-      step: 10
+      step: 5
   seconds:
     range:
       from: 10
       to: 100
-      step: 10
+      step: 5
   minutes_small:
     range:
       from: 2
@@ -51,7 +51,7 @@ lists:
   hours:
     range:
       from: 1
-      to: 100
+      to: 24
   cover_classes:
     values:
       - blinds
@@ -124,12 +124,12 @@ intents:
             - cover
 
       - sentences:
-          - "open [all [of]] [the] {cover_classes} in [the] {area}"
-          - "open [all [of]] [the] {area} {cover_classes}"
+          - "open [the] {cover_classes} in [the] {area}"
+          - "open [the] {area} {cover_classes}"
 
       - sentences:
-          - "open [all [of]] [the] [the] {cover_classes} (on|in) [the] {floor} [floor]"
-          - "open [all [of]] [the] {floor} [floor] {cover_classes}"
+          - "open [the] {cover_classes} (on|in) [the] {floor} [floor]"
+          - "open {floor} [floor] {cover_classes}"
 
       # lock
       - sentences:
@@ -181,10 +181,10 @@ intents:
             - cover
 
       - sentences:
-          - "close [all [of]] [the] {cover_classes} in [the] {area}"
-          - "close [all [of]] [the] {area} {cover_classes}"
-          - "close [all [of]] [the] {cover_classes} (on|in) [the] {floor} [floor]"
-          - "close [all [of]] [the] {floor} [floor] {cover_classes}"
+          - "close [the] {cover_classes} in [the] {area}"
+          - "close [the] {area} {cover_classes}"
+          - "close [the] {cover_classes} (on|in) [the] {floor} [floor]"
+          - "close [the] {floor} [floor] {cover_classes}"
 
       # unlock
       - sentences:
