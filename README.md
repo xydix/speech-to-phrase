@@ -20,7 +20,7 @@ A fast but limited speech-to-text system. Only trained phrases are able to be tr
 ### Weather and Temperature
 
 - "what's the weather?"
-    - Requires a [weather][weather] entity to be configured
+    - Requires a [weather][] entity to be configured
 - "what's the weather like in New York?"
     - Requires a [weather][] entity named "New York"
 - "what's the temperature?"
@@ -97,14 +97,14 @@ A fast but limited speech-to-text system. Only trained phrases are able to be tr
 - "nevermind"
 
 <!-- Links -->
-[area](https://www.home-assistant.io/docs/organizing/#area)
-[climate](https://www.home-assistant.io/integrations/climate/)
-[cover](https://www.home-assistant.io/integrations/cover/)
-[floor](https://www.home-assistant.io/docs/organizing/#floor)
-[light](https://www.home-assistant.io/integrations/light/)
-[lock](https://www.home-assistant.io/integrations/lock/)
-[media player](https://www.home-assistant.io/integrations/media_player/)
-[scene](https://www.home-assistant.io/integrations/scene/)
-[script](https://www.home-assistant.io/integrations/script/)
-[sensor](https://www.home-assistant.io/integrations/sensor/)
-[weather](https://www.home-assistant.io/integrations/weather/)
+[area]: https://www.home-assistant.io/docs/organizing/#area
+[climate]: https://www.home-assistant.io/integrations/climate/
+[cover]: https://www.home-assistant.io/integrations/cover/
+[floor]: https://www.home-assistant.io/docs/organizing/#floor
+[light]: https://www.home-assistant.io/integrations/light/
+[lock]: https://www.home-assistant.io/integrations/lock/
+[media player]: https://www.home-assistant.io/integrations/media_player/
+[scene]: https://www.home-assistant.io/integrations/scene/
+[script]: https://www.home-assistant.io/integrations/script/
+[sensor]: https://www.home-assistant.io/integrations/sensor/
+[weather]: https://www.home-assistant.io/integrations/weather/
