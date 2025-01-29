@@ -20,7 +20,7 @@ A fast but limited speech-to-text system. Only trained phrases are able to be tr
 ### Weather and Temperature
 
 - "what's the weather?"
-    - Requires a [weather][] entity to be configured
+    - Requires a [weather][weather] entity to be configured
 - "what's the weather like in New York?"
     - Requires a [weather][] entity named "New York"
 - "what's the temperature?"
