@@ -2,7 +2,7 @@
 
 import logging
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Set
 
 import aiohttp
 
@@ -33,9 +33,17 @@ class Things:
     trigger_sentences: List[str] = field(default_factory=list)
 
 
-async def get_exposed_things(token: str, uri: str) -> Things:
+@dataclass
+class HomeAssistantInfo:
+    system_language: str
+    things: Things
+    pipeline_languages: Set[str] = field(default_factory=set)
+
+
+async def get_hass_info(token: str, uri: str) -> HomeAssistantInfo:
     """Use HA websocket API to get exposed entities/areas/floors."""
     things = Things()
+    pipeline_languages: Set[str] = set()
 
     current_id = 0
 
@@ -60,6 +68,27 @@ async def get_exposed_things(token: str, uri: str) -> Things:
             msg = await websocket.receive_json()
             assert msg["type"] == "auth_ok", msg
 
+            # Get system language
+            await websocket.send_json({"id": next_id(), "type": "get_config"})
+
+            msg = await websocket.receive_json()
+            assert msg["success"], msg
+
+            system_language: str = msg["result"]["language"]
+
+            # Get pipeline STT languages
+            await websocket.send_json(
+                {"id": next_id(), "type": "assist_pipeline/pipeline/list"}
+            )
+            msg = await websocket.receive_json()
+            assert msg["success"], msg
+
+            for pipeline in msg["result"]["pipelines"]:
+                stt_language = pipeline.get("stt_language")
+                if stt_language:
+                    pipeline_languages.add(stt_language)
+
+            # Get exposed entities
             await websocket.send_json(
                 {"id": next_id(), "type": "homeassistant/expose_entity/list"}
             )
@@ -160,4 +189,8 @@ async def get_exposed_things(token: str, uri: str) -> Things:
             if msg["success"]:
                 things.trigger_sentences.extend(msg["result"]["trigger_sentences"])
 
-    return things
+    return HomeAssistantInfo(
+        system_language=system_language,
+        things=things,
+        pipeline_languages=pipeline_languages,
+    )

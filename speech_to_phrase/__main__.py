@@ -5,13 +5,14 @@ import asyncio
 import logging
 from functools import partial
 from pathlib import Path
+from typing import Dict
 
 from wyoming.server import AsyncServer
 
 from .const import Settings
 from .event_handler import SpeechToPhraseEventHandler
-from .hass_api import get_exposed_things
-from .models import MODELS
+from .hass_api import HomeAssistantInfo, get_hass_info
+from .models import DEFAULT_MODEL, Model, download_model, get_models_for_languages
 from .train import train
 
 _LOGGER = logging.getLogger()
@@ -60,9 +61,13 @@ async def main() -> None:
     _LOGGER.debug(
         "Getting exposed things from Home Assistant (%s)", args.hass_websocket_uri
     )
-    things = await get_exposed_things(
-        token=args.hass_token, uri=args.hass_websocket_uri
-    )
+    hass_info = await get_hass_info(token=args.hass_token, uri=args.hass_websocket_uri)
+    _LOGGER.debug("HA system language: %s", hass_info.system_language)
+    if hass_info.pipeline_languages:
+        _LOGGER.debug("HA pipeline language(s): %s", hass_info.pipeline_languages)
+
+    settings.default_language = hass_info.system_language
+    things = hass_info.things
     _LOGGER.debug(
         "Got %s entities, %s area(s), %s floor(s), %s trigger sentence(s)",
         len(things.entities),
@@ -71,15 +76,22 @@ async def main() -> None:
         len(things.trigger_sentences),
     )
 
-    for model in MODELS.values():
-        model_dir = settings.models_dir / model.id
-        if not model_dir.exists():
-            continue
+    languages_to_train = list(hass_info.pipeline_languages) + [
+        hass_info.system_language
+    ]
+    models_to_train = get_models_for_languages(languages_to_train)
+    if not models_to_train:
+        # Fall back to English model
+        models_to_train = [DEFAULT_MODEL]
 
-        _LOGGER.debug("Training speech model: %s", model.id)
-        await train(model, settings, things)
+    model_train_tasks: Dict[str, asyncio.Task] = {
+        model.id: asyncio.create_task(
+            _download_and_train_model(model, settings, hass_info)
+        )
+        for model in models_to_train
+    }
 
-    _LOGGER.info("Training completed successfully")
+    _LOGGER.info("Training started for models: %s", list(model_train_tasks.keys()))
 
     # Run server
     wyoming_server = AsyncServer.from_uri(args.uri)
@@ -88,10 +100,29 @@ async def main() -> None:
 
     try:
         await wyoming_server.run(
-            partial(SpeechToPhraseEventHandler, settings, args.volume_multiplier)
+            partial(
+                SpeechToPhraseEventHandler,
+                settings,
+                model_train_tasks,
+                args.volume_multiplier,
+            )
         )
     except KeyboardInterrupt:
         pass
+
+
+async def _download_and_train_model(
+    model: Model, settings: Settings, hass_info: HomeAssistantInfo
+) -> None:
+    try:
+        model_dir = settings.models_dir / model.id
+        if not model_dir.exists():
+            await download_model(model, settings)
+
+        await train(model, settings, hass_info.things)
+    except Exception:
+        _LOGGER.exception("Unexpected error while training %s", model.id)
+        raise
 
 
 # -----------------------------------------------------------------------------

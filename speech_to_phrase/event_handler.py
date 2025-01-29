@@ -2,10 +2,9 @@
 
 import asyncio
 import logging
-import re
 import time
 from collections.abc import AsyncIterable
-from typing import Optional
+from typing import Dict, Optional
 
 from pysilero_vad import SileroVoiceActivityDetector
 from wyoming.asr import Transcribe, Transcript
@@ -15,13 +14,13 @@ from wyoming.info import AsrModel, AsrProgram, Attribution, Describe, Info
 from wyoming.server import AsyncEventHandler
 
 from .audio import multiply_volume, vad_audio_stream
-from .const import CHANNELS, RATE, WIDTH, Language, Settings
-from .models import MODELS, Model
+from .const import CHANNELS, RATE, WIDTH, Settings
+from .models import DEFAULT_MODEL, MODELS, Model
 from .transcribe import transcribe
+from .util import get_language_family
 
 _LOGGER = logging.getLogger()
 
-DEFAULT_MODEL = MODELS[Language.ENGLISH]
 INFO = Info(
     asr=[
         AsrProgram(
@@ -55,6 +54,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
     def __init__(
         self,
         settings: Settings,
+        model_train_tasks: Dict[str, asyncio.Task],
         volume_multiplier: float,
         *args,
         **kwargs,
@@ -62,6 +62,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
         super().__init__(*args, **kwargs)
 
         self.settings = settings
+        self.model_train_tasks = model_train_tasks
         self.volume_multiplier = volume_multiplier
 
         self.client_id = str(time.monotonic_ns())
@@ -82,7 +83,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
 
         if Transcribe.is_type(event.type):
             # Select model
-            self.model = DEFAULT_MODEL
+            self.model = self._get_default_model()
 
             transcribe_event = Transcribe.from_event(event)
 
@@ -97,8 +98,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
             elif transcribe_event.language:
                 model = MODELS.get(transcribe_event.language)
                 if model is None:
-                    language_family = re.split(r"[-_]", transcribe_event.language)[0]
-                    model = MODELS.get(language_family)
+                    model = MODELS.get(get_language_family(transcribe_event.language))
 
                 if model is not None:
                     self.model = model
@@ -160,3 +160,18 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
                 chunk = multiply_volume(chunk, self.volume_multiplier)
 
             yield chunk
+
+    def _get_default_model(self) -> Model:
+        # Try HA language
+        maybe_model = MODELS.get(self.settings.default_language)
+        if maybe_model is None:
+            # Try HA language family
+            maybe_model = MODELS.get(
+                get_language_family(self.settings.default_language)
+            )
+
+        if maybe_model is None:
+            # Fall back to English model
+            return DEFAULT_MODEL
+
+        return maybe_model

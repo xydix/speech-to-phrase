@@ -23,6 +23,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def train(model: Model, settings: Settings, things: Things) -> None:
     """Train a speech model."""
+    _LOGGER.debug("Training speech model: %s", model.id)
     model_dir = (settings.models_dir / model.id / "model").absolute()
     train_dir = (settings.train_dir / model.id).absolute()
     train_dir.mkdir(parents=True, exist_ok=True)

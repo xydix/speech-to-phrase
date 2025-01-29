@@ -19,7 +19,7 @@ lists:
       type: "percentage"
       from: 10
       to: 100
-      step: 5
+      step: 10
   seconds:
     range:
       from: 10

@@ -77,7 +77,7 @@ A fast but limited speech-to-text system. Only trained phrases are able to be tr
 - "set a timer for five minutes"
     - minutes from 1-10, 15, 20, 30, 40, 45, 50-100 by 10s
 - "set a timer for thirty seconds"
-    - seconds from 10-100 by 10s
+    - seconds from 10-100 by 5s
 - "set a timer for three hours and ten minutes"
     - hours from 1-24
 - "pause/resume timer"

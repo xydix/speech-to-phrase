@@ -21,6 +21,7 @@ CHANNELS = 1
 
 class Language(str, Enum):
     ENGLISH = "en"
+    FRENCH = "fr"
 
 
 class Settings:
@@ -30,6 +31,7 @@ class Settings:
         train_dir: Union[str, Path],
         tools_dir: Union[str, Path],
         sentences_dir: Optional[Union[str, Path]] = None,
+        default_language: str = "en",
     ) -> None:
         self.models_dir = Path(models_dir)
         self.train_dir = Path(train_dir)
@@ -40,6 +42,7 @@ class Settings:
             sentences_dir = Path(__file__).parent / "sentences"
 
         self.sentences = Path(sentences_dir)
+        self.default_language = default_language
 
 
 class WordCasing(str, Enum):
