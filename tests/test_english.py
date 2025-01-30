@@ -7,17 +7,15 @@ import pytest
 import pytest_asyncio
 from pysilero_vad import SileroVoiceActivityDetector
 
-from speech_to_phrase import train, transcribe, MODELS, Language, Things, Settings
+from speech_to_phrase import MODELS, Language, Things, train, transcribe
 from speech_to_phrase.audio import wav_audio_stream
-from speech_to_phrase.hass_api import Entity, Area, Floor
+from speech_to_phrase.hass_api import Area, Entity, Floor
+
+from . import SETTINGS, TESTS_DIR
 
 LANGUAGE = Language.ENGLISH.value
 MODEL = MODELS[LANGUAGE]
 
-TESTS_DIR = Path(__file__).parent
-ROOT_DIR = TESTS_DIR.parent
-
-LOCAL_DIR = ROOT_DIR / "local"
 WAV_DIR = TESTS_DIR / "wav" / LANGUAGE
 
 THINGS = Things(
@@ -34,11 +32,6 @@ THINGS = Things(
     ],
     areas=[Area(names=["Office"]), Area(names=["Kitchen"])],
     floors=[Floor(names=["First Floor"])],
-)
-SETTINGS = Settings(
-    models_dir=LOCAL_DIR / "models",
-    train_dir=TESTS_DIR / "train",
-    tools_dir=LOCAL_DIR,
 )
 
 VAD = SileroVoiceActivityDetector()

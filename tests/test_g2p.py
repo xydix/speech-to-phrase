@@ -1,7 +1,8 @@
 """Tests for grapheme-to-phoneme (g2p) methods."""
 
-from speech_to_phrase.g2p import LexiconDatabase, split_words
 from unicode_rbnf import RbnfEngine
+
+from speech_to_phrase.g2p import LexiconDatabase, split_words
 
 
 def test_split_words() -> None:

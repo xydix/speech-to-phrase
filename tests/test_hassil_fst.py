@@ -1,9 +1,10 @@
 import io
+
 from hassil.intents import Intents
 
-from speech_to_phrase.hassil_fst import intents_to_fst, SPACE, G2PInfo
 from speech_to_phrase.const import WordCasing
 from speech_to_phrase.g2p import LexiconDatabase
+from speech_to_phrase.hassil_fst import SPACE, G2PInfo, intents_to_fst
 
 INTENTS_YAML = """
 language: en
