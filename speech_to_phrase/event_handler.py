@@ -15,7 +15,9 @@ from wyoming.server import AsyncEventHandler
 
 from .audio import multiply_volume, vad_audio_stream
 from .const import CHANNELS, RATE, WIDTH, Settings
+from .hass_api import HomeAssistantInfo, get_hass_info
 from .models import DEFAULT_MODEL, MODELS, Model
+from .train import train
 from .transcribe import transcribe
 from .util import get_language_family
 
@@ -54,6 +56,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
     def __init__(
         self,
         settings: Settings,
+        hass_info: HomeAssistantInfo,
         model_train_tasks: Dict[str, asyncio.Task],
         volume_multiplier: float,
         *args,
@@ -62,6 +65,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
         super().__init__(*args, **kwargs)
 
         self.settings = settings
+        self.hass_info = hass_info
         self.model_train_tasks = model_train_tasks
         self.volume_multiplier = volume_multiplier
 
@@ -72,6 +76,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
         self.audio_queue: "asyncio.Queue[Optional[bytes]]" = asyncio.Queue()
         self.transcribe_task: Optional[asyncio.Task] = None
         self.model = DEFAULT_MODEL
+        self.is_model_trained = False
 
     async def handle_event(self, event: Event) -> bool:
         if AudioChunk.is_type(event.type):
@@ -104,11 +109,16 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
                     self.model = model
                     _LOGGER.debug("Selected model by language: %s", model.id)
 
+            await self._retrain_model()
+            return True
+
         if AudioStart.is_type(event.type):
             # Begin transcription
             if self.transcribe_task is not None:
                 self.transcribe_task.cancel()
                 self.transcribe_task = None
+
+            await self._retrain_model()
 
             self.audio_queue = asyncio.Queue()
             self.transcribe_task = asyncio.create_task(
@@ -175,3 +185,20 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
             return DEFAULT_MODEL
 
         return maybe_model
+
+    async def _retrain_model(self) -> None:
+        if self.is_model_trained or (not self.settings.retrain_on_connect):
+            return
+
+        train_task = self.model_train_tasks.pop(self.model.id, None)
+        if (train_task is not None) and (not train_task.done()):
+            # Wait for training from start up
+            await train_task
+        else:
+            # Re-train automatically
+            self.hass_info = await get_hass_info(
+                token=self.settings.hass_token, uri=self.settings.hass_websocket_uri
+            )
+            await train(self.model, self.settings, self.hass_info.things)
+
+        self.is_model_trained = True

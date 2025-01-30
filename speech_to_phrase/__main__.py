@@ -12,7 +12,7 @@ from wyoming.server import AsyncServer
 from .const import Settings
 from .event_handler import SpeechToPhraseEventHandler
 from .hass_api import HomeAssistantInfo, get_hass_info
-from .models import DEFAULT_MODEL, Model, download_model, get_models_for_languages
+from .models import DEFAULT_MODEL, Model, get_models_for_languages
 from .train import train
 
 _LOGGER = logging.getLogger()
@@ -40,6 +40,11 @@ async def main() -> None:
         default="ws://homeassistant.local:8123/api/websocket",
         help="URI of Home Assistant websocket API",
     )
+    parser.add_argument(
+        "--retrain-on-connect",
+        action="store_true",
+        help="Automatically retrain on every client connection",
+    )
     # Audio
     parser.add_argument("--volume-multiplier", type=float, default=1.0)
     #
@@ -53,15 +58,20 @@ async def main() -> None:
         models_dir=Path(args.models_dir),
         train_dir=Path(args.train_dir),
         tools_dir=Path(args.tools_dir),
+        hass_token=args.hass_token,
+        hass_websocket_uri=args.hass_websocket_uri,
+        retrain_on_connect=args.retrain_on_connect,
     )
 
     # Train
     _LOGGER.info("Training started")
 
     _LOGGER.debug(
-        "Getting exposed things from Home Assistant (%s)", args.hass_websocket_uri
+        "Getting exposed things from Home Assistant (%s)", settings.hass_websocket_uri
     )
-    hass_info = await get_hass_info(token=args.hass_token, uri=args.hass_websocket_uri)
+    hass_info = await get_hass_info(
+        token=settings.hass_token, uri=settings.hass_websocket_uri
+    )
     _LOGGER.debug("HA system language: %s", hass_info.system_language)
     if hass_info.pipeline_languages:
         _LOGGER.debug("HA pipeline language(s): %s", hass_info.pipeline_languages)
@@ -85,9 +95,7 @@ async def main() -> None:
         models_to_train = [DEFAULT_MODEL]
 
     model_train_tasks: Dict[str, asyncio.Task] = {
-        model.id: asyncio.create_task(
-            _download_and_train_model(model, settings, hass_info)
-        )
+        model.id: asyncio.create_task(_train_model(model, settings, hass_info))
         for model in models_to_train
     }
 
@@ -103,6 +111,7 @@ async def main() -> None:
             partial(
                 SpeechToPhraseEventHandler,
                 settings,
+                hass_info,
                 model_train_tasks,
                 args.volume_multiplier,
             )
@@ -111,14 +120,10 @@ async def main() -> None:
         pass
 
 
-async def _download_and_train_model(
+async def _train_model(
     model: Model, settings: Settings, hass_info: HomeAssistantInfo
 ) -> None:
     try:
-        model_dir = settings.models_dir / model.id
-        if not model_dir.exists():
-            await download_model(model, settings)
-
         await train(model, settings, hass_info.things)
     except Exception:
         _LOGGER.exception("Unexpected error while training %s", model.id)

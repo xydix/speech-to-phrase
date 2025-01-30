@@ -1,5 +1,6 @@
 """Home Assistant API."""
 
+import hashlib
 import logging
 from dataclasses import dataclass, field
 from typing import List, Set
@@ -11,30 +12,102 @@ _LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class Entity:
+    """Home Assistant entity."""
+
     names: List[str]
     domain: str
+    _hash: str = ""
+
+    def get_hash(self) -> str:
+        """Get a stable hash for this entity."""
+        if not self._hash:
+            hasher = hashlib.sha256()
+
+            hasher.update(self.domain.encode("utf-8"))
+            for name in sorted(self.names):
+                hasher.update(name.encode("utf-8"))
+
+            self._hash = hasher.hexdigest()
+
+        return self._hash
 
 
 @dataclass
 class Area:
+    """Home Assistant area."""
+
     names: List[str]
+    _hash: str = ""
+
+    def get_hash(self) -> str:
+        """Get a stable hash for this area."""
+        if not self._hash:
+            hasher = hashlib.sha256()
+
+            for name in sorted(self.names):
+                hasher.update(name.encode("utf-8"))
+
+            self._hash = hasher.hexdigest()
+
+        return self._hash
 
 
 @dataclass
 class Floor:
+    """Home Assistant floor."""
+
     names: List[str]
+    _hash: str = ""
+
+    def get_hash(self) -> str:
+        """Get a stable hash for this floor."""
+        if not self._hash:
+            hasher = hashlib.sha256()
+
+            for name in sorted(self.names):
+                hasher.update(name.encode("utf-8"))
+
+            self._hash = hasher.hexdigest()
+
+        return self._hash
 
 
 @dataclass
 class Things:
+    """Exposed things in Home Assistant."""
+
     entities: List[Entity] = field(default_factory=list)
     areas: List[Area] = field(default_factory=list)
     floors: List[Floor] = field(default_factory=list)
     trigger_sentences: List[str] = field(default_factory=list)
+    _hash: str = ""
+
+    def get_hash(self) -> str:
+        """Get a stable hash for all the things."""
+        if not self._hash:
+            hasher = hashlib.sha256()
+
+            for entity_hash in sorted(e.get_hash() for e in self.entities):
+                hasher.update(entity_hash.encode("utf-8"))
+
+            for area_hash in sorted(e.get_hash() for e in self.entities):
+                hasher.update(area_hash.encode("utf-8"))
+
+            for floor_hash in sorted(e.get_hash() for e in self.entities):
+                hasher.update(floor_hash.encode("utf-8"))
+
+            for trigger_sentence in sorted(self.trigger_sentences):
+                hasher.update(trigger_sentence.encode("utf-8"))
+
+            self._hash = hasher.hexdigest()
+
+        return self._hash
 
 
 @dataclass
 class HomeAssistantInfo:
+    """Information loaded from Home Assistant websocket API."""
+
     system_language: str
     things: Things
     pipeline_languages: Set[str] = field(default_factory=set)
@@ -187,7 +260,7 @@ async def get_hass_info(token: str, uri: str) -> HomeAssistantInfo:
             )
             msg = await websocket.receive_json()
             if msg["success"]:
-                things.trigger_sentences.extend(msg["result"]["trigger_sentences"])
+                things.trigger_sentences.extend(set(msg["result"]["trigger_sentences"]))
 
     return HomeAssistantInfo(
         system_language=system_language,
