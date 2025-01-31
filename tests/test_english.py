@@ -1,7 +1,6 @@
 """English tests."""
 
 import shutil
-from pathlib import Path
 
 import pytest
 import pytest_asyncio
@@ -82,7 +81,9 @@ async def train_english() -> None:
     ],
 )
 @pytest.mark.asyncio
-async def test_transcribe(text: str, train_english) -> None:
+async def test_transcribe(
+    text: str, train_english  # pylint: disable=redefined-outer-name
+) -> None:
     """Test transcribing expected sentences."""
     wav_path = WAV_DIR / f"{text}.wav"
     assert wav_path.exists(), f"Missing {wav_path}"
@@ -93,7 +94,9 @@ async def test_transcribe(text: str, train_english) -> None:
 
 @pytest.mark.parametrize("wav_num", [1, 2, 3])
 @pytest.mark.asyncio
-async def test_oov(wav_num: int, train_english) -> None:
+async def test_oov(
+    wav_num: int, train_english  # pylint: disable=redefined-outer-name
+) -> None:
     """Test transcribing out-of-vocabulary (OOV) sentences."""
     wav_path = WAV_DIR / f"oov_{wav_num}.wav"
     assert wav_path.exists(), f"Missing {wav_path}"

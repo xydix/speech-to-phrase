@@ -1,7 +1,6 @@
 """English tests."""
 
 import shutil
-from pathlib import Path
 
 import pytest
 import pytest_asyncio
@@ -21,14 +20,7 @@ WAV_DIR = TESTS_DIR / "wav" / LANGUAGE
 THINGS = Things(
     entities=[
         Entity(names=["New York"], domain="weather"),
-        # Entity(names=["EcoBee"], domain="climate"),
-        # Entity(names=["Standing Light"], domain="light"),
-        # Entity(names=["Bed Light"], domain="light"),
-        # Entity(names=["Outdoor Humidity"], domain="sensor"),
-        # Entity(names=["Garage Door"], domain="cover"),
         Entity(names=["Porte d'entrée"], domain="lock"),
-        # Entity(names=["Party Time"], domain="script"),
-        # Entity(names=["Mood Lighting"], domain="scene"),
     ],
     areas=[Area(names=["Bureau"]), Area(names=["Salon"]), Area(names=["Chambre"])],
     floors=[Floor(names=["Premier Étage"]), Floor(names=["Rez-de-chaussée"])],
@@ -99,7 +91,9 @@ async def train_french() -> None:
     ],
 )
 @pytest.mark.asyncio
-async def test_transcribe(text: str, train_french) -> None:
+async def test_transcribe(
+    text: str, train_french  # pylint: disable=redefined-outer-name
+) -> None:
     """Test transcribing expected sentences."""
     wav_path = WAV_DIR / f"{text}.wav"
     assert wav_path.exists(), f"Missing {wav_path}"
@@ -110,7 +104,9 @@ async def test_transcribe(text: str, train_french) -> None:
 
 @pytest.mark.parametrize("wav_num", [1, 2, 3, 4])
 @pytest.mark.asyncio
-async def test_oov(wav_num: int, train_french) -> None:
+async def test_oov(
+    wav_num: int, train_french  # pylint: disable=redefined-outer-name
+) -> None:
     """Test transcribing out-of-vocabulary (OOV) sentences."""
     wav_path = WAV_DIR / f"oov_{wav_num}.wav"
     assert wav_path.exists(), f"Missing {wav_path}"
