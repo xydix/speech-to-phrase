@@ -1,4 +1,4 @@
-"""English tests."""
+"""French tests."""
 
 import shutil
 

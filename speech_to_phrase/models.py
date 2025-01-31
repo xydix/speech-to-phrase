@@ -59,6 +59,18 @@ MODELS: Dict[str, Model] = {
         sentences_language="fr",
         number_language="fr",
     ),
+    Language.GERMAN.value: Model(
+        id="de_DE-zamia",
+        language="de_DE",
+        language_family="de",
+        description="German Kaldi model",
+        version="1.0",
+        author="gooofy",
+        url="https://github.com/gooofy/zamia-speech/",
+        casing=WordCasing.LOWER,
+        sentences_language="de",
+        number_language="de",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]
