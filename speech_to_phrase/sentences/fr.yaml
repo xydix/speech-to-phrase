@@ -3,18 +3,18 @@ lists:
   color:
     values:
       - "blanc"
-      - "blanche"
+      # - "blanche"
       - "noir"
-      - "noire"
+      # - "noire"
       - "rouge"
       - "orange"
       - "jaune"
       - "vert"
-      - "verte"
+      # - "verte"
       - "bleu"
-      - "bleue"
+      # - "bleue"
       - "violet"
-      - "violettte"
+      # - "violettte"
       - "marron"
       - "rose"
   brightness:
@@ -38,17 +38,17 @@ lists:
   cover_classes:
     values:
       - store
-      - stores
+      # - stores
       - rideau
-      - rideaux
+      # - rideaux
       - portes de garage
-      - portess de garages
+      # - portess de garages
       - fenêtre
-      - fenêtres
+      # - fenêtres
       - volet
-      - volets
+      # - volets
       - portail
-      - portails
+      # - portails
 
 expansion_rules:
   le: (le |la |les |l')
@@ -61,7 +61,7 @@ expansion_rules:
   allume: "(allume|allumer)"
   augmente: "(augmente|augmenter|monte|monter)"
   diminue: "(diminue|diminuer|baisse|baisser)"
-  eteins: "(éteint|éteindre|désactive|désactiver|stoppe|stopper|arrête|arrêter|coupe|couper)"
+  eteins: "(éteins|éteindre|désactive|désactiver|stoppe|stopper|arrête|arrêter|coupe|couper)"
   ferme: "(ferme|fermer|<baisse>)"
   mets: "(mets|mettre|passe|passer)"
   ouvre: "(ouvre|ouvrir)"
@@ -377,6 +377,10 @@ intents:
       - sentences:
           - "minuteur {minutes} minutes"
 
+      # hours
+      - sentences:
+          - "minuteur {hours} heures"
+
       # hours + minutes
       - sentences:
           - "minuteur {hours} heures et {minutes} minutes"
@@ -431,7 +435,7 @@ intents:
 
       # Area (Context awarenes)
       - sentences:
-          - "suivant[e]"
+          - "[<media>] suivant[e]"
 
       # Area
       - sentences:
