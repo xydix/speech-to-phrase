@@ -4,6 +4,9 @@ import shutil
 
 import pytest
 import pytest_asyncio
+from hassil.intents import Intents
+from hassil.recognize import recognize
+from home_assistant_intents import get_intents
 from pysilero_vad import SileroVoiceActivityDetector
 
 from speech_to_phrase import MODELS, Language, Things, train, transcribe
@@ -34,6 +37,16 @@ THINGS = Things(
 )
 
 VAD = SileroVoiceActivityDetector()
+
+
+@pytest.fixture(scope="session")
+def english_intents() -> Intents:
+    intents_dict = get_intents("en")
+    lists_dict = intents_dict.get("lists", {})
+    lists_dict.update(THINGS.to_lists_dict())
+    intents_dict["lists"] = lists_dict
+
+    return Intents.from_dict(intents_dict)
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -82,9 +95,15 @@ async def train_english() -> None:
 )
 @pytest.mark.asyncio
 async def test_transcribe(
-    text: str, train_english  # pylint: disable=redefined-outer-name
+    text: str,
+    train_english,  # pylint: disable=redefined-outer-name
+    english_intents: Intents,  # pylint: disable=redefined-outer-name
 ) -> None:
     """Test transcribing expected sentences."""
+    assert recognize(
+        text, english_intents, intent_context={"area": "Kitchen"}
+    ), f"Sentence not recognized: {text}"
+
     wav_path = WAV_DIR / f"{text}.wav"
     assert wav_path.exists(), f"Missing {wav_path}"
 
@@ -92,7 +111,7 @@ async def test_transcribe(
     assert text == transcript
 
 
-@pytest.mark.parametrize("wav_num", [1, 2, 3])
+@pytest.mark.parametrize("wav_num", [1, 2, 3, 4])
 @pytest.mark.asyncio
 async def test_oov(
     wav_num: int, train_english  # pylint: disable=redefined-outer-name

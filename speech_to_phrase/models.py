@@ -33,6 +33,9 @@ class Model:
     sentences_language: str
     number_language: str
 
+    # Kaldi
+    spn_phone: str = "SPN"
+
 
 MODELS: Dict[str, Model] = {
     Language.ENGLISH.value: Model(
@@ -70,6 +73,19 @@ MODELS: Dict[str, Model] = {
         casing=WordCasing.LOWER,
         sentences_language="de",
         number_language="de",
+    ),
+    Language.DUTCH.value: Model(
+        id="nl_NL-cgn",
+        language="nl_NL",
+        language_family="nl",
+        description="Dutch Kaldi model",
+        version="1.0",
+        author="CGN",
+        url="https://github.com/opensource-spraakherkenning-nl/Kaldi_NL",
+        casing=WordCasing.LOWER,
+        sentences_language="nl",
+        number_language="nl",
+        spn_phone="[SPN]",
     ),
 }
 

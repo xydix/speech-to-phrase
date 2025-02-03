@@ -4,6 +4,9 @@ import shutil
 
 import pytest
 import pytest_asyncio
+from hassil.intents import Intents
+from hassil.recognize import recognize
+from home_assistant_intents import get_intents
 from pysilero_vad import SileroVoiceActivityDetector
 
 from speech_to_phrase import MODELS, Language, Things, train, transcribe
@@ -27,6 +30,16 @@ THINGS = Things(
 )
 
 VAD = SileroVoiceActivityDetector()
+
+
+@pytest.fixture(scope="session")
+def french_intents() -> Intents:
+    intents_dict = get_intents("fr")
+    lists_dict = intents_dict.get("lists", {})
+    lists_dict.update(THINGS.to_lists_dict())
+    intents_dict["lists"] = lists_dict
+
+    return Intents.from_dict(intents_dict)
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -92,9 +105,15 @@ async def train_french() -> None:
 )
 @pytest.mark.asyncio
 async def test_transcribe(
-    text: str, train_french  # pylint: disable=redefined-outer-name
+    text: str,
+    train_french,  # pylint: disable=redefined-outer-name
+    french_intents: Intents,  # pylint: disable=redefined-outer-name
 ) -> None:
     """Test transcribing expected sentences."""
+    assert recognize(
+        text, french_intents, intent_context={"area": "Salon"}
+    ), f"Sentence not recognized: {text}"
+
     wav_path = WAV_DIR / f"{text}.wav"
     assert wav_path.exists(), f"Missing {wav_path}"
 

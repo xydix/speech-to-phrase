@@ -274,12 +274,8 @@ intents:
           domain: light
 
       - sentences:
-          - "setze [die ]Farbe <area_floor> (der|aller) Lichter auf {color}"
           - "setze [die ]Farbe (der|aller) Lichter <area_floor> auf {color}"
-          - "setze <area_floor> [die ]Farbe (der|aller) Lichter auf {color}"
-          - "stelle [die ]Farbe <area_floor> (der|aller) Lichter auf {color}[ ein]"
           - "stelle [die ]Farbe (der|aller) Lichter <area_floor> auf {color}[ ein]"
-          - "stelle <area_floor> [die ]Farbe (der|aller) Lichter auf {color}[ ein]"
 
   # timers
   HassStartTimer:

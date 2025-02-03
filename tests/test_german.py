@@ -6,6 +6,7 @@ import pytest
 import pytest_asyncio
 from hassil.intents import Intents
 from hassil.recognize import recognize
+from home_assistant_intents import get_intents
 from pysilero_vad import SileroVoiceActivityDetector
 
 from speech_to_phrase import MODELS, Language, Things, train, transcribe
@@ -35,19 +36,23 @@ THINGS = Things(
 VAD = SileroVoiceActivityDetector()
 
 
+@pytest.fixture(scope="session")
+def german_intents() -> Intents:
+    intents_dict = get_intents("de")
+    lists_dict = intents_dict.get("lists", {})
+    lists_dict.update(THINGS.to_lists_dict())
+    intents_dict["lists"] = lists_dict
+
+    return Intents.from_dict(intents_dict)
+
+
 @pytest_asyncio.fixture(scope="session")
-async def train_german() -> Intents:
+async def train_german() -> None:
     """Train German Kaldi model once per session."""
     if SETTINGS.train_dir.exists():
         shutil.rmtree(SETTINGS.train_dir)
 
     await train(MODEL, SETTINGS, THINGS)
-
-    # Load training sentences
-    with open(
-        SETTINGS.training_sentences_path(MODEL.id), "r", encoding="utf-8"
-    ) as training_sentences_file:
-        return Intents.from_yaml(training_sentences_file)
 
 
 @pytest.mark.parametrize(
@@ -62,7 +67,7 @@ async def train_german() -> Intents:
         "schalte das Licht an",
         "schalte die Lampe an",
         "schalte das Licht im Büro aus",
-        "setze die Farbe Küchen der Lichter auf grün",
+        "setze die Farbe der Lichter in der Küchen auf grün",
         "schalte die Lichter im ersten Stock aus",
         "stelle die Helligkeit von der Lampe auf 50 Prozent",
         "wie ist die Außenluftfeuchtigkeit",
@@ -87,11 +92,14 @@ async def train_german() -> Intents:
 )
 @pytest.mark.asyncio
 async def test_transcribe(
-    text: str, train_german: Intents  # pylint: disable=redefined-outer-name
+    text: str,
+    train_german,  # pylint: disable=redefined-outer-name
+    german_intents: Intents,  # pylint: disable=redefined-outer-name
 ) -> None:
     """Test transcribing expected sentences."""
-    # Verify that sentence is part of training set
-    assert recognize(text, train_german), f"Sentence not recognized: {text}"
+    assert recognize(
+        text, german_intents, intent_context={"area": "Küchen"}
+    ), f"Sentence not recognized: {text}"
 
     # Check transcript
     wav_path = WAV_DIR / f"{text}.wav"

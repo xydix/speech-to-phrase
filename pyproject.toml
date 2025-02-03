@@ -36,6 +36,19 @@ dependencies = [
     "pyring-buffer>=1,<2",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "black==24.8.0",
+    "flake8==7.1.1",
+    "mypy==1.14.0",
+    "pylint==3.2.7",
+    "pytest==8.3.4",
+    "pytest-asyncio==0.25.2",
+    "tox==4.23.2",
+    "build==1.2.2",
+    "home-assistant-intents==2025.1.28",
+]
+
 [project.urls]
 "Source Code" = "http://github.com/OHF-voice/speech-to-phrase"
 

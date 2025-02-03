@@ -105,7 +105,9 @@ async def train(
         path_sh.write_text("")
 
     # Write pronunciation dictionary
-    await _create_lexicon(fst, lexicon, model_dir, train_dir, settings.tools)
+    await _create_lexicon(
+        fst, lexicon, model_dir, train_dir, settings.tools, spn_phone=model.spn_phone
+    )
 
     # Create utils link
     model_utils_link = train_dir / "utils"
@@ -143,25 +145,7 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
         sentences_dict = safe_load(sentences_file)
 
     lists_dict = sentences_dict.get("lists", {})
-
-    if things.entities:
-        lists_dict["name"] = {
-            "values": [
-                {"in": e_name, "out": e_name, "context": {"domain": e.domain}}
-                for e in things.entities
-                for e_name in e.names
-            ]
-        }
-
-    if things.areas:
-        lists_dict["area"] = {
-            "values": [a_name for a in things.areas for a_name in a.names]
-        }
-
-    if things.floors:
-        lists_dict["floor"] = {
-            "values": [f_name for f in things.floors for f_name in f.names]
-        }
+    lists_dict.update(things.to_lists_dict())
 
     sentences_dict["lists"] = lists_dict
 
@@ -217,6 +201,7 @@ async def _create_lexicon(
     model_dir: Path,
     train_dir: Path,
     tools: SpeechTools,
+    spn_phone: str = SPN,
 ) -> None:
     """Generate pronunciation dictionary."""
     _LOGGER.debug("Generating lexicon")
@@ -300,7 +285,7 @@ async def _create_lexicon(
                         print(word, phonemes, file=dictionary_file)
 
         # Add <unk>
-        print(UNK, SPN, file=dictionary_file)
+        print(UNK, spn_phone, file=dictionary_file)
 
         meta_labels = fst.output_words - fst.words
         for label in meta_labels:
