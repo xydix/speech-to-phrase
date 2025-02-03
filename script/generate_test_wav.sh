@@ -34,7 +34,7 @@ curl -X POST \
     lowpass 3000 highpass 200 \
     compand 0.02,0.05 -60,-60,-30,-10,-20,0 -8 \
     overdrive 5 \
-    gain -8 \
+    gain -5 \
     reverb 40 40 100 | \
     sox - -t wav - pad 0.2 | \
     sox "|sox -r 16000 -c 1 -n -p synth 0.2 sin 1000 vol 0.5" - "${temp_wav_path}"

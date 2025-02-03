@@ -68,6 +68,10 @@ class Settings:
         """Path to training info file for a model."""
         return self.model_train_dir(model_id) / "training_info.json"
 
+    def training_sentences_path(self, model_id: str) -> Path:
+        """Path to YAML file with training sentences."""
+        return self.model_train_dir(model_id) / "sentences.yaml"
+
 
 class WordCasing(str, Enum):
     """Casing applied to text when training model."""

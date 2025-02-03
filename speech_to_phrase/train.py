@@ -173,13 +173,15 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
         }
         sentences_dict["intents"] = intents_dict
 
-    # Write YAML for debugging
+    # Write YAML with training sentences (includes HA lists, triggers, etc.)
     SafeDumper.ignore_aliases = lambda *args: True  # type: ignore[assignment]
-    debug_yaml_path = settings.train_dir / model.id / "sentences.yaml"
-    with open(debug_yaml_path, "w", encoding="utf-8") as debug_yaml_file:
-        safe_dump(sentences_dict, debug_yaml_file, sort_keys=False)
+    training_sentences_path = settings.training_sentences_path(model.id)
+    with open(
+        training_sentences_path, "w", encoding="utf-8"
+    ) as training_sentences_file:
+        safe_dump(sentences_dict, training_sentences_file, sort_keys=False)
 
-    _LOGGER.debug("Wrote debug YAML to %s", debug_yaml_path)
+    _LOGGER.debug("Wrote debug YAML to %s", training_sentences_path)
 
     return Intents.from_dict(sentences_dict)
 

@@ -72,13 +72,19 @@ async def transcribe(
         assert proc.stdin is not None
         assert proc.stdout is not None
 
+        stream_has_chunks = False
         async for chunk in audio_stream:
             proc.stdin.write(chunk)
             await proc.stdin.drain()
+            stream_has_chunks = True
 
         _LOGGER.debug("Stream ended")
         proc.stdin.write_eof()
         await proc.communicate()
+
+        if not stream_has_chunks:
+            # Can't transcribe nothing
+            return ""
 
         # Transcripts
         nbest_stdout = await tools.async_run_pipeline(

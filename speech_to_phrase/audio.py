@@ -68,6 +68,13 @@ async def wav_audio_stream(
             if not chunk:
                 break
 
+            if len(chunk) != vad.chunk_bytes():
+                # Last chunk
+                if in_speech:
+                    yield chunk
+
+                continue
+
             if (not in_speech) and (vad.process_chunk(chunk) > VAD_THRESHOLD):
                 in_speech = True
                 yield before_speech.getvalue()
