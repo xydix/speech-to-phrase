@@ -5,11 +5,11 @@ import asyncio
 import logging
 from functools import partial
 from pathlib import Path
-from typing import Dict
+from typing import Optional
 
 from wyoming.server import AsyncServer
 
-from .const import Settings
+from .const import Settings, State
 from .event_handler import SpeechToPhraseEventHandler
 from .hass_api import HomeAssistantInfo, get_hass_info
 from .models import DEFAULT_MODEL, Model, get_models_for_languages
@@ -40,6 +40,17 @@ async def main() -> None:
         default="ws://homeassistant.local:8123/api/websocket",
         help="URI of Home Assistant websocket API",
     )
+    # Training
+    parser.add_argument(
+        "--retrain-on-start",
+        action="store_true",
+        help="Automatically retrain when starting",
+    )
+    parser.add_argument(
+        "--retrain-seconds",
+        type=float,
+        help="Number of seconds to wait before automatically retraining",
+    )
     parser.add_argument(
         "--retrain-on-connect",
         action="store_true",
@@ -54,16 +65,50 @@ async def main() -> None:
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
     _LOGGER.debug(args)
 
-    settings = Settings(
-        models_dir=Path(args.models_dir),
-        train_dir=Path(args.train_dir),
-        tools_dir=Path(args.tools_dir),
-        hass_token=args.hass_token,
-        hass_websocket_uri=args.hass_websocket_uri,
-        retrain_on_connect=args.retrain_on_connect,
+    state = State(
+        settings=Settings(
+            models_dir=Path(args.models_dir),
+            train_dir=Path(args.train_dir),
+            tools_dir=Path(args.tools_dir),
+            hass_token=args.hass_token,
+            hass_websocket_uri=args.hass_websocket_uri,
+            retrain_on_connect=args.retrain_on_connect,
+            volume_multiplier=args.volume_multiplier,
+        )
     )
 
-    # Train
+    if args.retrain_on_start:
+        await _retrain_once(state)
+
+    retrain_task: Optional[asyncio.Task] = None
+    if (args.retrain_seconds is not None) and (args.retrain_seconds > 0):
+        retrain_task = asyncio.create_task(_retrain_loop(state, args.retrain_seconds))
+
+    # Run server
+    wyoming_server = AsyncServer.from_uri(args.uri)
+
+    _LOGGER.info("Ready")
+
+    try:
+        await wyoming_server.run(partial(SpeechToPhraseEventHandler, state))
+    except KeyboardInterrupt:
+        pass
+    finally:
+        if retrain_task is not None:
+            retrain_task.cancel()
+            await retrain_task
+
+
+async def _retrain_loop(state: State, wait_seconds: float) -> None:
+    """Wait and retrain on a loop."""
+    while True:
+        await asyncio.sleep(wait_seconds)
+        await _retrain_once(state)
+
+
+async def _retrain_once(state: State) -> None:
+    """Retrain all models that match HA's language or a pipeline language."""
+    settings = state.settings
     _LOGGER.info("Training started")
 
     _LOGGER.debug(
@@ -94,30 +139,20 @@ async def main() -> None:
         # Fall back to English model
         models_to_train = [DEFAULT_MODEL]
 
-    model_train_tasks: Dict[str, asyncio.Task] = {
-        model.id: asyncio.create_task(_train_model(model, settings, hass_info))
-        for model in models_to_train
-    }
+    async with state.model_train_tasks_lock:
+        for model in models_to_train:
+            if model.id in state.model_train_tasks:
+                # Already training
+                continue
 
-    _LOGGER.info("Training started for models: %s", list(model_train_tasks.keys()))
-
-    # Run server
-    wyoming_server = AsyncServer.from_uri(args.uri)
-
-    _LOGGER.info("Ready")
-
-    try:
-        await wyoming_server.run(
-            partial(
-                SpeechToPhraseEventHandler,
-                settings,
-                hass_info,
-                model_train_tasks,
-                args.volume_multiplier,
+            train_task = asyncio.create_task(_train_model(model, settings, hass_info))
+            state.model_train_tasks[model.id] = train_task
+            train_task.add_done_callback(
+                partial(
+                    lambda _task, model_id: state.model_train_tasks.pop(model_id, None),
+                    model.id,
+                )
             )
-        )
-    except KeyboardInterrupt:
-        pass
 
 
 async def _train_model(

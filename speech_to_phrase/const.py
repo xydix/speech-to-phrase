@@ -1,9 +1,11 @@
 """Constants."""
 
+import asyncio
 from collections.abc import Callable
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 from .speech_tools import SpeechTools
 
@@ -40,6 +42,7 @@ class Settings:
         retrain_on_connect: bool,
         sentences_dir: Optional[Union[str, Path]] = None,
         default_language: str = Language.ENGLISH.value,
+        volume_multiplier: float = 1.0,
     ) -> None:
         """Initialize settings."""
         self.models_dir = Path(models_dir)
@@ -55,6 +58,7 @@ class Settings:
 
         self.sentences = Path(sentences_dir)
         self.default_language = default_language
+        self.volume_multiplier = volume_multiplier
 
     def model_data_dir(self, model_id: str) -> Path:
         """Path to model data."""
@@ -71,6 +75,15 @@ class Settings:
     def training_sentences_path(self, model_id: str) -> Path:
         """Path to YAML file with training sentences."""
         return self.model_train_dir(model_id) / "sentences.yaml"
+
+
+@dataclass
+class State:
+    """Application state."""
+
+    settings: Settings
+    model_train_tasks: Dict[str, asyncio.Task] = field(default_factory=dict)
+    model_train_tasks_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
 
 
 class WordCasing(str, Enum):

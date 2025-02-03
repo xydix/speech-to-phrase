@@ -4,7 +4,7 @@ import asyncio
 import logging
 import time
 from collections.abc import AsyncIterable
-from typing import Dict, Optional
+from typing import Optional
 
 from pysilero_vad import SileroVoiceActivityDetector
 from wyoming.asr import Transcribe, Transcript
@@ -14,8 +14,8 @@ from wyoming.info import AsrModel, AsrProgram, Attribution, Describe, Info
 from wyoming.server import AsyncEventHandler
 
 from .audio import multiply_volume, vad_audio_stream
-from .const import CHANNELS, RATE, WIDTH, Settings
-from .hass_api import HomeAssistantInfo, get_hass_info
+from .const import CHANNELS, RATE, WIDTH, State
+from .hass_api import get_hass_info
 from .models import DEFAULT_MODEL, MODELS, Model
 from .train import train
 from .transcribe import transcribe
@@ -55,19 +55,15 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
 
     def __init__(
         self,
-        settings: Settings,
-        hass_info: HomeAssistantInfo,
-        model_train_tasks: Dict[str, asyncio.Task],
-        volume_multiplier: float,
+        state: State,
         *args,
         **kwargs,
     ) -> None:
+        """Initialize event handler."""
         super().__init__(*args, **kwargs)
 
-        self.settings = settings
-        self.hass_info = hass_info
-        self.model_train_tasks = model_train_tasks
-        self.volume_multiplier = volume_multiplier
+        self.state = state
+        self.settings = state.settings
 
         self.client_id = str(time.monotonic_ns())
         self.converter = AudioChunkConverter(rate=RATE, width=WIDTH, channels=CHANNELS)
@@ -79,6 +75,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
         self.is_model_trained = False
 
     async def handle_event(self, event: Event) -> bool:
+        """Handle Wyoming event."""
         if AudioChunk.is_type(event.type):
             # Add audio chunk to queue
             chunk = AudioChunk.from_event(event)
@@ -109,7 +106,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
                     self.model = model
                     _LOGGER.debug("Selected model by language: %s", model.id)
 
-            await self._retrain_model()
+            await self._retrain()
             return True
 
         if AudioStart.is_type(event.type):
@@ -118,7 +115,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
                 self.transcribe_task.cancel()
                 self.transcribe_task = None
 
-            await self._retrain_model()
+            await self._retrain()
 
             self.audio_queue = asyncio.Queue()
             self.transcribe_task = asyncio.create_task(
@@ -158,7 +155,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
         return True
 
     async def disconnect(self) -> None:
-        """Handle disconnection"""
+        """Handle disconnection."""
 
     async def _audio_stream(self) -> AsyncIterable[bytes]:
         while True:
@@ -166,8 +163,8 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
             if chunk is None:
                 break
 
-            if self.volume_multiplier != 1.0:
-                chunk = multiply_volume(chunk, self.volume_multiplier)
+            if self.settings.volume_multiplier != 1.0:
+                chunk = multiply_volume(chunk, self.settings.volume_multiplier)
 
             yield chunk
 
@@ -186,19 +183,32 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
 
         return maybe_model
 
-    async def _retrain_model(self) -> None:
+    async def _retrain(self) -> None:
+        """Retrain the selected model if necessary."""
         if self.is_model_trained or (not self.settings.retrain_on_connect):
             return
 
-        train_task = self.model_train_tasks.pop(self.model.id, None)
-        if (train_task is not None) and (not train_task.done()):
-            # Wait for training from start up
-            await train_task
-        else:
-            # Re-train automatically
-            self.hass_info = await get_hass_info(
+        model = self.model
+
+        async with self.state.model_train_tasks_lock:
+            train_task = self.state.model_train_tasks.pop(model.id, None)
+            if train_task is None:
+                train_task = asyncio.create_task(self._retrain_model(model))
+                self.state.model_train_tasks[model.id] = train_task
+                train_task.add_done_callback(
+                    lambda _task: self.state.model_train_tasks.pop(model.id, None)
+                )
+
+        await train_task
+        self.is_model_trained = True
+
+    async def _retrain_model(self, model: Model) -> None:
+        """Get HA info and retrain model."""
+        try:
+            hass_info = await get_hass_info(
                 token=self.settings.hass_token, uri=self.settings.hass_websocket_uri
             )
-            await train(self.model, self.settings, self.hass_info.things)
-
-        self.is_model_trained = True
+            await train(model, self.settings, hass_info.things)
+        except Exception:
+            _LOGGER.exception("Unexpected error training %s", model.id)
+            raise

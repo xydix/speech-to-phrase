@@ -4,9 +4,9 @@ import shutil
 
 import pytest
 import pytest_asyncio
-from pysilero_vad import SileroVoiceActivityDetector
-from hassil.recognize import recognize
 from hassil.intents import Intents
+from hassil.recognize import recognize
+from pysilero_vad import SileroVoiceActivityDetector
 
 from speech_to_phrase import MODELS, Language, Things, train, transcribe
 from speech_to_phrase.audio import wav_audio_stream
@@ -44,7 +44,9 @@ async def train_german() -> Intents:
     await train(MODEL, SETTINGS, THINGS)
 
     # Load training sentences
-    with open(SETTINGS.training_sentences_path(MODEL.id)) as training_sentences_file:
+    with open(
+        SETTINGS.training_sentences_path(MODEL.id), "r", encoding="utf-8"
+    ) as training_sentences_file:
         return Intents.from_yaml(training_sentences_file)
 
 
