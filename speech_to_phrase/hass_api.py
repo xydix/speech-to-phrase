@@ -106,24 +106,21 @@ class Things:
     def to_lists_dict(self) -> Dict[str, Any]:
         """Get lists dictionary for hassil intents."""
         lists_dict: Dict[str, Any] = {}
-        if self.entities:
-            lists_dict["name"] = {
-                "values": [
-                    {"in": e_name, "out": e_name, "context": {"domain": e.domain}}
-                    for e in self.entities
-                    for e_name in e.names
-                ]
-            }
+        lists_dict["name"] = {
+            "values": [
+                {"in": e_name, "out": e_name, "context": {"domain": e.domain}}
+                for e in self.entities
+                for e_name in e.names
+            ]
+        }
 
-        if self.areas:
-            lists_dict["area"] = {
-                "values": [a_name for a in self.areas for a_name in a.names]
-            }
+        lists_dict["area"] = {
+            "values": [a_name for a in self.areas for a_name in a.names]
+        }
 
-        if self.floors:
-            lists_dict["floor"] = {
-                "values": [f_name for f in self.floors for f_name in f.names]
-            }
+        lists_dict["floor"] = {
+            "values": [f_name for f in self.floors for f_name in f.names]
+        }
 
         return lists_dict
 
