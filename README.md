@@ -12,6 +12,10 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 ## Supported Languages
 
 - [English](#english)
+- Français (French)
+- Deutsch (German)
+- Nederlands (Dutch)
+- Spanish (Español)
 
 ## English
 
