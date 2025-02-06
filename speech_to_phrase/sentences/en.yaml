@@ -50,7 +50,7 @@ lists:
         out: 30
   hours:
     range:
-      from: 1
+      from: 2
       to: 24
   cover_classes:
     values:
@@ -261,6 +261,9 @@ intents:
       # hours + minutes
       - sentences:
           - "(set|start|create) [a] timer for 1 hour and 1 minute"
+          - "(set|start|create) [a] timer for 1 hour and {minutes_small} minutes"
+          - "(set|start|create) [a] timer for 1 hour and {minutes_large} minutes"
+          - "(set|start|create) [a] timer for 1 hour and {minutes_extra} minutes"
           - "(set|start|create) [a] timer for {hours} hours and {minutes_small} minutes"
           - "(set|start|create) [a] timer for {hours} hours and {minutes_large} minutes"
           - "(set|start|create) [a] timer for {hours} hours and {minutes_extra} minutes"

@@ -58,7 +58,7 @@ lists:
   hours:
     range:
       from: 1
-      to: 100
+      to: 24
   cover_classes:
     values:
       - "(luifel[s]|[zonne]scherm[en])"

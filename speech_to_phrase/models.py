@@ -111,6 +111,30 @@ MODELS: Dict[str, Model] = {
         sentences_language="it",
         number_language="it",
     ),
+    # Language.RUSSIAN.value: Model(
+    #     id="ru_RU-rhasspy",
+    #     language="ru_RU",
+    #     language_family="ru",
+    #     description="Russian Kaldi model",
+    #     version="1.0",
+    #     author="Rhasspy",
+    #     url="https://github.com/rhasspy/rhasspy",
+    #     casing=WordCasing.LOWER,
+    #     sentences_language="ru",
+    #     number_language="ru",
+    # ),
+    # Language.CZECH.value: Model(
+    #     id="cs-CZ-rhasspy",
+    #     language="cs_CZ",
+    #     language_family="cs",
+    #     description="Czech Kaldi model",
+    #     version="1.0",
+    #     author="Rhasspy",
+    #     url="https://github.com/rhasspy/rhasspy",
+    #     casing=WordCasing.LOWER,
+    #     sentences_language="cs",
+    #     number_language="cs",
+    # ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]

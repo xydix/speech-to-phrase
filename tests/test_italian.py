@@ -78,7 +78,7 @@ async def train_italian() -> None:
         # "is the Front Door locked",  # not supported yet
         "imposta un timer di 5 minuti",
         "imposta timer di 30 secondi",
-        "imposta timer di 3 ore e 10 minuti",  # failing
+        "imposta timer di 3 ore e 10 minuti",
         "metti in pausa il mio timer",
         "riprendi timer",
         "annulla il timer",
@@ -97,15 +97,15 @@ async def test_transcribe(
     italian_intents: Intents,  # pylint: disable=redefined-outer-name
 ) -> None:
     """Test transcribing expected sentences."""
+    assert recognize(
+        text, italian_intents, intent_context={"area": "Cucina"}
+    ), f"Sentence not recognized: {text}"
+
     wav_path = WAV_DIR / f"{text}.wav"
     assert wav_path.exists(), f"Missing {wav_path}"
 
     transcript = await transcribe(MODEL, SETTINGS, wav_audio_stream(wav_path, VAD))
     assert text == transcript
-
-    assert recognize(
-        text, italian_intents, intent_context={"area": "Cucina"}
-    ), f"Sentence not recognized: {text}"
 
 
 @pytest.mark.parametrize("wav_num", [1, 2, 3, 4])

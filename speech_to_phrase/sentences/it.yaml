@@ -47,8 +47,8 @@ lists:
         out: 45
   hours:
     range:
-      from: 1
-      to: 100
+      from: 2
+      to: 24
 
 expansion_rules:
   of: "del|della|degli|delle|dell"
@@ -185,8 +185,13 @@ intents:
 
       # hours + minutes
       - sentences:
-          - "imposta [un] timer [di] 1 ora [e] {minutes} minuti"
-          - "imposta [un] timer [di] {hours} ore [e] {minutes} minuti"
+          - "imposta [un] timer [di] 1 ora [e] 1 minuto"
+          - "imposta [un] timer [di] 1 ora [e] {minutes_small} minuti"
+          - "imposta [un] timer [di] 1 ora [e] {minutes_large} minuti"
+          - "imposta [un] timer [di] 1 ora [e] {minutes_extra} minuti"
+          - "imposta [un] timer [di] {hours} ore [e] {minutes_small} minuti"
+          - "imposta [un] timer [di] {hours} ore [e] {minutes_large} minuti"
+          - "imposta [un] timer [di] {hours} ore [e] {minutes_extra} minuti"
 
   HassCancelTimer:
     data:
@@ -262,4 +267,3 @@ intents:
             values:
               - "apert(o|a|e|i)"
               - "chius(o|a|e|i)"
-

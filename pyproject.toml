@@ -46,7 +46,7 @@ dev = [
     "pytest-asyncio==0.25.2",
     "tox==4.23.2",
     "build==1.2.2",
-    "home-assistant-intents==2025.1.28",
+    "home-assistant-intents==2025.2.5",
 ]
 
 [project.urls]

@@ -16,6 +16,7 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - Deutsch (German)
 - Nederlands (Dutch)
 - Spanish (Español)
+- Italian (Italiano)
 
 ## English
 
