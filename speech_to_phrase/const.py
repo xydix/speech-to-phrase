@@ -29,6 +29,7 @@ class Language(str, Enum):
     GERMAN = "de"
     DUTCH = "nl"
     SPANISH = "es"
+    ITALIAN = "it"
 
 
 class Settings:

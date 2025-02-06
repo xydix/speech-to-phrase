@@ -99,6 +99,18 @@ MODELS: Dict[str, Model] = {
         sentences_language="es",
         number_language="es",
     ),
+    Language.ITALIAN.value: Model(
+        id="it_IT-rhasspy",
+        language="it_IT",
+        language_family="it",
+        description="Italian Kaldi model",
+        version="1.1",
+        author="Rhasspy",
+        url="https://github.com/rhasspy/rhasspy",
+        casing=WordCasing.LOWER,
+        sentences_language="it",
+        number_language="it",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]

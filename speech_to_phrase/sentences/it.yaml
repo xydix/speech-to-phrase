@@ -1,0 +1,265 @@
+language: it
+
+# Missing:
+# - lock/unlock
+# - is locked/unlocked
+# - floors
+
+lists:
+  color:
+    values:
+      - in: "bianco"
+      - in: "nero"
+      - in: "rosso"
+      - in: "arancione"
+      - in: "giallo"
+      - in: "verde"
+      - in: "blu"
+      - in: "viola"
+      - in: "marrone"
+      - in: "rosa"
+      - in: "turchese"
+  brightness:
+    range:
+      type: "percentage"
+      from: 10
+      to: 100
+      step: 10
+  seconds:
+    range:
+      from: 10
+      to: 100
+      step: 10
+  minutes_small:
+    range:
+      from: 2
+      to: 9
+  minutes_large:
+    range:
+      from: 10
+      to: 100
+      step: 10
+  minutes_extra:
+    values:
+      - in: quindici
+        out: 15
+      - in: quarantacinque
+        out: 45
+  hours:
+    range:
+      from: 1
+      to: 100
+
+expansion_rules:
+  of: "del|della|degli|delle|dell"
+  to: "al|allo|all|alla|ai|agli|alle"
+  the: "il|la|gli|le"
+
+intents:
+  # nevermind
+  HassNevermind:
+    data:
+      - sentences:
+          - "lascia (stare|perdere)"
+          - "niente"
+          - "no"
+
+  # date, time, weather
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "che ore sono"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "che giorno è oggi"
+
+  HassGetWeather:
+    data:
+      - sentences:
+          - "che tempo fa"
+          - "com'è il tempo"
+      - sentences:
+          - "che tempo fa a {name}"
+          - "com'è il tempo a {name}"
+        requires_context:
+          domain: weather
+
+  # turn on/off
+  # open/close
+  # lock/unlock
+  HassTurnOn:
+    data:
+      # turn on
+      - sentences:
+          - "accendi le luci"
+
+      - sentences:
+          - "accendi <the> {name}"
+        requires_context:
+          domain:
+            - light
+            - switch
+            - fan
+            - media_player
+            - input_boolean
+
+      - sentences:
+          - "accendi le luci in {area}"
+
+      # open
+      - sentences:
+          - "apri <the> {name}"
+        requires_context:
+          domain:
+            - cover
+            - valve
+
+  HassTurnOff:
+    data:
+      # turn off
+      - sentences:
+          - "spegni le luci"
+
+      - sentences:
+          - "spegni <the> {name}"
+        requires_context:
+          domain:
+            - light
+            - switch
+            - fan
+            - media_player
+            - input_boolean
+
+      - sentences:
+          - "spegni le luci in {area}"
+
+      # close
+      - sentences:
+          - "chiudi <the> {name}"
+        requires_context:
+          domain:
+            - cover
+            - valve
+
+  # light brightness/color
+  HassLightSet:
+    data:
+      # brightness
+      - sentences:
+          - "imposta la luminosità <of> {name} al {brightness} percento"
+        requires_context:
+          domain: light
+
+      - sentences:
+          - "imposta la luminosità in {area} al {brightness} percento"
+
+      # color
+      - sentences:
+          - "imposta <the> {name} su {color}"
+        requires_context:
+          domain: light
+
+      - sentences:
+          - "imposta le luci in {area} su {color}"
+
+  # timers
+  HassStartTimer:
+    data:
+      # seconds
+      - sentences:
+          - "imposta [un] timer [di] {seconds} secondi"
+
+      # minutes
+      - sentences:
+          - "imposta [un] timer [di] 1 minuto"
+          - "imposta [un] timer [di] {minutes_small} minuti"
+          - "imposta [un] timer [di] {minutes_large} minuti"
+          - "imposta [un] timer [di] {minutes_extra} minuti"
+
+      # hours
+      - sentences:
+          - "imposta [un] timer [di] 1 ora"
+          - "imposta [un] timer [di] {hours} ore"
+
+      # hours + minutes
+      - sentences:
+          - "imposta [un] timer [di] 1 ora [e] {minutes} minuti"
+          - "imposta [un] timer [di] {hours} ore [e] {minutes} minuti"
+
+  HassCancelTimer:
+    data:
+      - sentences:
+          - "(annulla|cancella) [il|il mio] timer"
+
+  HassCancelAllTimers:
+    data:
+      - sentences:
+          - "(annulla|cancella) tutti [i|i miei] timer"
+
+  HassPauseTimer:
+    data:
+      - sentences:
+          - "metti in pausa[ il| il mio] timer"
+
+  HassUnpauseTimer:
+    data:
+      - sentences:
+          - "(riprendi|continua)[ il| il mio] timer"
+
+  HassTimerStatus:
+    data:
+      - sentences:
+          - "stato timer"
+          - "stato (di|del[ mio]|dei[ miei]) timer"
+          - "[quanto ]tempo (manca|resta|rimane|rimanente) (a|su)(l[ mio]|i[ miei]) timer"
+
+  # media players
+  HassMediaPause:
+    data:
+      - sentences:
+          - "pausa"
+
+  HassMediaUnpause:
+    data:
+      - sentences:
+          - "riprendi"
+
+  HassMediaNext:
+    data:
+      - sentences:
+          - "vai avanti"
+
+  # temperature
+  HassGetTemperature:
+    data:
+      - sentences:
+          - "qual è la temperatura"
+
+      # Not supported yet
+      # - sentences:
+      #     - "qual è la temperatura <of> {name}"
+      #   requires_context:
+      #     domain: climate
+
+      - sentences:
+          - "qual è la temperatura in {area}"
+
+  # questions
+  HassGetState:
+    data:
+
+      # doors, etc.
+      - sentences:
+          - "<the> {name} è {state}"
+        requires_context:
+          domain:
+            - cover
+            - valve
+        lists:
+          state:
+            values:
+              - "apert(o|a|e|i)"
+              - "chius(o|a|e|i)"
+
