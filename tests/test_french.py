@@ -97,6 +97,7 @@ async def train_french() -> None:
         "quel temps fait-il",
         "quel temps fait-il à New York",
         "règle la luminosité dans le Bureau à 50 pourcent",
+        "reprends le minuteur",
         "silence",
         "suivant",
         "supprime le minuteur",

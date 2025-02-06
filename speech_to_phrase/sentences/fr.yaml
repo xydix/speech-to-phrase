@@ -64,6 +64,7 @@ expansion_rules:
   eteins: "(éteins|éteindre|désactive|désactiver|stoppe|stopper|arrête|arrêter|coupe|couper)"
   ferme: "(ferme|fermer|<baisse>)"
   mets: "(mets|mettre|passe|passer)"
+  reprends: "(reprends|relance)"
   lecture: "(lecture|visionnage)"
   ouvre: "(ouvre|ouvrir)"
   regle: "(règle|régler|mets|mettre|ajuste|ajuster|change|changer)"
@@ -400,6 +401,20 @@ intents:
       - sentences:
           - "<supprime> tous (les|mes) minuteurs"
 
+  # HassPauseTimer
+  HassPauseTimer:
+    data:
+      # No name
+      - sentences:
+          - "<mets> [le] minuteur en pause"
+
+  # HassUnpauseTimer
+  HassUnpauseTimer:
+    data:
+      # No name
+      - sentences:
+          - "<reprends> [le] minuteur"
+
   # HassTimerStatus:
   HassTimerStatus:
     data:
@@ -466,7 +481,7 @@ intents:
       - sentences:
           - "combien fait-il <dans> [<le>]{area}"
 
-      # context awerness
+      # context awareness
       - sentences:
           - "combien fait-il"
 
