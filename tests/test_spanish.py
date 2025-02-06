@@ -106,14 +106,14 @@ async def test_transcribe(
     assert text == transcript
 
 
-# @pytest.mark.parametrize("wav_num", [1, 2, 3, 4])
-# @pytest.mark.asyncio
-# async def test_oov(
-#     wav_num: int, train_spanish  # pylint: disable=redefined-outer-name
-# ) -> None:
-#     """Test transcribing out-of-vocabulary (OOV) sentences."""
-#     wav_path = WAV_DIR / f"oov_{wav_num}.wav"
-#     assert wav_path.exists(), f"Missing {wav_path}"
+@pytest.mark.parametrize("wav_num", [1, 2, 3, 4])
+@pytest.mark.asyncio
+async def test_oov(
+    wav_num: int, train_spanish  # pylint: disable=redefined-outer-name
+) -> None:
+    """Test transcribing out-of-vocabulary (OOV) sentences."""
+    wav_path = WAV_DIR / f"oov_{wav_num}.wav"
+    assert wav_path.exists(), f"Missing {wav_path}"
 
-#     transcript = await transcribe(MODEL, SETTINGS, wav_audio_stream(wav_path, VAD))
-#     assert not transcript
+    transcript = await transcribe(MODEL, SETTINGS, wav_audio_stream(wav_path, VAD))
+    assert not transcript
