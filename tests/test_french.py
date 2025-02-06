@@ -79,6 +79,7 @@ async def train_french() -> None:
         "ferme les rideau du Bureau",
         "fermer les rideau",
         "ferme tous les volet",
+        "lecture",
         "média suivant",
         "minuteur 10 minutes",
         "minuteur 1 heures",

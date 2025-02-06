@@ -9,6 +9,7 @@ from typing import Optional
 
 from wyoming.server import AsyncServer
 
+from . import __version__
 from .const import Settings, State
 from .event_handler import SpeechToPhraseEventHandler
 from .hass_api import HomeAssistantInfo, get_hass_info
@@ -59,6 +60,7 @@ async def main() -> None:
     # Audio
     parser.add_argument("--volume-multiplier", type=float, default=1.0)
     #
+    parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("--debug", action="store_true", help="Log DEBUG messages")
     args = parser.parse_args()
 

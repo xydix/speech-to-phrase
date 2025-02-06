@@ -11,13 +11,13 @@ from .speech_tools import SpeechTools
 
 # Kaldi
 EPS = "<eps>"
-SIL = "SIL"
-SPN = "SPN"
-UNK = "<unk>"
+SIL = "SIL"  # silence
+SPN = "SPN"  # spoken noise
+UNK = "<unk>"  # unknown
 
 # Audio
-RATE = 16000
-WIDTH = 2
+RATE = 16000  # hertz
+WIDTH = 2  # bytes
 CHANNELS = 1
 
 
@@ -30,8 +30,8 @@ class Language(str, Enum):
     DUTCH = "nl"
     SPANISH = "es"
     ITALIAN = "it"
-    # RUSSIAN = "ru"
-    # CZECH = "cs"
+    # RUSSIAN = "ru"  # need more sentences
+    # CZECH = "cs"  # need more sentences
 
 
 class Settings:
@@ -83,12 +83,31 @@ class Settings:
 
 
 @dataclass
+class CachedTranscriber:
+    """Transcription task and audio queue."""
+
+    task: asyncio.Task
+    audio_queue: "asyncio.Queue[Optional[bytes]]"
+
+
+@dataclass
 class State:
     """Application state."""
 
     settings: Settings
+    """Application settings."""
+
     model_train_tasks: Dict[str, asyncio.Task] = field(default_factory=dict)
+    """Training tasks for each model id."""
+
     model_train_tasks_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
+    """Lock for model_train_tasks."""
+
+    cached_transcribers: Dict[str, CachedTranscriber] = field(default_factory=dict)
+    """Transcription tasks/audio queues for each model id."""
+
+    cached_transcriber_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
+    """Lock for cached_transcriber."""
 
 
 class WordCasing(str, Enum):

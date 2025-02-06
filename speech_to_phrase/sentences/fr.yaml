@@ -64,6 +64,7 @@ expansion_rules:
   eteins: "(éteins|éteindre|désactive|désactiver|stoppe|stopper|arrête|arrêter|coupe|couper)"
   ferme: "(ferme|fermer|<baisse>)"
   mets: "(mets|mettre|passe|passer)"
+  lecture: "(lecture|visionnage)"
   ouvre: "(ouvre|ouvrir)"
   regle: "(règle|régler|mets|mettre|ajuste|ajuster|change|changer)"
   supprime: "(supprime|supprimer)"
@@ -423,6 +424,23 @@ intents:
       # Area
       - sentences:
           - "<mets> [<le>]<media> (sur|en) pause <dans> [<le>]{area}"
+
+  # HassMediaUnpause:
+  HassMediaUnpause:
+    data:
+      # name
+      - sentences:
+          - "<lecture> sur [<le>]{name}"
+        requires_context:
+          domain: media_player
+
+      # Area (Context awarenes)
+      - sentences:
+          - "<lecture>"
+
+      # Area
+      - sentences:
+          - "<lecture> <dans> [<le>]{area}"
 
   # HassMediaNext:
   HassMediaNext:

@@ -13,8 +13,9 @@ from wyoming.event import Event
 from wyoming.info import AsrModel, AsrProgram, Attribution, Describe, Info
 from wyoming.server import AsyncEventHandler
 
+from . import __version__
 from .audio import multiply_volume, vad_audio_stream
-from .const import CHANNELS, RATE, WIDTH, State
+from .const import CHANNELS, RATE, WIDTH, CachedTranscriber, State
 from .hass_api import get_hass_info
 from .models import DEFAULT_MODEL, MODELS, Model
 from .train import train
@@ -33,7 +34,7 @@ INFO = Info(
             ),
             description="Fast but limited speech-to-text",
             installed=True,
-            version="0.0.1",
+            version=__version__,
             models=[
                 AsrModel(
                     name=model.id,
@@ -117,14 +118,31 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
 
             await self._retrain()
 
-            self.audio_queue = asyncio.Queue()
-            self.transcribe_task = asyncio.create_task(
-                transcribe(
-                    self.model,
-                    self.settings,
-                    vad_audio_stream(self._audio_stream(), self.vad),
+            async with self.state.cached_transcriber_lock:
+                cached_transcriber = self.state.cached_transcribers.pop(
+                    self.model.id, None
                 )
-            )
+
+            if cached_transcriber is not None:
+                # Cached
+                _LOGGER.debug("Using cached transcriber")
+                self.transcribe_task, self.audio_queue = (
+                    cached_transcriber.task,
+                    cached_transcriber.audio_queue,
+                )
+            else:
+                # Not cached
+                self.audio_queue = asyncio.Queue()
+                self.transcribe_task = asyncio.create_task(
+                    transcribe(
+                        self.model,
+                        self.settings,
+                        vad_audio_stream(
+                            self._audio_stream(self.audio_queue), self.vad
+                        ),
+                    )
+                )
+
             return True
 
         if AudioStop.is_type(event.type):
@@ -144,6 +162,26 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
 
             await self.write_event(Transcript(text=text).event())
 
+            # Create cached transcriber for next time
+            async with self.state.cached_transcriber_lock:
+                if self.model.id not in self.state.cached_transcribers:
+                    cached_audio_queue: "asyncio.Queue[Optional[bytes]]" = (
+                        asyncio.Queue()
+                    )
+                    self.state.cached_transcribers[self.model.id] = CachedTranscriber(
+                        task=asyncio.create_task(
+                            transcribe(
+                                self.model,
+                                self.settings,
+                                vad_audio_stream(
+                                    self._audio_stream(cached_audio_queue),
+                                    SileroVoiceActivityDetector(),
+                                ),
+                            )
+                        ),
+                        audio_queue=cached_audio_queue,
+                    )
+
             return True
 
         if Describe.is_type(event.type):
@@ -157,9 +195,11 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
     async def disconnect(self) -> None:
         """Handle disconnection."""
 
-    async def _audio_stream(self) -> AsyncIterable[bytes]:
+    async def _audio_stream(
+        self, audio_queue: "asyncio.Queue[Optional[bytes]]"
+    ) -> AsyncIterable[bytes]:
         while True:
-            chunk = await self.audio_queue.get()
+            chunk = await audio_queue.get()
             if chunk is None:
                 break
 
@@ -191,6 +231,7 @@ class SpeechToPhraseEventHandler(AsyncEventHandler):
         model = self.model
 
         async with self.state.model_train_tasks_lock:
+            # Use existing training task or create a new one
             train_task = self.state.model_train_tasks.pop(model.id, None)
             if train_task is None:
                 train_task = asyncio.create_task(self._retrain_model(model))
