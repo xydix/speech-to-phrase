@@ -2,7 +2,7 @@
 
 **NOTE:** This library is in beta! Expect things to change and break.
 
-A local speech-to-text system that is personalized with your [Home Assistant](https://www.home-assistant.io/) device names.
+A fast, local speech-to-text system that is personalized with your [Home Assistant](https://www.home-assistant.io/) device names.
 
 Speech-to-phrase is not a general purpose speech recognition system. Instead of answering the question "what did the user say?", it answers "which of the phrases I know did the user say?".
 This is accomplished by combining [pre-defined sentence templates](speech_to_phrase/sentences) with the names of your Home Assistant [entities, areas, and floors](https://www.home-assistant.io/getting-started/concepts-terminology/) that have been [exposed to Assist](https://www.home-assistant.io/voice_control/voice_remote_expose_devices/).
@@ -11,12 +11,12 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 
 ## Supported languages
 
-- [English](docs/english.md)
-- [Français (French)](docs/french.md)
-- [Deutsch (German)](docs/german.md)
-- [Nederlands (Dutch)](docs/dutch.md)
-- [Spanish (Español)](docs/spanish.md)
-- [Italian (Italiano)](docs/italian.md)
+- [English](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/english.md)
+- [Français (French)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/french.md)
+- [Deutsch (German)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/german.md)
+- [Nederlands (Dutch)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/dutch.md)
+- [Spanish (Español)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/spanish.md)
+- [Italian (Italiano)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/italian.md)
 
 ## How it works
 
