@@ -1,4 +1,4 @@
-# German
+# Deutsch (German)
 
 ## Date and Time
 

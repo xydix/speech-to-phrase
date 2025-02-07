@@ -25,7 +25,6 @@ THINGS = Things(
         Entity(names=["New York"], domain="weather"),
         Entity(names=["EcoBee"], domain="climate"),
         Entity(names=["Staande Lamp"], domain="light"),
-        # Entity(names=["Außenluftfeuchtigkeit"], domain="sensor"),
         Entity(names=["Garagedeur"], domain="cover"),
         Entity(names=["Voordeur"], domain="lock"),
     ],
@@ -62,8 +61,9 @@ async def train_dutch() -> None:
         "wat is de datum",
         "wat voor weer is het",
         "wat voor weer is het in New York",
-        # "wat is de temperatuur",  # not supported yet
+        "wat is de temperatuur",
         "wat is de temperatuur van de EcoBee",
+        "zet de lampen aan",
         "zet de Staande Lamp aan",
         "doe alle lampen in het Kantoor uit",
         "zet alle lampen op de Eerste Verdieping aan",

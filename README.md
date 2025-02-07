@@ -13,10 +13,10 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 
 - [English](docs/english.md)
 - [Français (French)](docs/french.md)
-- Deutsch (German)
-- Nederlands (Dutch)
-- Spanish (Español)
-- Italian (Italiano)
+- [Deutsch (German)](docs/german.md)
+- [Nederlands (Dutch)](docs/dutch.md)
+- [Spanish (Español)](docs/spanish.md)
+- [Italian (Italiano)](docs/italian.md)
 
 ## How it works
 

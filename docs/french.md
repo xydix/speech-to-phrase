@@ -1,4 +1,4 @@
-# French
+# Français (French)
 
 ## Date and Time
 

@@ -65,6 +65,7 @@ async def train_spanish() -> None:
         "cuál es la temperatura",
         "cuál es la temperatura del EcoBee",
         "enciende la Lámpara",
+        "apaga las luces",
         "apaga las luces de la Oficina",
         "enciende las luces del Primer Piso",
         "ajusta el color de las luces de la Cocina a verde",
