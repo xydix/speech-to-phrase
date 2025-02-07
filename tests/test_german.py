@@ -76,6 +76,7 @@ async def train_german() -> None:
         "schließ die Vordertür ab",
         "schließ die Vordertür auf",
         "ist die Vordertür abgeschlossen",
+        "öffne alle Vorhänge im ersten Stock",
         "starte einen Timer für 5 Minuten",
         "starte einen Timer für 30 Sekunden",
         "starte einen Timer für 3 Stunden und 10 Minuten",
