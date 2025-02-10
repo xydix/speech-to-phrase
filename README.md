@@ -1,4 +1,7 @@
-<img src="logo.png" height="50" alt="Speech-to-phrase logo" />
+<h1 style="display: inline-flex; align-items: center; gap: 10px;">
+  <img src="icon.png" alt="Speech-to-phrase logo" height="50">
+  Speech-to-phrase
+</h1>
 
 A fast and local speech-to-text system that is personalized with your [Home Assistant](https://www.home-assistant.io/) device and area names.
 
