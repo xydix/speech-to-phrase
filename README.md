@@ -1,5 +1,5 @@
-<h1 style="display: inline-flex; align-items: center; gap: 10px;">
-  <img src="icon.png" alt="Speech-to-phrase logo" height="50">
+<h1>
+  <img src="icon.png" alt="Speech-to-phrase logo" height="42" align="top">
   Speech-to-phrase
 </h1>
 
