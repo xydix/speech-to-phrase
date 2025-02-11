@@ -19,6 +19,34 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - [Spanish (Español)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/spanish.md)
 - [Italian (Italiano)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/italian.md)
 
+## Custom sentences
+
+You can add your [own sentences and list values][custom_sentences] with `--custom-sentences-dir <DIR>` where `<DIR>` contains directories of YAML files per language. For example:
+
+``` sh
+python3 -m speech_to_phrase ... --custom-sentences-dir /path/to/custom_sentences
+```
+
+For an English model, you could have `/path/to/custom_sentences/en/sentences.yaml` with:
+
+``` yaml
+language: "en"
+lists:
+  todo_item:
+    values:
+      - apples
+      - bananas
+```
+
+This would allow you to say "add apples to my shopping list" if you have a [todo][] entity in Home Assistant exposed with the name "shopping list".
+
+You can also create lists with the same names as your [sentence trigger wildcards][sentence_wildcards] to make them usable in speech-to-phrase.
+
+## Models and tools
+
+Speech models and tools are downloaded automatically from [HuggingFace](https://huggingface.co/datasets/rhasspy/rhasspy-speech/tree/main)
+
+
 ## How it works
 
 Speech-to-phrase combines [pre-defined sentence templates](speech_to_phrase/sentences) with the names of things from your Home Assistant to produce a [hassil](https://github.com/home-assistant/hassil) template file. This file compactly represents all of the possible sentences that can be recognized, which may be hundreds, thousands, or even millions.
@@ -36,7 +64,7 @@ During training, a lot of "magic" happens to ensure that your entity, area, and 
 
 To make phrase recognition more robust, a "fuzzy" layer is added on top of Kaldi's transcription output. This layer can correct small errors, such as duplicate or missing words, and also ensures that output names are exactly what you have in Home Assistant.
 
-## Models and tools
 
-Speech models and tools are downloaded automatically from [HuggingFace](https://huggingface.co/datasets/rhasspy/rhasspy-speech/tree/main)
-
+[custom_sentences]: https://www.home-assistant.io/voice_control/custom_sentences_yaml/#setting-up-sentences-in-the-config-directory
+[todo]: https://www.home-assistant.io/integrations/todo
+[sentence_wildcards]: https://www.home-assistant.io/docs/automation/trigger/#sentence-wildcards

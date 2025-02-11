@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+
+- Add custom sentences
+
 ## 1.0.1
 
 - Fix "turn on/off all of the lights in {area}" for English
