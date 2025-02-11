@@ -34,8 +34,8 @@ language: "en"
 lists:
   todo_item:
     values:
-      - apples
-      - bananas
+      - "apples"  # make sure to use quotes!
+      - "bananas"
 ```
 
 This would allow you to say "add apples to my shopping list" if you have a [todo][] entity in Home Assistant exposed with the name "shopping list".
