@@ -174,7 +174,7 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
             with open(
                 custom_sentences_path, "r", encoding="utf-8"
             ) as custom_sentences_file:
-                merge_dict(sentences_dict, safe_load(custom_sentences_file))
+                merge_dict(sentences_dict, safe_load(custom_sentences_file) or {})
 
     # Write YAML with training sentences (includes HA lists, triggers, etc.)
     SafeDumper.ignore_aliases = lambda *args: True  # type: ignore[assignment]
