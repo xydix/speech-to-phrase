@@ -6,6 +6,7 @@ import tarfile
 import tempfile
 from collections.abc import Collection
 from dataclasses import dataclass
+from enum import Enum
 from typing import Dict, List, Set
 
 import aiohttp
@@ -18,11 +19,19 @@ _LOGGER = logging.getLogger(__name__)
 URL_FORMAT = "https://huggingface.co/datasets/rhasspy/rhasspy-speech/resolve/main/models/{model_id}.tar.gz?download=true"
 
 
+class ModelType(str, Enum):
+    """Type of model."""
+
+    KALDI = "kaldi"
+    COQUI_STT = "coqui-stt"
+
+
 @dataclass
 class Model:
     """Speech-to-phrase model."""
 
     id: str
+    type: ModelType
     language: str
     language_family: str
     description: str
@@ -40,6 +49,7 @@ class Model:
 MODELS: Dict[str, Model] = {
     Language.ENGLISH.value: Model(
         id="en_US-rhasspy",
+        type=ModelType.KALDI,
         language="en_US",
         language_family="en",
         description="U.S. English Kaldi model",
@@ -52,6 +62,7 @@ MODELS: Dict[str, Model] = {
     ),
     Language.FRENCH.value: Model(
         id="fr_FR-rhasspy",
+        type=ModelType.KALDI,
         language="fr_FR",
         language_family="fr",
         description="French Kaldi model",
@@ -64,6 +75,7 @@ MODELS: Dict[str, Model] = {
     ),
     Language.GERMAN.value: Model(
         id="de_DE-zamia",
+        type=ModelType.KALDI,
         language="de_DE",
         language_family="de",
         description="German Kaldi model",
@@ -76,6 +88,7 @@ MODELS: Dict[str, Model] = {
     ),
     Language.DUTCH.value: Model(
         id="nl_NL-cgn",
+        type=ModelType.KALDI,
         language="nl_NL",
         language_family="nl",
         description="Dutch Kaldi model",
@@ -89,6 +102,7 @@ MODELS: Dict[str, Model] = {
     ),
     Language.SPANISH.value: Model(
         id="es_ES-rhasspy",
+        type=ModelType.KALDI,
         language="es_ES",
         language_family="es",
         description="Spanish Kaldi model",
@@ -101,6 +115,7 @@ MODELS: Dict[str, Model] = {
     ),
     Language.ITALIAN.value: Model(
         id="it_IT-rhasspy",
+        type=ModelType.KALDI,
         language="it_IT",
         language_family="it",
         description="Italian Kaldi model",
@@ -111,8 +126,22 @@ MODELS: Dict[str, Model] = {
         sentences_language="it",
         number_language="it",
     ),
+    Language.GREEK.value: Model(
+        id="el_GR-coqui",
+        type=ModelType.COQUI_STT,
+        language="el_GR",
+        language_family="el",
+        description="Greek Coqui STT model",
+        version="0.1",
+        author="Francis Tyers",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="el",
+        number_language="el",
+    ),
     # Language.RUSSIAN.value: Model(
     #     id="ru_RU-rhasspy",
+    #     type=ModelType.KALDI,
     #     language="ru_RU",
     #     language_family="ru",
     #     description="Russian Kaldi model",
@@ -125,6 +154,7 @@ MODELS: Dict[str, Model] = {
     # ),
     # Language.CZECH.value: Model(
     #     id="cs-CZ-rhasspy",
+    #     type=ModelType.KALDI,
     #     language="cs_CZ",
     #     language_family="cs",
     #     description="Czech Kaldi model",
