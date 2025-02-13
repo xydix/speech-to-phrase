@@ -624,9 +624,7 @@ def expression_to_fst(
             if number_sequence is None:
                 values = []
                 if num_to_words is not None:
-                    for number in range(
-                        range_list.start, range_list.stop + 1, range_list.step
-                    ):
+                    for number in range_list.get_numbers():
                         number_str = str(number)
                         number_result = num_to_words.engine.format_number(number)
                         number_words = {

@@ -94,6 +94,7 @@ async def train_english() -> None:
         "activate Mood Lighting",
         "never mind",
         "add apples to my Shopping List",
+        "set temperature to 22.5 degrees",
     ],
 )
 @pytest.mark.asyncio

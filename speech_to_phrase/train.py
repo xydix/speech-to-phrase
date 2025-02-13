@@ -61,7 +61,7 @@ async def train(
             _LOGGER.debug("Skipping training of %s", model.id)
             return
 
-    _LOGGER.debug("Training speech model: %s", model.id)
+    _LOGGER.info("Started training: %s", model.id)
     train_dir = (settings.model_train_dir(model.id)).absolute()
     train_dir.mkdir(parents=True, exist_ok=True)
 
@@ -134,6 +134,8 @@ async def train(
             asdict(training_info),
             training_info_file,
         )
+
+    _LOGGER.info("Finished training: %s", model.id)
 
 
 # -----------------------------------------------------------------------------
