@@ -42,6 +42,19 @@ This would allow you to say "add apples to my shopping list" if you have a [todo
 
 You can also create lists with the same names as your [sentence trigger wildcards][sentence_wildcards] to make them usable in speech-to-phrase.
 
+## Docker container
+
+A Docker container is available that can be connected to Home Assistant via the [wyoming integration][wyoming]:
+
+``` sh
+docker run -it -p 10300:10300 \
+  -v /path/to/download/models:/models \
+  -v /path/to/train:/train rhasspy/wyoming-speech-to-phrase \
+  --hass-websocket-uri 'ws://homeassistant.local:8123/api/websocket' \
+  --hass-token '<LONG_LIVED_ACCESS_TOKEN>' \
+  --retrain-on-start
+```
+
 ## Models and tools
 
 Speech models and tools are downloaded automatically from [HuggingFace](https://huggingface.co/datasets/rhasspy/rhasspy-speech/tree/main)
@@ -68,3 +81,4 @@ To make phrase recognition more robust, a "fuzzy" layer is added on top of Kaldi
 [custom_sentences]: https://www.home-assistant.io/voice_control/custom_sentences_yaml/#setting-up-sentences-in-the-config-directory
 [todo]: https://www.home-assistant.io/integrations/todo
 [sentence_wildcards]: https://www.home-assistant.io/docs/automation/trigger/#sentence-wildcards
+[wyoming]: https://www.home-assistant.io/integrations/wyoming
