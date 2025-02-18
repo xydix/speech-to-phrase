@@ -55,9 +55,11 @@ intents:
   HassNevermind:
     data:
       - sentences:
+          - "άστο"
+          - "ξέχνα το"
+          - "άκυρο"
+          - "ξέχνατο"
           - "άσε το"
-          - "τίποτα"
-          - "όχι"
 
   # date, time, weather
   HassGetCurrentTime:
@@ -235,5 +237,5 @@ intents:
         lists:
           state:
             values:
-              - "ανοιχτ(ό|ή)"
-              - "κλειστ(ό|ή)"
+              - "ανοιχτ(ό|ή|ς)"
+              - "κλειστ(ό|ή|ς)"
