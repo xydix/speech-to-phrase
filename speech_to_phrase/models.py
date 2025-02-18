@@ -41,6 +41,7 @@ class Model:
     casing: WordCasing
     sentences_language: str
     number_language: str
+    is_enabled: bool = True
 
     # Kaldi
     spn_phone: str = "SPN"
@@ -127,6 +128,7 @@ MODELS: Dict[str, Model] = {
         number_language="it",
     ),
     Language.GREEK.value: Model(
+        is_enabled=False,  # WIP
         id="el_GR-coqui",
         type=ModelType.COQUI_STT,
         language="el_GR",
