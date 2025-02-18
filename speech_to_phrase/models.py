@@ -185,6 +185,9 @@ def get_models_for_languages(languages: Collection[str]) -> List[Model]:
 
     # Exact language match
     for model in MODELS.values():
+        if not model.is_enabled:
+            continue
+
         if model.language in languages:
             matching_models.append(model)
             used_model_ids.add(model.id)
@@ -192,6 +195,9 @@ def get_models_for_languages(languages: Collection[str]) -> List[Model]:
 
     # Language family match
     for model in MODELS.values():
+        if not model.is_enabled:
+            continue
+
         if (model.id in used_model_ids) or (
             model.language_family in used_language_families
         ):

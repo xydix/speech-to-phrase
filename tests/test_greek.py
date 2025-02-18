@@ -11,7 +11,7 @@ from pysilero_vad import SileroVoiceActivityDetector
 
 from speech_to_phrase import MODELS, Language, Things, train, transcribe
 from speech_to_phrase.audio import wav_audio_stream
-from speech_to_phrase.hass_api import Area, Entity, Floor
+from speech_to_phrase.hass_api import Area, Entity
 
 from . import SETTINGS, TESTS_DIR
 
