@@ -3,12 +3,20 @@
 import hashlib
 import logging
 import re
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Set
+from dataclasses import dataclass, field, fields
+from typing import Any, Dict, List, Optional, Set
 
 import aiohttp
 
 _LOGGER = logging.getLogger(__name__)
+
+RGB_MODES = {"hs", "rgb", "rgbw", "rgbww", "xy"}
+BRIGHTNESS_MODES = RGB_MODES | {"brightness", "white"}
+FAN_SET_SPEED = 1
+COVER_SET_POSITION = 4
+MEDIA_PLAYER_PAUSE = 1
+MEDIA_PLAYER_VOLUME_SET = 4
+MEDIA_PLAYER_NEXT_TRACK = 32
 
 
 @dataclass
@@ -17,6 +25,16 @@ class Entity:
 
     names: List[str]
     domain: str
+
+    # Domain-specific features
+    light_supports_color: Optional[bool] = None
+    light_supports_brightness: Optional[bool] = None
+    fan_supports_speed: Optional[bool] = None
+    cover_supports_position: Optional[bool] = None
+    media_player_supports_pause: Optional[bool] = None
+    media_player_supports_volume_set: Optional[bool] = None
+    media_player_supports_next_track: Optional[bool] = None
+
     _hash: str = ""
 
     def get_hash(self) -> str:
@@ -25,6 +43,17 @@ class Entity:
             hasher = hashlib.sha256()
 
             hasher.update(self.domain.encode("utf-8"))
+
+            for supports_field in fields(self):
+                if "supports" not in supports_field.name:
+                    continue
+
+                supports_value = getattr(self, supports_field.name)
+                if supports_value is None:
+                    continue
+
+                hasher.update(f"{supports_field.name}={supports_value}".encode("utf-8"))
+
             for name in sorted(self.names):
                 hasher.update(name.encode("utf-8"))
 
@@ -112,7 +141,7 @@ class Things:
                 {
                     "in": _remove_template_syntax(e_name),
                     "out": e_name,
-                    "context": {"domain": e.domain},
+                    "context": _get_context(e),
                 }
                 for e in self.entities
                 for e_name in e.names
@@ -128,6 +157,20 @@ class Things:
         }
 
         return lists_dict
+
+
+def _get_context(entity: Entity) -> Dict[str, Any]:
+    """Get context dictionary for an entity."""
+    context = {"domain": entity.domain}
+    for supports_field in fields(entity):
+        if "supports" not in supports_field.name:
+            continue
+
+        supports_value = getattr(entity, supports_field.name)
+        if supports_value is not None:
+            context[supports_field.name] = supports_value
+
+    return context
 
 
 def _remove_template_syntax(name: str) -> str:
@@ -216,11 +259,11 @@ async def get_hass_info(token: str, uri: str) -> HomeAssistantInfo:
             states = {s["entity_id"]: s for s in msg["result"]}
 
             # Get device info
-            await websocket.send_json(
-                {"id": next_id(), "type": "config/device_registry/list"}
-            )
-            msg = await websocket.receive_json()
-            assert msg["success"], msg
+            # await websocket.send_json(
+            #     {"id": next_id(), "type": "config/device_registry/list"}
+            # )
+            # msg = await websocket.receive_json()
+            # assert msg["success"], msg
             # devices = {device_info["id"]: device_info for device_info in msg["result"]}
 
             # Floors
@@ -275,14 +318,62 @@ async def get_hass_info(token: str, uri: str) -> HomeAssistantInfo:
                     name = entity_info.get("name") or entity_info["original_name"]
                     names.extend(entity_info.get("aliases", []))
 
-                if (not name) and (entity_id in states):
-                    name = states[entity_id]["attributes"].get("friendly_name")
+                attributes = states.get(entity_id, {}).get("attributes", {})
+                if not name:
+                    # Try friendly name
+                    name = attributes.get("friendly_name")
 
                 if name:
                     names.append(name)
 
+                supported_features = attributes.get("supported_features", 0)
+
+                # Domain-specific features
+                light_supports_color: Optional[bool] = None
+                light_supports_brightness: Optional[bool] = None
+                fan_supports_speed: Optional[bool] = None
+                cover_supports_position: Optional[bool] = None
+                media_player_supports_pause: Optional[bool] = None
+                media_player_supports_volume_set: Optional[bool] = None
+                media_player_supports_next_track: Optional[bool] = None
+
+                if domain == "light":
+                    color_modes = set(attributes.get("supported_color_modes", []))
+                    light_supports_color = not RGB_MODES.isdisjoint(color_modes)
+                    light_supports_brightness = not BRIGHTNESS_MODES.isdisjoint(
+                        color_modes
+                    )
+                elif domain == "fan":
+                    fan_supports_speed = (
+                        supported_features & FAN_SET_SPEED
+                    ) == FAN_SET_SPEED
+                elif domain == "cover":
+                    cover_supports_position = (
+                        supported_features & COVER_SET_POSITION
+                    ) == COVER_SET_POSITION
+                elif domain == "media_player":
+                    media_player_supports_pause = (
+                        supported_features & MEDIA_PLAYER_PAUSE
+                    ) == MEDIA_PLAYER_PAUSE
+                    media_player_supports_volume_set = (
+                        supported_features & MEDIA_PLAYER_VOLUME_SET
+                    ) == MEDIA_PLAYER_VOLUME_SET
+                    media_player_supports_next_track = (
+                        supported_features & MEDIA_PLAYER_NEXT_TRACK
+                    ) == MEDIA_PLAYER_NEXT_TRACK
+
                 things.entities.append(
-                    Entity(names=[name.strip() for name in names], domain=domain)
+                    Entity(
+                        names=[name.strip() for name in names],
+                        domain=domain,
+                        light_supports_color=light_supports_color,
+                        light_supports_brightness=light_supports_brightness,
+                        fan_supports_speed=fan_supports_speed,
+                        cover_supports_position=cover_supports_position,
+                        media_player_supports_pause=media_player_supports_pause,
+                        media_player_supports_volume_set=media_player_supports_volume_set,
+                        media_player_supports_next_track=media_player_supports_next_track,
+                    )
                 )
 
             # Get sentences from sentence triggers
