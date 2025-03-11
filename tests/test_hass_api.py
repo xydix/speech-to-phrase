@@ -123,7 +123,7 @@ async def test_system_and_pipeline_languages() -> None:
             ("config/entity_registry/get_entries", {"result": {}}),
             (
                 "conversation/sentences/list",
-                {"result": {"trigger_sentences": []}},
+                {"result": {"trigger_sentences": ["trigger 1", "trigger 2"]}},
             ),
         ]
     )
@@ -132,6 +132,7 @@ async def test_system_and_pipeline_languages() -> None:
         ha_info = await get_hass_info("<token>", "<url>")
         assert ha_info.system_language == "en"
         assert ha_info.pipeline_languages == {"de", "nl"}
+        assert set(ha_info.things.trigger_sentences) == {"trigger 1", "trigger 2"}
 
 
 @pytest.mark.asyncio
@@ -330,7 +331,10 @@ async def test_light_features() -> None:
                 "homeassistant/expose_entity/list",
                 {
                     "result": {
-                        "exposed_entities": {"light.rgb_light": {"conversation": True}}
+                        "exposed_entities": {
+                            "light.rgb_light": {"conversation": True},
+                            "light.brightness_only_light": {"conversation": True},
+                        }
                     }
                 },
             ),
@@ -344,19 +348,28 @@ async def test_light_features() -> None:
                                 "friendly_name": "RGB Light",
                                 "supported_color_modes": ["rgb"],
                             },
-                        }
+                        },
+                        {
+                            "entity_id": "light.brightness_only_light",
+                            "attributes": {
+                                "friendly_name": "Brightness Only Light",
+                                "supported_color_modes": ["brightness"],
+                            },
+                        },
                     ]
                 },
             ),
+            ("config/floor_registry/list", {"result": []}),
+            ("config/area_registry/list", {"result": []}),
             (
-                "config/floor_registry/list",
-                {"result": [{"floor_id": "main_floor", "name": "Main"}]},
+                "config/entity_registry/get_entries",
+                {
+                    "result": {
+                        "light.rgb_light": {},
+                        "light.brightness_only_light": {},
+                    }
+                },
             ),
-            (
-                "config/area_registry/list",
-                {"result": [{"area_id": "office_area", "name": "Office"}]},
-            ),
-            ("config/entity_registry/get_entries", {"result": {"light.rgb_light": {}}}),
             (
                 "conversation/sentences/list",
                 {"result": {"trigger_sentences": []}},
@@ -366,9 +379,261 @@ async def test_light_features() -> None:
 
     with patch("aiohttp.ClientSession", return_value=_make_session(mock_websocket)):
         ha_info = await get_hass_info("<token>", "<url>")
-        assert len(ha_info.things.entities) == 1
+        assert len(ha_info.things.entities) == 2
 
-        rgb_light = ha_info.things.entities[0]
+        rgb_light = next(e for e in ha_info.things.entities if "RGB Light" in e.names)
         assert rgb_light.domain == "light"
         assert rgb_light.light_supports_color
         assert rgb_light.light_supports_brightness
+
+        brightness_only_light = next(
+            e for e in ha_info.things.entities if "Brightness Only Light" in e.names
+        )
+        assert brightness_only_light.domain == "light"
+        assert brightness_only_light.light_supports_brightness
+        assert not brightness_only_light.light_supports_color
+
+
+@pytest.mark.asyncio
+async def test_fan_features() -> None:
+    """Test that fan entities report supported features."""
+    mock_websocket = MockWebsocket(
+        [
+            (None, {"type": "auth_required"}),
+            ("auth", {"type": "auth_ok"}),
+            ("get_config", {"result": {"language": "en"}}),
+            (
+                "assist_pipeline/pipeline/list",
+                {"result": {"pipelines": [{"stt_language": "de"}]}},
+            ),
+            (
+                "homeassistant/expose_entity/list",
+                {
+                    "result": {
+                        "exposed_entities": {
+                            "fan.with_speed": {"conversation": True},
+                            "fan.without_speed": {"conversation": True},
+                        }
+                    }
+                },
+            ),
+            (
+                "get_states",
+                {
+                    "result": [
+                        {
+                            "entity_id": "fan.with_speed",
+                            "attributes": {
+                                "friendly_name": "Fan With Speed",
+                                "supported_features": 1,  # SET_SPEED
+                            },
+                        },
+                        {
+                            "entity_id": "fan.without_speed",
+                            "attributes": {
+                                "friendly_name": "Fan Without Speed",
+                                "supported_features": 0,
+                            },
+                        },
+                    ]
+                },
+            ),
+            ("config/floor_registry/list", {"result": []}),
+            ("config/area_registry/list", {"result": []}),
+            (
+                "config/entity_registry/get_entries",
+                {
+                    "result": {
+                        "fan.with_speed": {},
+                        "fan.without_speed": {},
+                    }
+                },
+            ),
+            (
+                "conversation/sentences/list",
+                {"result": {"trigger_sentences": []}},
+            ),
+        ]
+    )
+
+    with patch("aiohttp.ClientSession", return_value=_make_session(mock_websocket)):
+        ha_info = await get_hass_info("<token>", "<url>")
+        assert len(ha_info.things.entities) == 2
+
+        speed_fan = next(
+            e for e in ha_info.things.entities if "Fan With Speed" in e.names
+        )
+        assert speed_fan.domain == "fan"
+        assert speed_fan.fan_supports_speed
+
+        no_speed_fan = next(
+            e for e in ha_info.things.entities if "Fan Without Speed" in e.names
+        )
+        assert no_speed_fan.domain == "fan"
+        assert not no_speed_fan.fan_supports_speed
+
+
+@pytest.mark.asyncio
+async def test_cover_features() -> None:
+    """Test that cover entities report supported features."""
+    mock_websocket = MockWebsocket(
+        [
+            (None, {"type": "auth_required"}),
+            ("auth", {"type": "auth_ok"}),
+            ("get_config", {"result": {"language": "en"}}),
+            (
+                "assist_pipeline/pipeline/list",
+                {"result": {"pipelines": [{"stt_language": "de"}]}},
+            ),
+            (
+                "homeassistant/expose_entity/list",
+                {
+                    "result": {
+                        "exposed_entities": {
+                            "cover.with_position": {"conversation": True},
+                            "cover.without_position": {"conversation": True},
+                        }
+                    }
+                },
+            ),
+            (
+                "get_states",
+                {
+                    "result": [
+                        {
+                            "entity_id": "cover.with_position",
+                            "attributes": {
+                                "friendly_name": "Cover With Position",
+                                "supported_features": 4,  # SET_POSITION
+                            },
+                        },
+                        {
+                            "entity_id": "cover.without_position",
+                            "attributes": {
+                                "friendly_name": "Cover Without Position",
+                                "supported_features": 0,
+                            },
+                        },
+                    ]
+                },
+            ),
+            ("config/floor_registry/list", {"result": []}),
+            ("config/area_registry/list", {"result": []}),
+            (
+                "config/entity_registry/get_entries",
+                {
+                    "result": {
+                        "cover.with_position": {},
+                        "cover.without_position": {},
+                    }
+                },
+            ),
+            (
+                "conversation/sentences/list",
+                {"result": {"trigger_sentences": []}},
+            ),
+        ]
+    )
+
+    with patch("aiohttp.ClientSession", return_value=_make_session(mock_websocket)):
+        ha_info = await get_hass_info("<token>", "<url>")
+        assert len(ha_info.things.entities) == 2
+
+        position_cover = next(
+            e for e in ha_info.things.entities if "Cover With Position" in e.names
+        )
+        assert position_cover.domain == "cover"
+        assert position_cover.cover_supports_position
+
+        no_position_cover = next(
+            e for e in ha_info.things.entities if "Cover Without Position" in e.names
+        )
+        assert no_position_cover.domain == "cover"
+        assert not no_position_cover.cover_supports_position
+
+
+@pytest.mark.asyncio
+async def test_media_player_features() -> None:
+    """Test that media player entities report supported features."""
+    mock_websocket = MockWebsocket(
+        [
+            (None, {"type": "auth_required"}),
+            ("auth", {"type": "auth_ok"}),
+            ("get_config", {"result": {"language": "en"}}),
+            (
+                "assist_pipeline/pipeline/list",
+                {"result": {"pipelines": [{"stt_language": "de"}]}},
+            ),
+            (
+                "homeassistant/expose_entity/list",
+                {
+                    "result": {
+                        "exposed_entities": {
+                            "media_player.with_extra": {"conversation": True},
+                            "media_player.without_extra": {"conversation": True},
+                        }
+                    }
+                },
+            ),
+            (
+                "get_states",
+                {
+                    "result": [
+                        {
+                            "entity_id": "media_player.with_extra",
+                            "attributes": {
+                                "friendly_name": "Media Player With Extra",
+                                "supported_features": 1  # PAUSE
+                                | 4  # VOLUME_SET
+                                | 32,  # NEXT_TRACK
+                            },
+                        },
+                        {
+                            "entity_id": "media_player.without_extra",
+                            "attributes": {
+                                "friendly_name": "Media Player Without Extra",
+                                "supported_features": 0,
+                            },
+                        },
+                    ]
+                },
+            ),
+            ("config/floor_registry/list", {"result": []}),
+            ("config/area_registry/list", {"result": []}),
+            (
+                "config/entity_registry/get_entries",
+                {
+                    "result": {
+                        "media_player.with_extra": {},
+                        "media_player.without_extra": {},
+                    }
+                },
+            ),
+            (
+                "conversation/sentences/list",
+                {"result": {"trigger_sentences": []}},
+            ),
+        ]
+    )
+
+    with patch("aiohttp.ClientSession", return_value=_make_session(mock_websocket)):
+        ha_info = await get_hass_info("<token>", "<url>")
+        assert len(ha_info.things.entities) == 2
+
+        extra_media_player = next(
+            e for e in ha_info.things.entities if "Media Player With Extra" in e.names
+        )
+        assert extra_media_player.domain == "media_player"
+        assert extra_media_player.media_player_supports_pause
+        assert extra_media_player.media_player_supports_volume_set
+        assert extra_media_player.media_player_supports_next_track
+
+        no_extra_media_player = next(
+            e
+            for e in ha_info.things.entities
+            if "Media Player Without Extra" in e.names
+        )
+        assert no_extra_media_player.domain == "media_player"
+        assert not no_extra_media_player.media_player_supports_pause
+        assert not no_extra_media_player.media_player_supports_volume_set
+        assert not no_extra_media_player.media_player_supports_next_track
