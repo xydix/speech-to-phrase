@@ -39,6 +39,53 @@ intents:
       - sentences:
           - "add {food} to shopping list"
 
+  SetColorWithFeatures:
+    data:
+      - sentences:
+          - "set {name_with_features} to {color}"
+        requires_context:
+          domain: light
+          light_supports_color: true
+
+  SetBrightnessWithFeatures:
+    data:
+      - sentences:
+          - "set {name_with_features} to {brightness} percent"
+        requires_context:
+          domain: light
+          light_supports_brightness: true
+
+  SetFanSpeedWithFeatures:
+    data:
+      - sentences:
+          - "set {name_with_features} to {speed} percent"
+        requires_context:
+          domain: fan
+          fan_supports_speed: true
+
+  PauseMediaWithFeatures:
+    data:
+      - sentences:
+          - "pause {name_with_features}"
+        requires_context:
+          domain: media_player
+          media_player_supports_pause: true
+
+  SetMediaVolumeWithFeatures:
+    data:
+      - sentences:
+          - "set {name_with_features} to {volume} percent"
+        requires_context:
+          domain: media_player
+          media_player_supports_volume_set: true
+
+  NextMediaWithFeatures:
+    data:
+      - sentences:
+          - "next track on {name_with_features}"
+        requires_context:
+          domain: media_player
+          media_player_supports_next_track: true
 
 lists:
   name:
@@ -56,6 +103,56 @@ lists:
       - A1 Steak Sauce
       - NASA Moon Cake[s]
       - 0 A.D. DVD
+  name_with_features:
+    values:
+      - in: On/Off Light
+        context:
+          domain: light
+          light_supports_color: false
+          light_supports_brightness: false
+      - in: RGB Light
+        context:
+          domain: light
+          light_supports_color: true
+          light_supports_brightness: false
+      - in: Brightness Light
+        context:
+          domain: light
+          light_supports_color: false
+          light_supports_brightness: true
+      - in: Non-Speedy Fan
+        context:
+          domain: fan
+          fan_supports_speed: false
+      - in: Speedy Fan
+        context:
+          domain: fan
+          fan_supports_speed: true
+      - in: Dumb Speaker
+        context:
+          domain: media_player
+          media_player_supports_pause: false
+          media_player_supports_volume_set: false
+          media_player_supports_next_track: false
+      - in: Smart Speaker
+        context:
+          domain: media_player
+          media_player_supports_pause: true
+          media_player_supports_volume_set: true
+          media_player_supports_next_track: true
+  color:
+    values:
+      - red
+      - green
+      - blue
+  speed:
+    range:
+      from: 20
+      to: 22
+  volume:
+    range:
+      from: 20
+      to: 22
 """
 
 
@@ -149,3 +246,54 @@ def test_g2p() -> None:
         "add nasa moon cakes to shopping list",
         "add zero a d d v d to shopping list",
     }
+
+
+def test_features() -> None:
+    with io.StringIO(INTENTS_YAML) as intents_file:
+        intents = Intents.from_yaml(intents_file)
+
+    # light color
+    fst = intents_to_fst(intents, include_intents={"SetColorWithFeatures"})
+    assert set(fst.to_strings(False)) == {
+        "set RGB Light to red",
+        "set RGB Light to green",
+        "set RGB Light to blue",
+    }
+
+    # light brightness
+    fst = intents_to_fst(
+        intents, include_intents={"SetBrightnessWithFeatures"}, number_language="en"
+    )
+    assert set(fst.to_strings(False)) == {
+        "set Brightness Light to twenty percent",
+        "set Brightness Light to twenty one percent",
+        "set Brightness Light to twenty two percent",
+    }
+
+    # fan speed
+    fst = intents_to_fst(
+        intents, include_intents={"SetFanSpeedWithFeatures"}, number_language="en"
+    )
+    assert set(fst.to_strings(False)) == {
+        "set Speedy Fan to twenty percent",
+        "set Speedy Fan to twenty one percent",
+        "set Speedy Fan to twenty two percent",
+    }
+
+    # media player pause
+    fst = intents_to_fst(intents, include_intents={"PauseMediaWithFeatures"})
+    assert set(fst.to_strings(False)) == {"pause Smart Speaker"}
+
+    # media player volume
+    fst = intents_to_fst(
+        intents, include_intents={"SetMediaVolumeWithFeatures"}, number_language="en"
+    )
+    assert set(fst.to_strings(False)) == {
+        "set Smart Speaker to twenty percent",
+        "set Smart Speaker to twenty one percent",
+        "set Smart Speaker to twenty two percent",
+    }
+
+    # media player next
+    fst = intents_to_fst(intents, include_intents={"NextMediaWithFeatures"})
+    assert set(fst.to_strings(False)) == {"next track on Smart Speaker"}
