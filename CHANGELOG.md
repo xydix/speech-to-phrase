@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0 (unreleased)
+
+- Add supported features to `light`, `fan`, `cover`, and `media_player` domains (used in `requires_context`)
+    - `light_supports_color` (color mode is hs/rgb/rgbw/rgbww/xy)
+    - `light_supports_brightness` (color mode is hs/rgb/rgbw/rgbww/xy/brightness/white)
+    - `fan_supports_speed` - fan has `SET_SPEED` feature
+    - `cover_supports_position` - cover has `SET_POSITION` feature
+    - `media_player_supports_pause` - media player has `PAUSE` feature
+    - `media_player_supports_volume_set` - media player has `VOLUME_SET` feature
+    - `media_player_supports_next_track` - media player has `NEXT_TRACK` feature
+- Change timer minutes to 1-20
+
 ## 1.3.0
 
 - Add Coqui STT
