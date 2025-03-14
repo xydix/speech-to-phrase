@@ -5,8 +5,7 @@ import json
 import logging
 from dataclasses import asdict, dataclass
 
-from hassil.intents import Intents
-from hassil.util import merge_dict
+from hassil import Intents, merge_dict
 from yaml import SafeDumper, safe_dump, safe_load
 
 from .const import Settings, TrainingError, WordCasing

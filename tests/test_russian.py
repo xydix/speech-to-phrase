@@ -4,8 +4,7 @@
 
 # import pytest
 # import pytest_asyncio
-# from hassil.intents import Intents
-# from hassil.recognize import recognize
+# from hassil import Intents, recognize
 # from home_assistant_intents import get_intents
 # from pysilero_vad import SileroVoiceActivityDetector
 
