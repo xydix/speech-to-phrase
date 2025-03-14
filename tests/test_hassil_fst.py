@@ -1,6 +1,6 @@
 import io
 
-from hassil.intents import Intents
+from hassil import Intents
 
 from speech_to_phrase.const import WordCasing
 from speech_to_phrase.g2p import LexiconDatabase
@@ -87,11 +87,19 @@ intents:
           domain: media_player
           media_player_supports_next_track: true
 
+  IsSmokeInArea:
+    data:
+      - sentences:
+          - "(is there smoke;in the {area})"
 lists:
   name:
     values:
       - tv
       - light
+  area:
+    values:
+      - kitchen
+      - living room
   item:
     wildcard: true
   brightness:
@@ -297,3 +305,16 @@ def test_features() -> None:
     # media player next
     fst = intents_to_fst(intents, include_intents={"NextMediaWithFeatures"})
     assert set(fst.to_strings(False)) == {"next track on Smart Speaker"}
+
+
+def test_permutations() -> None:
+    with io.StringIO(INTENTS_YAML) as intents_file:
+        intents = Intents.from_yaml(intents_file)
+
+    fst = intents_to_fst(intents, include_intents={"IsSmokeInArea"})
+    assert set(fst.to_strings(False)) == {
+        "is there smoke in the kitchen",
+        "is there smoke in the living room",
+        "in the kitchen is there smoke",
+        "in the living room is there smoke",
+    }

@@ -1,4 +1,5 @@
 import base64
+import itertools
 import json
 import logging
 import math
@@ -11,17 +12,24 @@ from enum import Enum, auto
 from functools import reduce
 from typing import Dict, List, Optional, Set, TextIO, Tuple, Union
 
-from hassil.expression import (
+from hassil import (
+    Alternative,
     Expression,
+    Group,
+    IntentData,
+    Intents,
     ListReference,
+    Permutation,
+    RangeSlotList,
     RuleReference,
     Sentence,
     Sequence,
-    SequenceType,
+    SlotList,
     TextChunk,
+    TextSlotList,
+    check_excluded_context,
+    check_required_context,
 )
-from hassil.intents import IntentData, Intents, RangeSlotList, SlotList, TextSlotList
-from hassil.util import check_excluded_context, check_required_context
 from unicode_rbnf import RbnfEngine
 
 from .g2p import LexiconDatabase, split_words
@@ -361,7 +369,7 @@ class Fst:
 @dataclass
 class NumToWords:
     engine: RbnfEngine
-    cache: Dict[Tuple[int, int, int], Sequence] = field(default_factory=dict)
+    cache: Dict[Tuple[int, int, int], Group] = field(default_factory=dict)
 
 
 @dataclass
@@ -471,13 +479,13 @@ def expression_to_fst(
 
         return state
 
-    if isinstance(expression, Sequence):
-        seq: Sequence = expression
-        if seq.type == SequenceType.ALTERNATIVE:
+    if isinstance(expression, Group):
+        grp: Group = expression
+        if isinstance(grp, Alternative):
             start = state
             end = fst.next_state()
 
-            for item in seq.items:
+            for item in grp.items:
                 maybe_state = expression_to_fst(
                     item,
                     start,
@@ -499,13 +507,13 @@ def expression_to_fst(
 
                 fst.add_edge(state, end)
 
-            if seq.is_optional:
+            if grp.is_optional:
                 fst.add_edge(start, end)
 
             return end
 
-        if seq.type == SequenceType.GROUP:
-            for item in seq.items:
+        if isinstance(grp, Sequence):
+            for item in grp.items:
                 maybe_state = expression_to_fst(
                     item,
                     state,
@@ -524,6 +532,26 @@ def expression_to_fst(
                 state = maybe_state
 
             return state
+
+        if isinstance(grp, Permutation):
+            # a;b -> (a b|b a)
+            return expression_to_fst(
+                Alternative(
+                    [
+                        Sequence(perm_items)
+                        for perm_items in itertools.permutations(grp.items)
+                    ]
+                ),
+                state,
+                fst,
+                intent_data,
+                intents,
+                slot_lists,
+                num_to_words,
+                g2p_info,
+            )
+
+        raise ValueError(f"Unexpected group type: {grp}")
 
     if isinstance(expression, ListReference):
         # {list}
@@ -584,7 +612,7 @@ def expression_to_fst(
                 return None
 
             return expression_to_fst(
-                Sequence(values, type=SequenceType.ALTERNATIVE),  # type: ignore[arg-type]
+                Alternative(values),  # type: ignore[arg-type]
                 state,
                 fst,
                 intent_data,
@@ -623,9 +651,7 @@ def expression_to_fst(
                             for w in number_words
                         )
 
-                number_sequence = Sequence(
-                    values, type=SequenceType.ALTERNATIVE  # type: ignore[arg-type]
-                )
+                number_sequence = Alternative(values)  # type: ignore[arg-type]
 
                 if num_to_words is not None:
                     num_to_words.cache[num_cache_key] = number_sequence
@@ -664,7 +690,7 @@ def expression_to_fst(
             raise ValueError(f"Missing expansion rule <{rule_ref.rule_name}>")
 
         return expression_to_fst(
-            rule_body,
+            rule_body.expression,
             state,
             fst,
             intent_data,
@@ -682,16 +708,21 @@ def get_count(
     intents: Intents,
     intent_data: IntentData,
 ) -> int:
-    if isinstance(e, Sequence):
-        seq: Sequence = e
-        item_counts = [get_count(item, intents, intent_data) for item in seq.items]
+    if isinstance(e, Group):
+        grp: Group = e
+        item_counts = [get_count(item, intents, intent_data) for item in grp.items]
 
-        if seq.type == SequenceType.ALTERNATIVE:
-            return sum(item_counts)
+        if isinstance(grp, Alternative):
+            return max(1, sum(item_counts))
 
-        if seq.type == SequenceType.GROUP:
-            return reduce(lambda x, y: x * y, item_counts, 1)
+        if isinstance(grp, (Sequence, Permutation)):
+            mult_counts = reduce(lambda x, y: max(1, x) * max(1, y), item_counts, 1)
+            if isinstance(grp, Permutation):
+                mult_counts *= math.factorial(len(item_counts))
 
+            return mult_counts
+
+        raise ValueError(f"Unexpected group type: {grp}")
     if isinstance(e, ListReference):
         list_ref: ListReference = e
         slot_list: Optional[SlotList] = None
@@ -702,8 +733,11 @@ def get_count(
 
         if isinstance(slot_list, TextSlotList):
             text_list: TextSlotList = slot_list
-            return sum(
-                get_count(v.text_in, intents, intent_data) for v in text_list.values
+            return max(
+                1,
+                sum(
+                    get_count(v.text_in, intents, intent_data) for v in text_list.values
+                ),
             )
 
         if isinstance(slot_list, RangeSlotList):
@@ -722,9 +756,9 @@ def get_count(
             rule_body = intents.expansion_rules.get(rule_ref.rule_name)
 
         if rule_body:
-            return get_count(rule_body, intents, intent_data)
+            return get_count(rule_body.expression, intents, intent_data)
 
-    return 1
+    return 0
 
 
 def lcm(*nums: int) -> int:
@@ -768,7 +802,7 @@ def intents_to_fst(
         num_sentences = 0
         for data in intent.data:
             for sentence in data.sentences:
-                num_sentences += get_count(sentence, intents, data)
+                num_sentences += get_count(sentence.expression, intents, data)
 
         sentence_counts[intent.name] = num_sentences
         total_sentences += num_sentences
@@ -803,7 +837,7 @@ def intents_to_fst(
                     )
 
                 state = expression_to_fst(
-                    sentence,
+                    sentence.expression,
                     sentence_state,
                     fst_with_spaces,
                     data,

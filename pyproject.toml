@@ -26,7 +26,7 @@ classifiers = [
 ]
 requires-python = ">=3.8.0"
 dependencies = [
-    "hassil>=2.2.1,<3",
+    "hassil>=3,<4",
     "PyYAML>=6,<7",
     "unicode-rbnf>=2.3,<3",
     "regex==2024.11.6",
