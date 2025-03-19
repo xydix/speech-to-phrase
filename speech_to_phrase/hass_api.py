@@ -4,7 +4,7 @@ import hashlib
 import logging
 import re
 from dataclasses import dataclass, field, fields
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Union
 
 import aiohttp
 
@@ -142,6 +142,8 @@ class Things:
                     "in": _remove_template_syntax(e_name),
                     "out": e_name,
                     "context": _get_context(e),
+                    # Used for tests
+                    "metadata": {"domain": e.domain},
                 }
                 for e in self.entities
                 for e_name in e.names
@@ -157,6 +159,27 @@ class Things:
         }
 
         return lists_dict
+
+    @staticmethod
+    def from_dict(things_dict: Dict[str, Any]) -> "Things":
+        """Load things from a dict."""
+        return Things(
+            entities=[
+                Entity(
+                    names=_coerce_list(entity_dict["name"]),
+                    domain=entity_dict["domain"],
+                )
+                for entity_dict in things_dict.get("entities", [])
+            ],
+            areas=[
+                Area(names=_coerce_list(area_dict["name"]))
+                for area_dict in things_dict.get("areas", [])
+            ],
+            floors=[
+                Floor(names=_coerce_list(floor_dict["name"]))
+                for floor_dict in things_dict.get("floors", [])
+            ],
+        )
 
 
 def _get_context(entity: Entity) -> Dict[str, Any]:
@@ -176,6 +199,13 @@ def _get_context(entity: Entity) -> Dict[str, Any]:
 def _remove_template_syntax(name: str) -> str:
     """Remove template syntax from a name."""
     return re.sub(r"[{}\[\]<>()]", "", name)
+
+
+def _coerce_list(str_or_list: Union[str, List[str]]) -> List[str]:
+    if isinstance(str_or_list, str):
+        return [str_or_list]
+
+    return str_or_list
 
 
 @dataclass

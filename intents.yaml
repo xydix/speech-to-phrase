@@ -1,0 +1,700 @@
+---
+
+HassNevermind:
+  description: "Does nothing. Used to cancel a request"
+  slot_combinations:
+    default:
+      slots: []
+      example: "nevermind"
+
+HassGetCurrentTime:
+  description: "Gets the current time"
+  slot_combinations:
+    default:
+      slots: []
+      example: "what time is it"
+
+HassGetCurrentDate:
+  description: "Gets the current date"
+  slot_combinations:
+    default:
+      slots: []
+      example: "what is the date"
+
+HassGetWeather:
+  description: "Gets the current weather"
+  slots:
+    name: "Name of the weather entity to use"
+  slot_combinations:
+    default:
+      slots: []
+      example: "what is the weather"
+    name_only:
+      slots: "name"
+      domain: "weather"
+      example: "what is the weather in New York"
+
+# HassTurnOn:
+#   description: "Turns on a device or entity"
+#   slots:
+#     name: "Name of a device or entity"
+#     area: "Name of an area"
+#     floor: "Name of a floor"
+#     domain: "Domain of devices/entities in an area"
+#     device_class: "Device class of devices/entities in an area"
+#   slot_combinations:
+#     - slots: "domain"
+#       context_area: true
+#       domain:
+#         - "light"
+#         - "fan"
+#       example: "turn on the lights in here"
+#     - slots: "name"
+#       domain:
+#         - "light"
+#         - "cover"
+#         - "switch"
+#         - "fan"
+#         - "media_player"
+#         - "input_boolean"
+#       example:
+#         - "turn on the overhead light"
+#         - "open the sliding door"
+#     - slots:
+#         - "area"
+#         - "domain"
+#       domain:
+#         - "light"
+#         - "fan"
+#       example: "turn on the lights in the kitchen"
+#     - slots:
+#         - "name"
+#         - "area"
+#       domain:
+#         - "light"
+#         - "cover"
+#         - "switch"
+#         - "fan"
+#         - "media_player"
+#         - "input_boolean"
+#       example: "turn on the overhead light in the kitchen"
+#     - slots:
+#         - "area"
+#         - "domain"
+#         - "device_class"
+#       domain: "cover"
+#       example: "open the curtains in the living room"
+#     - slots:
+#         - "floor"
+#         - "domain"
+#       domain:
+#         - "light"
+#         - "fan"
+#       example: "turn on the upstairs lights"
+#     - slots:
+#         - "floor"
+#         - "domain"
+#         - "device_class"
+#       domain: "cover"
+#       example: "open the curtains on the main floor"
+
+# HassTurnOff:
+#   description: "Turns off a device or entity"
+#   slots:
+#     name: "Name of a device or entity"
+#     area: "Name of an area"
+#     floor: "Name of a floor"
+#     domain: "Domain of devices/entities in an area"
+#     device_class: "Device class of devices/entities in an area"
+#   slot_combinations:
+#     - slots: "domain"
+#       context_area: true
+#       domain:
+#         - "light"
+#         - "fan"
+#       example: "turn off the lights in here"
+#     - slots: "name"
+#       domain:
+#         - "light"
+#         - "cover"
+#         - "switch"
+#         - "fan"
+#         - "media_player"
+#         - "input_boolean"
+#       example:
+#         - "turn off the overhead light"
+#         - "close the sliding door"
+#     - slots:
+#         - "area"
+#         - "domain"
+#       example: "turn off the lights in the kitchen"
+#     - slots:
+#         - "name"
+#         - "area"
+#       example: "turn off the overhead light in the kitchen"
+#     - slots:
+#         - "area"
+#         - "domain"
+#         - "device_class"
+#       example: "close the curtains in the living room"
+#     - slots:
+#         - "floor"
+#         - "domain"
+#       example: "turn off the upstairs lights"
+#     - slots:
+#         - "floor"
+#         - "domain"
+#         - "device_class"
+#       example: "close the curtains on the main floor"
+#     - slots:
+#         - "name"
+#         - "floor"
+#       example: "turn off the overhead light upstairs"
+#     - slots: "domain"
+#       example: "turn off all the lights in the house"
+
+# HassGetState:
+#   description: "Gets or checks the state of an entity"
+#   slots:
+#     name: "Name of a device or entity"
+#     area: "Name of an area"
+#     floor: "Name of a floor"
+#     domain: "Domain of devices/entities in an area"
+#     device_class: "Device class of devices/entities in an area"
+#     state: "Name of state to match"
+#   slot_combinations:
+#     - slots: "name"
+#       domain: "sensor"
+#       example: "what is the value of sensor 1"
+#     - slots:
+#         - "name"
+#         - "area"
+#       example: "what is the value of sensor 1 in the kitchen"
+#     - slots:
+#         - "name"
+#         - "floor"
+#       importance: "complete"
+#       example: "what is the value of sensor 1 on the first floor"
+#     - slots:
+#         - "state"
+#         - "domain"
+#       importance: "optional"
+#       example: "are there any lights on"
+#     - slots:
+#         - "state"
+#         - "domain"
+#         - "area"
+#       importance: "optional"
+#       example: "are there any lights on in the kitchen"
+#     - slots:
+#         - "state"
+#         - "domain"
+#         - "floor"
+#       importance: "optional"
+#       example: "are there any lights on upstairs"
+#     - slots:
+#         - "state"
+#         - "device_class"
+#         - "domain"
+#       importance: "optional"
+#       example: "are any batteries charging"
+#     - slots:
+#         - "state"
+#         - "device_class"
+#         - "domain"
+#         - "area"
+#       importance: "optional"
+#       example: "are any batteries charging in the garage"
+#     - slots:
+#         - "state"
+#         - "device_class"
+#         - "domain"
+#         - "floor"
+#       importance: "optional"
+#       example: "are any batteries charging in the basement"
+
+# HassLightSet:
+#   description: "Sets the brightness or color of a light"
+#   slots:
+#     name: "Name of a device or entity"
+#     area: "Name of an area"
+#     floor: "Name of a floor"
+#     brightness: "Brightness percentage from 0 to 100"
+#     color: "Name of color"
+#   slot_combinations:
+#     # brightness
+#     - slots:
+#         - "brightness"
+#       context_area: true
+#       importance: "usable"
+#       example: "set the brightness in here to 50%"
+#     - slots:
+#         - "name"
+#         - "brightness"
+#       importance: "usable"
+#       example: "set the overhead light brightness to 50%"
+#     - slots:
+#         - "area"
+#         - "brightness"
+#       importance: "usable"
+#       example: "set the living room brightness to 50%"
+#     - slots:
+#         - "floor"
+#         - "brightness"
+#       importance: "complete"
+#       example: "set the main floor brightness to 50%"
+#     # color
+#     - slots:
+#         - "color"
+#       context_area: true
+#       importance: "usable"
+#       example: "set the lights in here to red"
+#     - slots:
+#         - "name"
+#         - "color"
+#       importance: "usable"
+#       example: "set the overhead light to red"
+#     - slots:
+#         - "area"
+#         - "color"
+#       importance: "usable"
+#       example: "set the living room to red"
+#     - slots:
+#         - "floor"
+#         - "color"
+#       importance: "complete"
+#       example: "set the main floor to red"
+
+# HassClimateGetTemperature:
+#   description: "Gets the current temperature of a climate device or entity"
+#   slots:
+#     name: "Name of a device or entity"
+#     area: "Name of an area"
+#     floor: "Name of a floor"
+#   slot_combinations:
+#     - slots: []
+#       context_area: true
+#       importance: "usable"
+#       example: "what is the temperature"
+#     - slots: "name"
+#       importance: "usable"
+#       example: "what is the temperature of the EcoBee"
+#     - slots: "area"
+#       importance: "usable"
+#       example: "what is the temperature in the bedroom"
+#     - slots: "floor"
+#       importance: "usable"
+#       example: "what is the temperature downstairs"
+
+# HassMediaPause:
+#   description: "Pauses a media player"
+#   slots:
+#     name: "Name of a device or entity"
+#     area: "Name of an area"
+#   slot_combinations:
+#     - slots: []
+#       context_area: true
+#       importance: "usable"
+#       example: "pause"
+#     - slots: "name"
+#       importance: "usable"
+#       example: "pause TV"
+#     - slots: "area"
+#       importance: "usable"
+#       example: "pause music in kitchen"
+
+# HassMediaUnpause:
+#   description: "Unpauses a media player"
+#   slots:
+#     name: "Name of a device or entity"
+#     area: "Name of an area"
+#   slot_combinations:
+#     - slots: []
+#       context_area: true
+#       importance: "usable"
+#       example: "resume"
+#     - slots: "name"
+#       importance: "usable"
+#       example: "resume TV"
+#     - slots: "area"
+#       importance: "usable"
+#       example: "resume music in kitchen"
+
+# HassMediaNext:
+#   description: "Skips a media player to the next item"
+#   slots:
+#     name: "Name of a device or entity"
+#     area: "Name of an area"
+#   slot_combinations:
+#     - slots: []
+#       context_area: true
+#       importance: "usable"
+#       example: "next track"
+#     - slots: "name"
+#       importance: "usable"
+#       example: "next track on the stereo"
+#     - slots: "area"
+#       importance: "usable"
+#       example: "next track in the kitchen"
+
+# HassStartTimer:
+#   description: "Starts a timer"
+#   slots:
+#     hours: "Number of hours"
+#     minutes: "Number of minutes"
+#     seconds: "Number of seconds"
+#   slot_combinations:
+#     - slots: "hours"
+#       importance: "usable"
+#       example: "set a timer for 1 hour"
+#     - slots: "minutes"
+#       importance: "usable"
+#       example: "set a timer for 10 minutes"
+#     - slots: "seconds"
+#       importance: "usable"
+#       example: "set a timer for 30 seconds"
+#     - slots:
+#         - "hours"
+#         - "minutes"
+#       importance: "complete"
+#       example: "set a timer for 1 hour and 10 minutes"
+#     - slots:
+#         - "hours"
+#         - "seconds"
+#       importance: "complete"
+#       example: "set a timer for 1 hour and 30 seconds"
+#     - slots:
+#         - "minutes"
+#         - "seconds"
+#       importance: "complete"
+#       example: "set a timer for 10 minutes and 30 seconds"
+#     - slots:
+#         - "hours"
+#         - "minutes"
+#         - "seconds"
+#       importance: "complete"
+#       example: "set a timer for 1 hour and 10 minutes and 30 seconds"
+#     # name
+#     - slots:
+#         - "name"
+#         - "hours"
+#       importance: "complete"
+#       example: "set a timer for 1 hour named pizza"
+#     - slots:
+#         - "name"
+#         - "minutes"
+#       importance: "complete"
+#       example: "set a timer for 10 minutes named pizza"
+#     - slots:
+#         - "name"
+#         - "seconds"
+#       importance: "complete"
+#       example: "set a timer for 30 seconds named pizza"
+#     - slots:
+#         - "name"
+#         - "hours"
+#         - "minutes"
+#       importance: "complete"
+#       example: "set a timer for 1 hour and 10 minutes named pizza"
+#     - slots:
+#         - "name"
+#         - "hours"
+#         - "seconds"
+#       importance: "complete"
+#       example: "set a timer for 1 hour and 30 seconds named pizza"
+#     - slots:
+#         - "name"
+#         - "minutes"
+#         - "seconds"
+#       importance: "complete"
+#       example: "set a timer for 10 minutes and 30 seconds named pizza"
+#     - slots:
+#         - "name"
+#         - "hours"
+#         - "minutes"
+#         - "seconds"
+#       importance: "complete"
+#       example: "set a timer for 1 hour and 10 minutes and 30 seconds named pizza"
+#     # conversation_command
+#     - slots:
+#         - "conversation_command"
+#         - "hours"
+#       importance: "optional"
+#       example: "turn off the lights in 1 hour"
+#     - slots:
+#         - "conversation_command"
+#         - "minutes"
+#       importance: "optional"
+#       example: "turn off the lights in 10 minutes"
+#     - slots:
+#         - "conversation_command"
+#         - "seconds"
+#       importance: "optional"
+#       example: "turn off the lights in 30 seconds"
+#     - slots:
+#         - "conversation_command"
+#         - "hours"
+#         - "minutes"
+#       importance: "optional"
+#       example: "turn off the lights in 1 hour and 10 minutes"
+#     - slots:
+#         - "conversation_command"
+#         - "hours"
+#         - "seconds"
+#       importance: "optional"
+#       example: "turn off the lights in 1 hour and 30 seconds"
+#     - slots:
+#         - "conversation_command"
+#         - "minutes"
+#         - "seconds"
+#       importance: "optional"
+#       example: "turn off the lights in 10 minutes and 30 seconds"
+#     - slots:
+#         - "conversation_command"
+#         - "hours"
+#         - "minutes"
+#         - "seconds"
+#       importance: "optional"
+#       example: "turn off the lights in 1 hour and 10 minutes and 30 seconds"
+
+# HassCancelAllTimers:
+#   description: "Cancels all timers"
+#   slot_combinations:
+#     - slots: []
+#       example: "cancel all timers"
+
+# HassCancelTimer:
+#   description: "Cancels a timer"
+#   slots:
+#     start_hours:
+#       description: "Hours the timer was started with"
+#       required: false
+#     start_minutes:
+#       description: "Minutes the timer was started with"
+#       required: false
+#     start_seconds:
+#       description: "Seconds the timer was started with"
+#       required: false
+#     name:
+#       description: "Name attached to the timer"
+#       required: false
+#     area:
+#       description: "Area of the device used to start the timer"
+#       required: false
+#   slot_combinations:
+#     - slots: []
+#       importance: "usable"
+#       example: "cancel my timer"
+#     - slots: "name"
+#       importance: "complete"
+#       example: "cancel the pizza timer"
+#     - slots: "area"
+#       importance: "complete"
+#       example: "cancel the kitchen timer"
+#     - slots: "start_hours"
+#       importance: "usable"
+#       example: "cancel the 1 hour timer"
+#     - slots: "start_minutes"
+#       importance: "usable"
+#       example: "cancel the 10 minute timer"
+#     - slots: "start_seconds"
+#       importance: "usable"
+#       example: "cancel the 30 second timer"
+#     - slots:
+#         - "start_minutes"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "cancel the 10 minutes and 30 seconds timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_minutes"
+#       importance: "complete"
+#       example: "cancel the 1 hour and 10 minutes timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "cancel the 1 hour and 30 seconds timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_minutes"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "cancel the 1 hour and 10 minutes and 30 seconds timer"
+
+# HassPauseTimer:
+#   description: "Pauses a running timer"
+#   slots:
+#     start_hours:
+#       description: "Hours the timer was started with"
+#       required: false
+#     start_minutes:
+#       description: "Minutes the timer was started with"
+#       required: false
+#     start_seconds:
+#       description: "Seconds the timer was started with"
+#       required: false
+#     name:
+#       description: "Name attached to the timer"
+#       required: false
+#     area:
+#       description: "Area of the device used to start the timer"
+#       required: false
+#   slot_combinations:
+#     - slots: []
+#       importance: "usable"
+#       example: "pause my timer"
+#     - slots: "name"
+#       importance: "complete"
+#       example: "pause the pizza timer"
+#     - slots: "area"
+#       importance: "complete"
+#       example: "pause the kitchen timer"
+#     - slots: "start_hours"
+#       importance: "complete"
+#       example: "pause the 1 hour timer"
+#     - slots: "start_minutes"
+#       importance: "complete"
+#       example: "pause the 10 minute timer"
+#     - slots: "start_seconds"
+#       importance: "complete"
+#       example: "pause the 30 second timer"
+#     - slots:
+#         - "start_minutes"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "pause the 10 minutes and 30 seconds timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_minutes"
+#       importance: "complete"
+#       example: "pause the 1 hour and 10 minutes timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "pause the 1 hour and 30 seconds timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_minutes"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "pause the 1 hour and 10 minutes and 30 seconds timer"
+
+# HassUnpauseTimer:
+#   description: "Resumes a paused timer"
+#   slots:
+#     start_hours:
+#       description: "Hours the timer was started with"
+#       required: false
+#     start_minutes:
+#       description: "Minutes the timer was started with"
+#       required: false
+#     start_seconds:
+#       description: "Seconds the timer was started with"
+#       required: false
+#     name:
+#       description: "Name attached to the timer"
+#       required: false
+#     area:
+#       description: "Area of the device used to start the timer"
+#       required: false
+#   slot_combinations:
+#     - slots: []
+#       importance: "usable"
+#       example: "resume my timer"
+#     - slots: "name"
+#       importance: "complete"
+#       example: "resume the pizza timer"
+#     - slots: "area"
+#       importance: "complete"
+#       example: "resume the kitchen timer"
+#     - slots: "start_hours"
+#       importance: "complete"
+#       example: "resume the 1 hour timer"
+#     - slots: "start_minutes"
+#       importance: "complete"
+#       example: "resume the 10 minute timer"
+#     - slots: "start_seconds"
+#       importance: "complete"
+#       example: "resume the 30 second timer"
+#     - slots:
+#         - "start_minutes"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "resume the 10 minutes and 30 seconds timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_minutes"
+#       importance: "complete"
+#       example: "resume the 1 hour and 10 minutes timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "resume the 1 hour and 30 seconds timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_minutes"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "resume the 1 hour and 10 minutes and 30 seconds timer"
+
+# HassTimerStatus:
+#   description: "Reports status of one or more timers"
+#   slots:
+#     start_hours:
+#       description: "Hours the timer was started with"
+#       required: false
+#     start_minutes:
+#       description: "Minutes the timer was started with"
+#       required: false
+#     start_seconds:
+#       description: "Seconds the timer was started with"
+#       required: false
+#     name:
+#       description: "Name attached to the timer"
+#       required: false
+#     area:
+#       description: "Area of the device used to start the timer"
+#       required: false
+#   slot_combinations:
+#     - slots: []
+#       importance: "usable"
+#       example: "how much time is left on my timer"
+#     - slots: "name"
+#       importance: "complete"
+#       example: "how much time is left on the pizza timer"
+#     - slots: "area"
+#       importance: "complete"
+#       example: "how much time is left on the kitchen timer"
+#     - slots: "start_hours"
+#       importance: "complete"
+#       example: "how much time is left on the 1 hour timer"
+#     - slots: "start_minutes"
+#       importance: "complete"
+#       example: "how much time is left on the 10 minute timer"
+#     - slots: "start_seconds"
+#       importance: "complete"
+#       example: "how much time is left on the 30 second timer"
+#     - slots:
+#         - "start_minutes"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "how much time is left on the 10 minutes and 30 seconds timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_minutes"
+#       importance: "complete"
+#       example: "how much time is left on the 1 hour and 10 minutes timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "how much time is left on the 1 hour and 30 seconds timer"
+#     - slots:
+#         - "start_hours"
+#         - "start_minutes"
+#         - "start_seconds"
+#       importance: "complete"
+#       example: "how much time is left on the 1 hour and 10 minutes and 30 seconds timer"

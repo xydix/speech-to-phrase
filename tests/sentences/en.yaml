@@ -1,0 +1,39 @@
+---
+language: "en"
+floors:
+  - name: "First Floor"
+areas:
+  - name: "Office"
+  - name: "Kitchen"
+entities:
+  - name: "New York"
+    domain: "weather"
+
+tests:
+  HassNevermind:
+    default:
+      - "nevermind"
+
+  HassGetWeather:
+    default:
+      - "what is the weather"
+      - "what's the weather"
+
+    name_only:
+      - "what is the weather in New York"
+      - "what is the New York weather"
+      - "what's the weather in New York"
+      - "what's the New York weather"
+
+  HassGetCurrentTime:
+    default:
+      - "what time is it"
+      - "what is the time"
+      - "what's the time"
+
+  HassGetCurrentDate:
+    default:
+      - "what is the date"
+      - "what's the date"
+      - "what is today's date"
+      - "what's today's date"
