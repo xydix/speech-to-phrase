@@ -4,26 +4,33 @@ floors:
   - name: "First Floor"
 areas:
   - name: "Office"
-  - name: "Kitchen"
 entities:
   - name: "New York"
     domain: "weather"
+  - name: "EcoBee"
+    domain: "climate"
+  - name: "TV"
+    domain: "media_player"
 
 tests:
   HassNevermind:
     default:
       - "nevermind"
 
+  # weather and date/time
   HassGetWeather:
     default:
       - "what is the weather"
       - "what's the weather"
 
     name_only:
-      - "what is the weather in New York"
-      - "what is the New York weather"
-      - "what's the weather in New York"
-      - "what's the New York weather"
+      - sentences:
+          - "what is the weather in New York"
+          - "what is the New York weather"
+          - "what's the weather in New York"
+          - "what's the New York weather"
+        slots:
+          name: "New York"
 
   HassGetCurrentTime:
     default:
@@ -37,3 +44,327 @@ tests:
       - "what's the date"
       - "what is today's date"
       - "what's today's date"
+
+  # timers
+  HassStartTimer:
+    seconds_only:
+      - sentences:
+          - "set timer for 10 seconds"
+        slots:
+          seconds: 10
+
+      - sentences:
+          - "set timer for 100 seconds"
+        slots:
+          seconds: 100
+
+    minutes_1:
+      - sentences:
+          - "set timer for 1 minute"
+        slots:
+          minutes: 1
+
+    minutes_1_half:
+      - sentences:
+          - "set timer for 1 and a half minutes"
+        slots:
+          minutes: 1
+          seconds: 30
+
+    minutes_only:
+      - sentences:
+          - "set timer for 2 minutes"
+        slots:
+          minutes: 2
+      - sentences:
+          - "set timer for 19 minutes"
+        slots:
+          minutes: 19
+      - sentences:
+          - "set timer for 20 minutes"
+        slots:
+          minutes: 20
+      - sentences:
+          - "set timer for 45 minutes"
+          - "set timer for forty five minutes"
+        slots:
+          minutes: 45
+      - sentences:
+          - "set timer for 100 minutes"
+        slots:
+          minutes: 100
+
+    minutes_half:
+      - sentences:
+          - "set timer for 2 and a half minutes"
+        slots:
+          minutes: 2
+          seconds: 30
+      - sentences:
+          - "set timer for 19 and a half minutes"
+        slots:
+          minutes: 19
+          seconds: 30
+      - sentences:
+          - "set timer for 20 and a half minutes"
+        slots:
+          minutes: 20
+          seconds: 30
+      - sentences:
+          - "set timer for 45 and a half minutes"
+          - "set timer for forty five and a half minutes"
+        slots:
+          minutes: 45
+          seconds: 30
+      - sentences:
+          - "set timer for 100 and a half minutes"
+        slots:
+          minutes: 100
+          seconds: 30
+
+    hours_1:
+      - sentences:
+          - "set timer for 1 hour"
+        slots:
+          hours: 1
+
+    hours_1_half:
+      - sentences:
+          - "set timer for 1 and a half hours"
+        slots:
+          hours: 1
+          minutes: 30
+
+    hours_only:
+      - sentences:
+          - "set timer for 2 hours"
+        slots:
+          hours: 2
+      - sentences:
+          - "set timer for 24 hours"
+        slots:
+          hours: 24
+
+    hours_half:
+      - sentences:
+          - "set timer for 2 and a half hours"
+        slots:
+          hours: 2
+          minutes: 30
+      - sentences:
+          - "set timer for 24 and a half hours"
+        slots:
+          hours: 24
+          minutes: 30
+
+    hours_1_minutes_1:
+      - sentences:
+          - "set timer for 1 hour and 1 minute"
+        slots:
+          hours: 1
+          minutes: 1
+
+    hours_1_minutes:
+      - sentences:
+          - "set timer for 1 hour and 2 minutes"
+        slots:
+          hours: 1
+          minutes: 2
+      - sentences:
+          - "set timer for 1 hour and 19 minutes"
+        slots:
+          hours: 1
+          minutes: 19
+      - sentences:
+          - "set timer for 1 hour and 20 minutes"
+        slots:
+          hours: 1
+          minutes: 20
+      - sentences:
+          - "set timer for 1 hour and 45 minutes"
+          - "set timer for 1 hour and forty five minutes"
+        slots:
+          hours: 1
+          minutes: 45
+      - sentences:
+          - "set timer for 1 hour and 100 minutes"
+        slots:
+          hours: 1
+          minutes: 100
+
+    hours_minutes_1:
+      - sentences:
+          - "set timer for 2 hours and 1 minute"
+        slots:
+          hours: 2
+          minutes: 1
+      - sentences:
+          - "set timer for 24 hours and 1 minute"
+        slots:
+          hours: 24
+          minutes: 1
+
+    hours_minutes:
+      - sentences:
+          - "set timer for 2 hours and 2 minutes"
+        slots:
+          hours: 2
+          minutes: 2
+      - sentences:
+          - "set timer for 2 hours and 19 minutes"
+        slots:
+          hours: 2
+          minutes: 19
+      - sentences:
+          - "set timer for 2 hours and 20 minutes"
+        slots:
+          hours: 2
+          minutes: 20
+      - sentences:
+          - "set timer for 2 hours and 45 minutes"
+          - "set timer for 2 hours and forty five minutes"
+        slots:
+          hours: 2
+          minutes: 45
+      - sentences:
+          - "set timer for 2 hours and 100 minutes"
+        slots:
+          hours: 2
+          minutes: 100
+      - sentences:
+          - "set timer for 24 hours and 2 minutes"
+        slots:
+          hours: 24
+          minutes: 2
+      - sentences:
+          - "set timer for 24 hours and 19 minutes"
+        slots:
+          hours: 24
+          minutes: 19
+      - sentences:
+          - "set timer for 24 hours and 20 minutes"
+        slots:
+          hours: 24
+          minutes: 20
+      - sentences:
+          - "set timer for 24 hours and 45 minutes"
+          - "set timer for 24 hours and forty five minutes"
+        slots:
+          hours: 24
+          minutes: 45
+      - sentences:
+          - "set timer for 24 hours and 100 minutes"
+        slots:
+          hours: 24
+          minutes: 100
+
+  HassCancelTimer:
+    default:
+      - "cancel timer"
+      - "stop timer"
+
+  HassCancelAllTimers:
+    default:
+      - "cancel all timers"
+      - "stop all timers"
+
+  HassPauseTimer:
+    default:
+      - "pause timer"
+
+  HassUnpauseTimer:
+    default:
+      - "resume timer"
+
+  HassTimerStatus:
+    default:
+      - sentences:
+          - "timer status"
+          - "status of timer"
+          - "time left on timer"
+
+  # media players
+  HassMediaPause:
+    default:
+      - sentences:
+          - "pause"
+        context_area: true
+    name_only:
+      - sentences:
+          - "pause TV"
+        slots:
+          name: "TV"
+
+  HassMediaUnpause:
+    default:
+      - sentences:
+          - "resume"
+        context_area: true
+    name_only:
+      - sentences:
+          - "resume TV"
+        slots:
+          name: "TV"
+
+  HassMediaNext:
+    default:
+      - sentences:
+          - "next"
+          - "skip"
+        context_area: true
+    name_only:
+      - sentences:
+          - "next on TV"
+          - "skip on TV"
+        slots:
+          name: "TV"
+
+  # temperature
+  HassClimateGetTemperature:
+    default:
+      - sentences:
+          - "what is the temperature"
+          - "what is the temp"
+          - "what's the temperature"
+          - "what's the temp"
+        context_area: true
+
+    name_only:
+      - sentences:
+          - "what is the EcoBee temperature"
+          - "what is the EcoBee temp"
+          - "what's the EcoBee temperature"
+          - "what's the EcoBee temp"
+          - "what is the temperature of EcoBee"
+          - "what is the temp of EcoBee"
+          - "what's the temperature of EcoBee"
+          - "what's the temp of EcoBee"
+        slots:
+          name: "EcoBee"
+
+    area_only:
+      - sentences:
+          - "what is the Office temperature"
+          - "what is the Office temp"
+          - "what's the Office temperature"
+          - "what's the Office temp"
+          - "what is the temperature in Office"
+          - "what is the temp in Office"
+          - "what's the temperature in Office"
+          - "what's the temp in Office"
+        slots:
+          area: "Office"
+
+    # TODO: need support in intents repo
+    # floor_only:
+    #   - sentences:
+    #       - "what is the First Floor temperature"
+    #       - "what is the First Floor temp"
+    #       - "what's the First Floor temperature"
+    #       - "what's the First Floor temp"
+    #       - "what is the temperature on First Floor"
+    #       - "what is the temp on First Floor"
+    #       - "what's the temperature on First Floor"
+    #       - "what's the temp on First Floor"
+    #     slots:
+    #       floor: "First Floor"

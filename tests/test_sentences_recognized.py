@@ -1,14 +1,13 @@
 """Test that sentences can be recognized in Home Assistant."""
 
 import itertools
-import sys
 from collections.abc import Iterable
+from dataclasses import dataclass
 from functools import partial
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 import pytest
-import voluptuous as vol
 import yaml
 from hassil import (
     Alternative,
@@ -17,16 +16,16 @@ from hassil import (
     IntentData,
     Intents,
     ListReference,
-    Permutation,
     RangeSlotList,
     RuleReference,
     Sequence,
     TextChunk,
     TextSlotList,
+    check_excluded_context,
+    check_required_context,
     merge_dict,
     normalize_whitespace,
-    parse_sentence,
-    recognize,
+    recognize_best,
 )
 from home_assistant_intents import get_intents
 
@@ -38,6 +37,13 @@ _MODULE_DIR = _PROGRAM_DIR / "speech_to_phrase"
 _SENTENCES_DIR = _MODULE_DIR / "sentences"
 _TESTS_DIR = _PROGRAM_DIR / "tests"
 _TEST_SENTENCES_DIR = _TESTS_DIR / "sentences"
+
+
+@dataclass
+class SentenceToTest:
+    text: str
+    slots: Optional[Dict[str, Any]] = None
+    context_area: bool = False
 
 
 def generate_sentences(
@@ -90,6 +96,22 @@ def generate_sentences(
             text_list: TextSlotList = slot_list
 
             for text_value in text_list.values:
+                if intent_data.requires_context and (
+                    not check_required_context(
+                        intent_data.requires_context,
+                        text_value.context,
+                        allow_missing_keys=True,
+                    )
+                ):
+                    continue
+
+                if intent_data.excludes_context and (
+                    not check_excluded_context(
+                        intent_data.excludes_context, text_value.context
+                    )
+                ):
+                    continue
+
                 yield from generate_sentences(
                     text_value.text_in,
                     intents,
@@ -99,11 +121,11 @@ def generate_sentences(
         elif isinstance(slot_list, RangeSlotList):
             range_list: RangeSlotList = slot_list
 
-            yield TextChunk(str(range_list.start)), {
+            yield str(range_list.start), {
                 **slots,
                 list_ref.slot_name: range_list.start,
             }
-            yield TextChunk(str(range_list.stop)), {
+            yield str(range_list.stop), {
                 **slots,
                 list_ref.slot_name: range_list.stop,
             }
@@ -125,10 +147,8 @@ def generate_sentences(
 
 
 def generate_test_sentences(
-    e: Expression,
-    intents: Intents,
-    intent_data: IntentData,
-) -> Iterable[Optional[str]]:
+    e: Expression, intents: Intents, intent_data: IntentData
+) -> Iterable[str]:
     """Generate possible text strings from an expression."""
     if isinstance(e, TextChunk):
         chunk: TextChunk = e
@@ -171,14 +191,30 @@ def generate_test_sentences(
             text_list: TextSlotList = slot_list
 
             for text_value in text_list.values:
+                if intent_data.requires_context and (
+                    not check_required_context(
+                        intent_data.requires_context,
+                        text_value.context,
+                        allow_missing_keys=True,
+                    )
+                ):
+                    continue
+
+                if intent_data.excludes_context and (
+                    not check_excluded_context(
+                        intent_data.excludes_context, text_value.context
+                    )
+                ):
+                    continue
+
                 yield from generate_test_sentences(
                     text_value.text_in, intents, intent_data
                 )
         elif isinstance(slot_list, RangeSlotList):
             range_list: RangeSlotList = slot_list
 
-            yield TextChunk(str(range_list.start))
-            yield TextChunk(str(range_list.stop))
+            yield str(range_list.start)
+            yield str(range_list.stop)
         else:
             raise ValueError(f"Unexpected slot list type: {slot_list}")
     elif isinstance(e, RuleReference):
@@ -203,6 +239,27 @@ def _coerce_list(str_or_list: Union[str, List[str]]) -> List[str]:
     return str_or_list
 
 
+def _unpack_test_sentences(
+    test_sentences: List[Union[str, Dict[str, Any]]]
+) -> Iterable[SentenceToTest]:
+    for str_or_dict in test_sentences:
+        if isinstance(str_or_dict, str):
+            yield SentenceToTest(str_or_dict)
+        else:
+            str_or_list = str_or_dict["sentences"]
+            test_slots = str_or_dict.get("slots")
+            test_context_area = str_or_dict.get("context_area", False)
+
+            if isinstance(str_or_list, str):
+                yield SentenceToTest(str_or_list, test_slots, test_context_area)
+            else:
+                # List
+                for test_sentence_text in str_or_list:
+                    yield SentenceToTest(
+                        test_sentence_text, test_slots, test_context_area
+                    )
+
+
 @pytest.fixture
 def intent_slots() -> Dict[str, Any]:
     intents_path = _PROGRAM_DIR / "intents.yaml"
@@ -211,7 +268,10 @@ def intent_slots() -> Dict[str, Any]:
 
 
 @pytest.mark.parametrize("language", (Language.ENGLISH,))
-def test_sentences_recognized(language: Language, intent_slots) -> None:
+def test_sentences_recognized(
+    language: Language,
+    intent_slots: Dict[str, Any],  # pylint: disable=redefined-outer-name
+) -> None:
     lang_code = language.value
 
     # Load tests for language
@@ -222,6 +282,10 @@ def test_sentences_recognized(language: Language, intent_slots) -> None:
         lang_test_sentences_dict = yaml.safe_load(lang_test_sentences_file)
 
     lang_test_intents_dict = lang_test_sentences_dict["tests"]
+
+    assert set(intent_slots.keys()) == set(
+        lang_test_intents_dict.keys()
+    ), "Tests and known intents must match"
 
     test_things = Things.from_dict(lang_test_sentences_dict)
     test_things_lists_dict = {"lists": test_things.to_lists_dict()}
@@ -235,8 +299,8 @@ def test_sentences_recognized(language: Language, intent_slots) -> None:
     merge_dict(lang_sentences_dict, test_things_lists_dict)
     lang_intents = Intents.from_dict(lang_sentences_dict)
 
-    assert (
-        lang_intents.intents.keys() == lang_test_intents_dict.keys()
+    assert set(lang_intents.intents.keys()) == set(
+        lang_test_intents_dict.keys()
     ), "Tests and supported intents must match"
 
     # Load Home Assistant intents
@@ -262,54 +326,90 @@ def test_sentences_recognized(language: Language, intent_slots) -> None:
 
         for intent_data in intent_info.data:
             # Check that test sentences can be recognized by Speech-to-Phrase
+            assert intent_data.metadata, f"No metadata for intent: '{intent_name}'"
+            assert (
+                "slot_combination" in intent_data.metadata
+            ), f"No slot combination for in metadata for intent: '{intent_name}'"
             slot_combo_name = intent_data.metadata["slot_combination"]
+
+            context_area = intent_data.metadata.get("context_area", False)
             assert (
                 slot_combo_name in possible_slot_combos
             ), f"No expected slot combination for intent '{intent_name}': '{slot_combo_name}'"
             slot_combo_info = possible_slot_combos[slot_combo_name]
-            expected_slot_names = set(_coerce_list(slot_combo_info["slots"]))
 
             expected_domains: Optional[Set[str]] = None
             if "domain" in slot_combo_info:
                 expected_domains = set(_coerce_list(slot_combo_info["domain"]))
 
+            actual_domains: Set[str] = set()
+
             assert (
                 slot_combo_name in test_intent_info
             ), f"No tests for slot combination '{slot_combo_name}' of intent '{intent_name}'"
 
-            for sentence_text in test_intent_info[slot_combo_name]:
-                result = recognize(sentence_text, lang_intents)
+            for test_sentence in _unpack_test_sentences(
+                test_intent_info[slot_combo_name]
+            ):
+                assert (
+                    context_area == test_sentence.context_area
+                ), "Test sentence context_area must match sentence template metadata"
+
+                result = recognize_best(
+                    test_sentence.text, lang_intents, best_slot_name="name"
+                )
                 assert (
                     result is not None
-                ), f"Sentence not recognized with Speech-to-Phrase intents: '{sentence_text}'"
-                assert result.entities.keys() == expected_slot_names
+                ), f"Sentence not recognized with Speech-to-Phrase intents: '{test_sentence.text}'"
+                assert result.intent.name == intent_name, test_sentence
+                result_slots = {
+                    e_name: e.value for e_name, e in result.entities.items()
+                }
+
+                assert result_slots == (test_sentence.slots or {}), test_sentence
                 if expected_domains:
                     # Verify that matched entity has an expected domain.
                     # The domain is stored in the metadata in Things.to_lists_dict()
                     assert "name" in result.entities
                     name_entity = result.entities["name"]
                     assert name_entity.metadata and ("domain" in name_entity.metadata)
-                    assert name_entity.metadata["domain"] in expected_domains
+                    entity_domain = name_entity.metadata["domain"]
+                    assert entity_domain in expected_domains
+                    actual_domains.discard(entity_domain)
+
+            assert not actual_domains, "Missing tests for some entity domains"
 
             # Generate possible sentences and verify they can be recognized in Home Assistant
             for sentence in intent_data.sentences:
                 possible_sentences = generate_sentences(
-                    sentence.expression, lang_intents, intent_data, {}
+                    sentence.expression, lang_intents, intent_data, intent_data.slots
                 )
                 for gen_text, gen_slots in possible_sentences:
-                    result = recognize(gen_text, hass_intents)
+                    result = recognize_best(
+                        gen_text,
+                        hass_intents,
+                        intent_context=({"area": "_"} if context_area else None),
+                        best_slot_name="name",
+                    )
                     assert (
                         result is not None
                     ), f"Sentence not recognized with Home Assistant intents: '{gen_text}'"
-                    assert result.intent.name == intent_name
+                    assert result.intent.name == intent_name, sentence
                     result_slots = {
                         e_name: e.value for e_name, e in result.entities.items()
                     }
-                    assert result_slots == gen_slots
+                    if context_area:
+                        # Don't match against real slots
+                        result_slots.pop("area", None)
+
+                    assert result_slots == gen_slots, sentence
 
 
 @pytest.mark.parametrize("language", (Language.ENGLISH,))
-def test_sentences_tested(language: Language, intent_slots) -> None:
+def test_sentences_tested(
+    language: Language,
+    intent_slots: Dict[str, Any],  # pylint: disable=redefined-outer-name
+) -> None:
     lang_code = language.value
 
     # Load tests for language
@@ -336,8 +436,16 @@ def test_sentences_tested(language: Language, intent_slots) -> None:
     for intent_name, intent_info in lang_intents.intents.items():
         test_intent_info = lang_test_intents_dict[intent_name]
         for intent_data in intent_info.data:
+            assert intent_data.metadata, f"No metadata for intent: '{intent_name}'"
             slot_combo_name = intent_data.metadata["slot_combination"]
-            actual_test_sentences = set(test_intent_info[slot_combo_name])
+            assert (
+                slot_combo_name in test_intent_info
+            ), f"No tests for slot combination of intent '{intent_name}': {slot_combo_name}"
+
+            actual_test_sentences = set(
+                ts.text
+                for ts in _unpack_test_sentences(test_intent_info[slot_combo_name])
+            )
 
             # Generate test sentences and verify they are present
             expected_test_sentences: Set[str] = set()

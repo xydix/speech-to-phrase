@@ -265,436 +265,161 @@ HassGetWeather:
 #       importance: "complete"
 #       example: "set the main floor to red"
 
-# HassClimateGetTemperature:
-#   description: "Gets the current temperature of a climate device or entity"
-#   slots:
-#     name: "Name of a device or entity"
-#     area: "Name of an area"
-#     floor: "Name of a floor"
-#   slot_combinations:
-#     - slots: []
-#       context_area: true
-#       importance: "usable"
-#       example: "what is the temperature"
-#     - slots: "name"
-#       importance: "usable"
-#       example: "what is the temperature of the EcoBee"
-#     - slots: "area"
-#       importance: "usable"
-#       example: "what is the temperature in the bedroom"
-#     - slots: "floor"
-#       importance: "usable"
-#       example: "what is the temperature downstairs"
+# timers
+HassStartTimer:
+  description: "Starts a timer"
+  slots:
+    hours: "Number of hours"
+    minutes: "Number of minutes"
+    seconds: "Number of seconds"
+  slot_combinations:
+    seconds_only:
+      slots: "seconds"
+      example: "set a timer for 30 seconds"
+    hours_only:
+      slots: "hours"
+      example: "set a timer for 1 hour"
+    minutes_1:
+      slots: "minutes"
+      example: "set a timer for 1 minute"
+    minutes_only:
+      slots: "minutes"
+      example: "set a timer for 10 minutes"
+    minutes_1_half:
+      slots: "minutes"
+      example: "set a timer for 1 and a half minutes"
+    minutes_half:
+      slots: "minutes"
+      example: "set a timer for 10 and a half minutes"
+    hours_1:
+      slots:
+        - "hours"
+      example: "set a timer for 1 hour"
+    hours_1_minutes_1:
+      slots:
+        - "hours"
+        - "minutes"
+      example: "set a timer for 1 hour and 1 minute"
+    hours_1_minutes:
+      slots:
+        - "hours"
+        - "minutes"
+      example: "set a timer for 1 hour and 10 minute"
+    hours_minutes_1:
+      slots:
+        - "hours"
+        - "minutes"
+      example: "set a timer for 2 hours and 1 minute"
+    hours_minutes:
+      slots:
+        - "hours"
+        - "minutes"
+      example: "set a timer for 1 hour and 10 minutes"
+    hours_1_half:
+      slots:
+        - "hours"
+        - "minutes"
+      example: "set a timer for 1 and a half hours"
+    hours_half:
+      slots:
+        - "hours"
+        - "minutes"
+      example: "set a timer for 2 and a half hours"
 
-# HassMediaPause:
-#   description: "Pauses a media player"
-#   slots:
-#     name: "Name of a device or entity"
-#     area: "Name of an area"
-#   slot_combinations:
-#     - slots: []
-#       context_area: true
-#       importance: "usable"
-#       example: "pause"
-#     - slots: "name"
-#       importance: "usable"
-#       example: "pause TV"
-#     - slots: "area"
-#       importance: "usable"
-#       example: "pause music in kitchen"
+HassCancelAllTimers:
+  description: "Cancels all timers"
+  slot_combinations:
+    default:
+      slots: []
+      example: "cancel all timers"
 
-# HassMediaUnpause:
-#   description: "Unpauses a media player"
-#   slots:
-#     name: "Name of a device or entity"
-#     area: "Name of an area"
-#   slot_combinations:
-#     - slots: []
-#       context_area: true
-#       importance: "usable"
-#       example: "resume"
-#     - slots: "name"
-#       importance: "usable"
-#       example: "resume TV"
-#     - slots: "area"
-#       importance: "usable"
-#       example: "resume music in kitchen"
+HassCancelTimer:
+  description: "Cancels a timer"
+  slot_combinations:
+    default:
+      slots: []
+      example: "cancel my timer"
 
-# HassMediaNext:
-#   description: "Skips a media player to the next item"
-#   slots:
-#     name: "Name of a device or entity"
-#     area: "Name of an area"
-#   slot_combinations:
-#     - slots: []
-#       context_area: true
-#       importance: "usable"
-#       example: "next track"
-#     - slots: "name"
-#       importance: "usable"
-#       example: "next track on the stereo"
-#     - slots: "area"
-#       importance: "usable"
-#       example: "next track in the kitchen"
+HassPauseTimer:
+  description: "Pauses a running timer"
+  slot_combinations:
+    default:
+      slots: []
+      example: "pause my timer"
 
-# HassStartTimer:
-#   description: "Starts a timer"
-#   slots:
-#     hours: "Number of hours"
-#     minutes: "Number of minutes"
-#     seconds: "Number of seconds"
-#   slot_combinations:
-#     - slots: "hours"
-#       importance: "usable"
-#       example: "set a timer for 1 hour"
-#     - slots: "minutes"
-#       importance: "usable"
-#       example: "set a timer for 10 minutes"
-#     - slots: "seconds"
-#       importance: "usable"
-#       example: "set a timer for 30 seconds"
-#     - slots:
-#         - "hours"
-#         - "minutes"
-#       importance: "complete"
-#       example: "set a timer for 1 hour and 10 minutes"
-#     - slots:
-#         - "hours"
-#         - "seconds"
-#       importance: "complete"
-#       example: "set a timer for 1 hour and 30 seconds"
-#     - slots:
-#         - "minutes"
-#         - "seconds"
-#       importance: "complete"
-#       example: "set a timer for 10 minutes and 30 seconds"
-#     - slots:
-#         - "hours"
-#         - "minutes"
-#         - "seconds"
-#       importance: "complete"
-#       example: "set a timer for 1 hour and 10 minutes and 30 seconds"
-#     # name
-#     - slots:
-#         - "name"
-#         - "hours"
-#       importance: "complete"
-#       example: "set a timer for 1 hour named pizza"
-#     - slots:
-#         - "name"
-#         - "minutes"
-#       importance: "complete"
-#       example: "set a timer for 10 minutes named pizza"
-#     - slots:
-#         - "name"
-#         - "seconds"
-#       importance: "complete"
-#       example: "set a timer for 30 seconds named pizza"
-#     - slots:
-#         - "name"
-#         - "hours"
-#         - "minutes"
-#       importance: "complete"
-#       example: "set a timer for 1 hour and 10 minutes named pizza"
-#     - slots:
-#         - "name"
-#         - "hours"
-#         - "seconds"
-#       importance: "complete"
-#       example: "set a timer for 1 hour and 30 seconds named pizza"
-#     - slots:
-#         - "name"
-#         - "minutes"
-#         - "seconds"
-#       importance: "complete"
-#       example: "set a timer for 10 minutes and 30 seconds named pizza"
-#     - slots:
-#         - "name"
-#         - "hours"
-#         - "minutes"
-#         - "seconds"
-#       importance: "complete"
-#       example: "set a timer for 1 hour and 10 minutes and 30 seconds named pizza"
-#     # conversation_command
-#     - slots:
-#         - "conversation_command"
-#         - "hours"
-#       importance: "optional"
-#       example: "turn off the lights in 1 hour"
-#     - slots:
-#         - "conversation_command"
-#         - "minutes"
-#       importance: "optional"
-#       example: "turn off the lights in 10 minutes"
-#     - slots:
-#         - "conversation_command"
-#         - "seconds"
-#       importance: "optional"
-#       example: "turn off the lights in 30 seconds"
-#     - slots:
-#         - "conversation_command"
-#         - "hours"
-#         - "minutes"
-#       importance: "optional"
-#       example: "turn off the lights in 1 hour and 10 minutes"
-#     - slots:
-#         - "conversation_command"
-#         - "hours"
-#         - "seconds"
-#       importance: "optional"
-#       example: "turn off the lights in 1 hour and 30 seconds"
-#     - slots:
-#         - "conversation_command"
-#         - "minutes"
-#         - "seconds"
-#       importance: "optional"
-#       example: "turn off the lights in 10 minutes and 30 seconds"
-#     - slots:
-#         - "conversation_command"
-#         - "hours"
-#         - "minutes"
-#         - "seconds"
-#       importance: "optional"
-#       example: "turn off the lights in 1 hour and 10 minutes and 30 seconds"
+HassUnpauseTimer:
+  description: "Resumes a paused timer"
+  slot_combinations:
+    default:
+      slots: []
+      example: "resume my timer"
 
-# HassCancelAllTimers:
-#   description: "Cancels all timers"
-#   slot_combinations:
-#     - slots: []
-#       example: "cancel all timers"
+HassTimerStatus:
+  description: "Reports status of one or more timers"
+  slot_combinations:
+    default:
+      slots: []
+      example: "how much time is left on my timer"
 
-# HassCancelTimer:
-#   description: "Cancels a timer"
-#   slots:
-#     start_hours:
-#       description: "Hours the timer was started with"
-#       required: false
-#     start_minutes:
-#       description: "Minutes the timer was started with"
-#       required: false
-#     start_seconds:
-#       description: "Seconds the timer was started with"
-#       required: false
-#     name:
-#       description: "Name attached to the timer"
-#       required: false
-#     area:
-#       description: "Area of the device used to start the timer"
-#       required: false
-#   slot_combinations:
-#     - slots: []
-#       importance: "usable"
-#       example: "cancel my timer"
-#     - slots: "name"
-#       importance: "complete"
-#       example: "cancel the pizza timer"
-#     - slots: "area"
-#       importance: "complete"
-#       example: "cancel the kitchen timer"
-#     - slots: "start_hours"
-#       importance: "usable"
-#       example: "cancel the 1 hour timer"
-#     - slots: "start_minutes"
-#       importance: "usable"
-#       example: "cancel the 10 minute timer"
-#     - slots: "start_seconds"
-#       importance: "usable"
-#       example: "cancel the 30 second timer"
-#     - slots:
-#         - "start_minutes"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "cancel the 10 minutes and 30 seconds timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_minutes"
-#       importance: "complete"
-#       example: "cancel the 1 hour and 10 minutes timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "cancel the 1 hour and 30 seconds timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_minutes"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "cancel the 1 hour and 10 minutes and 30 seconds timer"
+# media players
+HassMediaPause:
+  description: "Pauses a media player"
+  slots:
+    name: "Name of a device or entity"
+  slot_combinations:
+    default:
+      slots: []
+      context_area: true
+      example: "pause"
+    name_only:
+      slots: "name"
+      example: "pause TV"
 
-# HassPauseTimer:
-#   description: "Pauses a running timer"
-#   slots:
-#     start_hours:
-#       description: "Hours the timer was started with"
-#       required: false
-#     start_minutes:
-#       description: "Minutes the timer was started with"
-#       required: false
-#     start_seconds:
-#       description: "Seconds the timer was started with"
-#       required: false
-#     name:
-#       description: "Name attached to the timer"
-#       required: false
-#     area:
-#       description: "Area of the device used to start the timer"
-#       required: false
-#   slot_combinations:
-#     - slots: []
-#       importance: "usable"
-#       example: "pause my timer"
-#     - slots: "name"
-#       importance: "complete"
-#       example: "pause the pizza timer"
-#     - slots: "area"
-#       importance: "complete"
-#       example: "pause the kitchen timer"
-#     - slots: "start_hours"
-#       importance: "complete"
-#       example: "pause the 1 hour timer"
-#     - slots: "start_minutes"
-#       importance: "complete"
-#       example: "pause the 10 minute timer"
-#     - slots: "start_seconds"
-#       importance: "complete"
-#       example: "pause the 30 second timer"
-#     - slots:
-#         - "start_minutes"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "pause the 10 minutes and 30 seconds timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_minutes"
-#       importance: "complete"
-#       example: "pause the 1 hour and 10 minutes timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "pause the 1 hour and 30 seconds timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_minutes"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "pause the 1 hour and 10 minutes and 30 seconds timer"
+HassMediaUnpause:
+  description: "Unpauses a media player"
+  slots:
+    name: "Name of a device or entity"
+  slot_combinations:
+    default:
+      slots: []
+      context_area: true
+      example: "resume"
+    name_only:
+      slots: "name"
+      example: "resume TV"
 
-# HassUnpauseTimer:
-#   description: "Resumes a paused timer"
-#   slots:
-#     start_hours:
-#       description: "Hours the timer was started with"
-#       required: false
-#     start_minutes:
-#       description: "Minutes the timer was started with"
-#       required: false
-#     start_seconds:
-#       description: "Seconds the timer was started with"
-#       required: false
-#     name:
-#       description: "Name attached to the timer"
-#       required: false
-#     area:
-#       description: "Area of the device used to start the timer"
-#       required: false
-#   slot_combinations:
-#     - slots: []
-#       importance: "usable"
-#       example: "resume my timer"
-#     - slots: "name"
-#       importance: "complete"
-#       example: "resume the pizza timer"
-#     - slots: "area"
-#       importance: "complete"
-#       example: "resume the kitchen timer"
-#     - slots: "start_hours"
-#       importance: "complete"
-#       example: "resume the 1 hour timer"
-#     - slots: "start_minutes"
-#       importance: "complete"
-#       example: "resume the 10 minute timer"
-#     - slots: "start_seconds"
-#       importance: "complete"
-#       example: "resume the 30 second timer"
-#     - slots:
-#         - "start_minutes"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "resume the 10 minutes and 30 seconds timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_minutes"
-#       importance: "complete"
-#       example: "resume the 1 hour and 10 minutes timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "resume the 1 hour and 30 seconds timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_minutes"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "resume the 1 hour and 10 minutes and 30 seconds timer"
+HassMediaNext:
+  description: "Skips a media player to the next item"
+  slots:
+    name: "Name of a device or entity"
+  slot_combinations:
+    default:
+      slots: []
+      context_area: true
+      example: "next track"
+    name_only:
+      slots: "name"
+      example: "next track on the stereo"
 
-# HassTimerStatus:
-#   description: "Reports status of one or more timers"
-#   slots:
-#     start_hours:
-#       description: "Hours the timer was started with"
-#       required: false
-#     start_minutes:
-#       description: "Minutes the timer was started with"
-#       required: false
-#     start_seconds:
-#       description: "Seconds the timer was started with"
-#       required: false
-#     name:
-#       description: "Name attached to the timer"
-#       required: false
-#     area:
-#       description: "Area of the device used to start the timer"
-#       required: false
-#   slot_combinations:
-#     - slots: []
-#       importance: "usable"
-#       example: "how much time is left on my timer"
-#     - slots: "name"
-#       importance: "complete"
-#       example: "how much time is left on the pizza timer"
-#     - slots: "area"
-#       importance: "complete"
-#       example: "how much time is left on the kitchen timer"
-#     - slots: "start_hours"
-#       importance: "complete"
-#       example: "how much time is left on the 1 hour timer"
-#     - slots: "start_minutes"
-#       importance: "complete"
-#       example: "how much time is left on the 10 minute timer"
-#     - slots: "start_seconds"
-#       importance: "complete"
-#       example: "how much time is left on the 30 second timer"
-#     - slots:
-#         - "start_minutes"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "how much time is left on the 10 minutes and 30 seconds timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_minutes"
-#       importance: "complete"
-#       example: "how much time is left on the 1 hour and 10 minutes timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "how much time is left on the 1 hour and 30 seconds timer"
-#     - slots:
-#         - "start_hours"
-#         - "start_minutes"
-#         - "start_seconds"
-#       importance: "complete"
-#       example: "how much time is left on the 1 hour and 10 minutes and 30 seconds timer"
+
+# temperature
+HassClimateGetTemperature:
+  description: "Gets the current temperature of a climate device or entity"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+  slot_combinations:
+    default:
+      slots: []
+      context_area: true
+      example: "what is the temperature"
+    name_only:
+      slots: "name"
+      example: "what is the temperature of the EcoBee"
+    area_only:
+      slots: "area"
+      example: "what is the temperature in the bedroom"
+    floor_only:
+      slots: "floor"
+      example: "what is the temperature downstairs"

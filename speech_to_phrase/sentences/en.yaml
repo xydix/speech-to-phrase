@@ -35,6 +35,8 @@ lists:
       step: 10
   minutes_extra:
     values:
+      - in: "45"
+        out: 45
       - in: forty five
         out: 45
   minutes_half:
@@ -64,7 +66,8 @@ lists:
       - unlocked
 
 expansion_rules:
-  timer_set: "(set|start|create)"
+  # timer_set: "(set|start|create)"
+  timer_set: "set"
 
 intents:
   # nevermind
@@ -247,124 +250,216 @@ intents:
   #         - "set [the] {floor} [floor] lights to {color}"
   #         - "set [the] lights (on|in) [the] {floor} [floor] to {color}"
 
-  # # timers
-  # HassStartTimer:
-  #   data:
-  #     # seconds
-  #     - sentences:
-  #         - "<timer_set> [a] timer for {seconds} seconds"
+  # timers
+  HassStartTimer:
+    data:
+      # seconds
+      - sentences:
+          - "<timer_set> [a] timer for {seconds} seconds"
+        metadata:
+          slot_combination: "seconds_only"
 
-  #     # minutes
-  #     - sentences:
-  #         - "<timer_set> [a] timer for 1 minute"
-  #         - "<timer_set> [a] timer for {minutes_small} minutes"
-  #         - "<timer_set> [a] timer for {minutes_large} minutes"
-  #         - "<timer_set> [a] timer for {minutes_extra} minutes"
+      # minutes
+      - sentences:
+          - "<timer_set> [a] timer for 1 minute"
+        slots:
+          minutes: 1
+        metadata:
+          slot_combination: "minutes_1"
 
-  #     # minutes half
-  #     - sentences:
-  #         - "<timer_set> [a] timer for 1 and a {minutes_half:seconds} minutes"
-  #         - "<timer_set> [a] timer for {minutes_small} and a {minutes_half:seconds} minutes"
-  #         - "<timer_set> [a] timer for {minutes_large} and a {minutes_half:seconds} minutes"
-  #         - "<timer_set> [a] timer for {minutes_extra} and a {minutes_half:seconds} minutes"
+      - sentences:
+          - "<timer_set> [a] timer for {minutes_small:minutes} minutes"
+          - "<timer_set> [a] timer for {minutes_large:minutes} minutes"
+          - "<timer_set> [a] timer for {minutes_extra:minutes} minutes"
+        metadata:
+          slot_combination: "minutes_only"
 
-  #     # hours
-  #     - sentences:
-  #         - "<timer_set> [a] timer for 1 hour"
-  #         - "<timer_set> [a] timer for {hours} hours"
+      # minutes half
+      - sentences:
+          - "<timer_set> [a] timer for 1 and a {minutes_half:seconds} minutes"
+        slots:
+          minutes: 1
+        metadata:
+          slot_combination: "minutes_1_half"
 
-  #     # hours half
-  #     - sentences:
-  #         - "<timer_set> [a] timer for 1 and a {hours_half:minutes} hours"
-  #         - "<timer_set> [a] timer for {hours} and a {hours_half:hours} hours"
+      - sentences:
+          - "<timer_set> [a] timer for {minutes_small:minutes} and a {minutes_half:seconds} minutes"
+          - "<timer_set> [a] timer for {minutes_large:minutes} and a {minutes_half:seconds} minutes"
+          - "<timer_set> [a] timer for {minutes_extra:minutes} and a {minutes_half:seconds} minutes"
+        metadata:
+          slot_combination: "minutes_half"
 
-  #     # hours + minutes
-  #     - sentences:
-  #         - "<timer_set> [a] timer for 1 hour and 1 minute"
-  #         - "<timer_set> [a] timer for 1 hour and {minutes_small} minutes"
-  #         - "<timer_set> [a] timer for 1 hour and {minutes_large} minutes"
-  #         - "<timer_set> [a] timer for 1 hour and {minutes_extra} minutes"
-  #         - "<timer_set> [a] timer for {hours} hours and {minutes_small} minutes"
-  #         - "<timer_set> [a] timer for {hours} hours and {minutes_large} minutes"
-  #         - "<timer_set> [a] timer for {hours} hours and {minutes_extra} minutes"
+      # hours
+      - sentences:
+          - "<timer_set> [a] timer for 1 hour"
+        slots:
+          hours: 1
+        metadata:
+          slot_combination: "hours_1"
 
-  # HassCancelTimer:
-  #   data:
-  #     - sentences:
-  #         - "(cancel|stop) [the|my] timer"
+      - sentences:
+          - "<timer_set> [a] timer for {hours} hours"
+        metadata:
+          slot_combination: "hours_only"
 
-  # HassCancelAllTimers:
-  #   data:
-  #     - sentences:
-  #         - "(cancel|stop) all [of] [the|my] timers"
+      # hours half
+      - sentences:
+          - "<timer_set> [a] timer for 1 and a {hours_half:minutes} hours"
+        slots:
+          hours: 1
+        metadata:
+          slot_combination: "hours_1_half"
 
-  # HassPauseTimer:
-  #   data:
-  #     - sentences:
-  #         - "pause [the|my] timer"
+      - sentences:
+          - "<timer_set> [a] timer for {hours} and a {hours_half:minutes} hours"
+        metadata:
+          slot_combination: "hours_half"
 
-  # HassUnpauseTimer:
-  #   data:
-  #     - sentences:
-  #         - "resume [the|my] timer"
+      # hours + minutes
+      - sentences:
+          - "<timer_set> [a] timer for 1 hour and 1 minute"
+        slots:
+          hours: 1
+          minutes: 1
+        metadata:
+          slot_combination: "hours_1_minutes_1"
 
-  # HassTimerStatus:
-  #   data:
-  #     - sentences:
-  #         - "timer status"
-  #         - "status of [the|my] timer[s]"
-  #         - "[how much] time [is] left on [the|my] timer[s]"
+      - sentences:
+          - "<timer_set> [a] timer for 1 hour and {minutes_small:minutes} minutes"
+          - "<timer_set> [a] timer for 1 hour and {minutes_large:minutes} minutes"
+          - "<timer_set> [a] timer for 1 hour and {minutes_extra:minutes} minutes"
+        slots:
+          hours: 1
+        metadata:
+          slot_combination: "hours_1_minutes"
 
-  # # media players
-  # HassMediaPause:
-  #   data:
-  #     - sentences:
-  #         - "pause [[the ]music]"
+      - sentences:
+          - "<timer_set> [a] timer for {hours} hours and 1 minute"
+        slots:
+          minutes: 1
+        metadata:
+          slot_combination: "hours_minutes_1"
 
-  #     - sentences:
-  #         - "pause [the] {name}"
-  #       requires_context:
-  #         domain: media_player
+      - sentences:
+          - "<timer_set> [a] timer for {hours} hours and {minutes_small:minutes} minutes"
+          - "<timer_set> [a] timer for {hours} hours and {minutes_large:minutes} minutes"
+          - "<timer_set> [a] timer for {hours} hours and {minutes_extra:minutes} minutes"
+        metadata:
+          slot_combination: "hours_minutes"
 
-  # HassMediaUnpause:
-  #   data:
-  #     - sentences:
-  #         - "resume [[the ]music]"
+  HassCancelTimer:
+    data:
+      - sentences:
+          - "(cancel|stop) [the|my] timer"
+        metadata:
+          slot_combination: "default"
 
-  #     - sentences:
-  #         - "resume [the] {name}"
-  #       requires_context:
-  #         domain: media_player
+  HassCancelAllTimers:
+    data:
+      - sentences:
+          - "(cancel|stop) all [[of ](the|my)] timers"
+        metadata:
+          slot_combination: "default"
 
-  # HassMediaNext:
-  #   data:
-  #     - sentences:
-  #         - "(next|skip) [[this ](track|song)]"
+  HassPauseTimer:
+    data:
+      - sentences:
+          - "pause [the|my] timer"
+        metadata:
+          slot_combination: "default"
 
-  #     - sentences:
-  #         - "(next|skip) [[the ](track|song)] on [the] {name}"
-  #       requires_context:
-  #         domain: media_player
+  HassUnpauseTimer:
+    data:
+      - sentences:
+          - "resume [the|my] timer"
+        metadata:
+          slot_combination: "default"
 
-  # # temperature
-  # HassGetTemperature:
-  #   data:
-  #     - sentences:
-  #         - "(what is|what's) the (temp|temperature)"
+  HassTimerStatus:
+    data:
+      - sentences:
+          - "timer status"
+          - "status of [the|my] timer[s]"
+          - "[how much] time [is] left on [the|my] timer[s]"
+        metadata:
+          slot_combination: "default"
 
-  #     - sentences:
-  #         - "(what is|what's) [the] {name} (temp|temperature)"
-  #         - "(what is|what's) [the] (temp|temperature) of [the] {name}"
-  #       requires_context:
-  #         domain: climate
+  # media players
+  HassMediaPause:
+    data:
+      - sentences:
+          - "pause"
+        metadata:
+          slot_combination: "default"
+          context_area: true
 
-  #     - sentences:
-  #         - "(what is|what's) the (temp|temperature) in [the] {area}"
-  #         - "(what is|what's) the {area} (temp|temperature)"
+      - sentences:
+          - "pause [the] {name}"
+        requires_context:
+          domain: media_player
+        metadata:
+          slot_combination: "name_only"
 
-  #     - sentences:
-  #         - "(what is|what's) the (temp|temperature) (on|in) [the] {floor} [floor]"
-  #         - "(what is|what's) the {floor} [floor] (temp|temperature)"
+  HassMediaUnpause:
+    data:
+      - sentences:
+          - "resume"
+        metadata:
+          slot_combination: "default"
+          context_area: true
+
+      - sentences:
+          - "resume [the] {name}"
+        requires_context:
+          domain: media_player
+        metadata:
+          slot_combination: "name_only"
+
+  HassMediaNext:
+    data:
+      - sentences:
+          - "next [(track|item)]"
+          - "skip [[this ](track|song)]"
+        metadata:
+          slot_combination: "default"
+          context_area: true
+
+      - sentences:
+          - "next [(track|item)] on [the] {name}"
+          - "skip [[the ](track|song)] on [the] {name}"
+        requires_context:
+          domain: media_player
+        metadata:
+          slot_combination: "name_only"
+
+  # temperature
+  HassClimateGetTemperature:
+    data:
+      - sentences:
+          - "(what is|what's) the (temp|temperature)"
+        metadata:
+          context_area: true
+          slot_combination: "default"
+
+      - sentences:
+          - "(what is|what's) the {name} (temp|temperature)"
+          - "(what is|what's) the (temp|temperature) of [the] {name}"
+        requires_context:
+          domain: climate
+        metadata:
+          slot_combination: "name_only"
+
+      - sentences:
+          - "(what is|what's) the (temp|temperature) in [the] {area}"
+          - "(what is|what's) the {area} (temp|temperature)"
+        metadata:
+          slot_combination: "area_only"
+
+      # - sentences:
+      #     - "(what is|what's) the (temp|temperature) on [the] {floor}"
+      #     - "(what is|what's) the {floor} (temp|temperature)"
+      #   metadata:
+      #     slot_combination: "floor_only"
 
   # # questions
   # HassGetState:

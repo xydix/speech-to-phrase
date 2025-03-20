@@ -6,7 +6,14 @@ from typing import Any
 import pytest
 import voluptuous as vol
 import yaml
-from hassil import Alternative, Expression, Group, ListReference, parse_sentence
+from hassil import (
+    Alternative,
+    Expression,
+    Group,
+    ListReference,
+    RuleReference,
+    parse_sentence,
+)
 from voluptuous.humanize import validate_with_humanized_errors
 
 from speech_to_phrase import Language
@@ -26,14 +33,20 @@ def _visit_expression(e: Expression, visitor, visitor_arg: Any):
             _visit_expression(item, visitor, result)
 
 
-def no_list_references(sentence: str):
-    """Validator that doesn't allow for {list} references in a sentence template."""
+def no_list_or_rule_references(sentence: str):
+    """Validator that doesn't allow for {list} or <rule> references in a sentence template."""
 
     def visitor(e: Expression, arg: Any):
         if isinstance(e, ListReference):
             list_ref: ListReference = e
             raise vol.Invalid(
                 f"List references not allow in expansion rules ({{{list_ref.list_name}}})"
+            )
+
+        if isinstance(e, RuleReference):
+            rule_ref: RuleReference = e
+            raise vol.Invalid(
+                f"Rule references not allow in expansion rules ({{{rule_ref.rule_name}}})"
             )
 
     _visit_expression(parse_sentence(sentence).expression, visitor, None)
@@ -84,6 +97,7 @@ INTENTS_SCHEMA = vol.Schema(
                     vol.Required("slots"): vol.Any(str, [str]),
                     vol.Required("example"): vol.Any(str, [str]),
                     vol.Optional("domain"): vol.Any(str, [str]),
+                    vol.Optional("context_area"): bool,
                 }
             },
             vol.Optional("slots"): {
@@ -120,7 +134,7 @@ SENTENCES_SCHEMA = vol.Schema(
             )
         },
         vol.Optional("expansion_rules"): {
-            str: vol.All(no_list_references, not_optional)
+            str: vol.All(no_list_or_rule_references, not_optional)
         },
         vol.Optional("intents"): {
             str: {
@@ -130,8 +144,13 @@ SENTENCES_SCHEMA = vol.Schema(
                         vol.Optional("requires_context"): {
                             vol.Required("domain"): vol.Any(str, [str])
                         },
+                        vol.Optional("slots"): {
+                            # slot name
+                            str: vol.Any(str, int)
+                        },
                         vol.Required("metadata"): {
-                            vol.Required("slot_combination"): str
+                            vol.Required("slot_combination"): str,
+                            vol.Optional("context_area"): bool,
                         },
                     }
                 ]
@@ -153,8 +172,17 @@ TEST_SENTENCES_SCHEMA = vol.Schema(
             str: {
                 # slot combination name
                 str: [
-                    # sentence
-                    str
+                    vol.Any(
+                        str,  # sentence
+                        {
+                            vol.Required("sentences"): vol.Any(str, [str]),
+                            vol.Optional("slots"): {
+                                # slot name
+                                str: vol.Any(str, int)
+                            },
+                            vol.Optional("context_area"): bool,
+                        },
+                    )
                 ]
             }
         },
