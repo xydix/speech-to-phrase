@@ -66,8 +66,7 @@ lists:
       - unlocked
 
 expansion_rules:
-  # timer_set: "(set|start|create)"
-  timer_set: "set"
+  timer_set: "(set|start|create)"
 
 intents:
   # nevermind
@@ -215,40 +214,67 @@ intents:
   #       requires_context:
   #         domain: lock
 
-  # # light brightness/color
-  # HassLightSet:
-  #   data:
-  #     # brightness
-  #     - sentences:
-  #         - "set [the] brightness of [the] {name} to {brightness} percent"
-  #         - "set [the] {name} brightness to {brightness} percent"
-  #       requires_context:
-  #         domain: light
+  # lights
+  HassLightSet:
+    data:
+      # brightness
+      - sentences:
+          - "set [the] brightness [in here] to {brightness} percent"
+        metadata:
+          context_area: true
+          slot_combination: brightness_only
 
-  #     - sentences:
-  #         - "set [the] brightness of [the] {area} to {brightness} percent"
-  #         - "set [the] {area} brightness to {brightness} percent"
+      - sentences:
+          - "set [the] brightness of [the] {name} to {brightness} percent"
+          - "set [the] {name} brightness to {brightness} percent"
+        requires_context:
+          domain: light
+        metadata:
+          slot_combination: name_brightness
 
-  #     - sentences:
-  #         - "set [the] {floor} [floor] brightness to {brightness} percent"
-  #         - "set [the] brightness of [the] {floor} [floor] to {brightness} percent"
+      - sentences:
+          - "set [the] brightness of [the] {area} to {brightness} percent"
+          - "set [the] {area} brightness to {brightness} percent"
+        metadata:
+          slot_combination: area_brightness
 
-  #     # color
-  #     - sentences:
-  #         - "set [the] [color of [the]] {name} to {color}"
-  #         - "set [the] {name} [color] to {color}"
-  #       requires_context:
-  #         domain: light
+      # TODO: Add support in main repo
+      # sentences:
+      #     - "set [the] {floor} brightness to {brightness} percent"
+      #     - "set [the] brightness of [the] {floor} to {brightness} percent"
+      #   metadata:
+      #     slot_combination: floor_brightness
 
-  #     - sentences:
-  #         - "set [the] [color of [the]] {area} lights to {color}"
-  #         - "set [the] {area} lights to {color}"
-  #         - "set [the] lights in [the] {area} to {color}"
+      # color
+      - sentences:
+          - "set [the] lights [in here] to {color}"
+          - "set [[the] color of the] lights [in here] to {color}"
+        metadata:
+          slot_combination: color_only
+          context_area: true
 
-  #     - sentences:
-  #         - "set [the] [color of [the]] {floor} [floor] lights to {color}"
-  #         - "set [the] {floor} [floor] lights to {color}"
-  #         - "set [the] lights (on|in) [the] {floor} [floor] to {color}"
+      - sentences:
+          - "set [the] [color of [the]] {name} to {color}"
+          - "set [the] {name} [color] to {color}"
+        requires_context:
+          domain: light
+        metadata:
+          slot_combination: name_color
+
+      - sentences:
+          - "set [the] [color of [the]] {area} lights to {color}"
+          - "set [the] {area} lights to {color}"
+          - "set lights in [the] {area} to {color}"
+        metadata:
+          slot_combination: area_color
+
+      # TODO: Add support in main repo
+      # - sentences:
+      #     - "set [the] [color of [the]] {floor} lights to {color}"
+      #     - "set [the] {floor} lights to {color}"
+      #     - "set lights (on|in) [the] {floor} to {color}"
+      #   metadata:
+      #     slot_combination: floor_color
 
   # timers
   HassStartTimer:

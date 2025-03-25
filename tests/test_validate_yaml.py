@@ -165,8 +165,19 @@ TEST_SENTENCES_SCHEMA = vol.Schema(
         vol.Required("floors"): [{vol.Required("name"): vol.Any(str, [str])}],
         vol.Required("areas"): [{vol.Required("name"): vol.Any(str, [str])}],
         vol.Required("entities"): [
-            {vol.Required("name"): vol.Any(str, [str]), vol.Required("domain"): str}
+            {
+                vol.Required("name"): vol.Any(str, [str]),
+                vol.Required("domain"): str,
+                vol.Optional("light_supports_brightness"): bool,
+                vol.Optional("light_supports_color"): bool,
+            }
         ],
+        # Format arguments used in test sentences/slots.
+        # Requires "uses_format_values: <list of keys>" and "{key}" in sentence/slot.
+        vol.Optional("test_format_values"): {
+            # values key
+            str: [str]
+        },
         vol.Optional("tests"): {
             # intent name
             str: {
@@ -181,6 +192,7 @@ TEST_SENTENCES_SCHEMA = vol.Schema(
                                 str: vol.Any(str, int)
                             },
                             vol.Optional("context_area"): bool,
+                            vol.Optional("uses_format_values"): vol.Any(str, [str]),
                         },
                     )
                 ]

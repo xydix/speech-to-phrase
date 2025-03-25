@@ -168,6 +168,10 @@ class Things:
                 Entity(
                     names=_coerce_list(entity_dict["name"]),
                     domain=entity_dict["domain"],
+                    light_supports_brightness=entity_dict.get(
+                        "light_supports_brightness"
+                    ),
+                    light_supports_color=entity_dict.get("light_supports_color"),
                 )
                 for entity_dict in things_dict.get("entities", [])
             ],

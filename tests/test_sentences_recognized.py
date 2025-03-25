@@ -240,21 +240,52 @@ def _coerce_list(str_or_list: Union[str, List[str]]) -> List[str]:
 
 
 def _unpack_test_sentences(
-    test_sentences: List[Union[str, Dict[str, Any]]]
+    test_sentences: List[Union[str, Dict[str, Any]]],
+    test_format_values: Dict[str, List[str]],
 ) -> Iterable[SentenceToTest]:
     for str_or_dict in test_sentences:
         if isinstance(str_or_dict, str):
             yield SentenceToTest(str_or_dict)
         else:
             str_or_list = str_or_dict["sentences"]
-            test_slots = str_or_dict.get("slots")
+            test_slots = str_or_dict.get("slots", {})
             test_context_area = str_or_dict.get("context_area", False)
+            uses_format_values = str_or_dict.get("uses_format_values")
 
             if isinstance(str_or_list, str):
-                yield SentenceToTest(str_or_list, test_slots, test_context_area)
+                sentence_list = [str_or_list]
             else:
-                # List
-                for test_sentence_text in str_or_list:
+                sentence_list = str_or_list
+
+            if isinstance(uses_format_values, str):
+                uses_format_values = [uses_format_values]
+
+            if uses_format_values:
+                # Requires formatting test sentences/slots
+                for test_sentence_text in sentence_list:
+                    for format_value_combo in itertools.product(
+                        *(
+                            test_format_values[values_key]
+                            for values_key in uses_format_values
+                        )
+                    ):
+                        format_args = dict(zip(uses_format_values, format_value_combo))
+                        formatted_text = test_sentence_text.format(**format_args)
+                        formatted_slots = {
+                            slot_key: (
+                                slot_value.format(**format_args)
+                                if isinstance(slot_value, str)
+                                else slot_value
+                            )
+                            for slot_key, slot_value in test_slots.items()
+                        }
+                        yield SentenceToTest(
+                            formatted_text, formatted_slots, test_context_area
+                        )
+
+            else:
+                # No format values
+                for test_sentence_text in sentence_list:
                     yield SentenceToTest(
                         test_sentence_text, test_slots, test_context_area
                     )
@@ -282,6 +313,7 @@ def test_sentences_recognized(
         lang_test_sentences_dict = yaml.safe_load(lang_test_sentences_file)
 
     lang_test_intents_dict = lang_test_sentences_dict["tests"]
+    lang_test_format_values = lang_test_sentences_dict.get("test_format_values", {})
 
     assert set(intent_slots.keys()) == set(
         lang_test_intents_dict.keys()
@@ -349,7 +381,7 @@ def test_sentences_recognized(
             ), f"No tests for slot combination '{slot_combo_name}' of intent '{intent_name}'"
 
             for test_sentence in _unpack_test_sentences(
-                test_intent_info[slot_combo_name]
+                test_intent_info[slot_combo_name], lang_test_format_values
             ):
                 assert (
                     context_area == test_sentence.context_area
@@ -420,6 +452,7 @@ def test_sentences_tested(
         lang_test_sentences_dict = yaml.safe_load(lang_test_sentences_file)
 
     lang_test_intents_dict = lang_test_sentences_dict["tests"]
+    lang_test_format_values = lang_test_sentences_dict.get("test_format_values", {})
 
     test_things = Things.from_dict(lang_test_sentences_dict)
     test_things_lists_dict = {"lists": test_things.to_lists_dict()}
@@ -444,7 +477,9 @@ def test_sentences_tested(
 
             actual_test_sentences = set(
                 ts.text
-                for ts in _unpack_test_sentences(test_intent_info[slot_combo_name])
+                for ts in _unpack_test_sentences(
+                    test_intent_info[slot_combo_name], lang_test_format_values
+                )
             )
 
             # Generate test sentences and verify they are present

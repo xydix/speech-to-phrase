@@ -213,57 +213,62 @@ HassGetWeather:
 #       importance: "optional"
 #       example: "are any batteries charging in the basement"
 
-# HassLightSet:
-#   description: "Sets the brightness or color of a light"
-#   slots:
-#     name: "Name of a device or entity"
-#     area: "Name of an area"
-#     floor: "Name of a floor"
-#     brightness: "Brightness percentage from 0 to 100"
-#     color: "Name of color"
-#   slot_combinations:
-#     # brightness
-#     - slots:
-#         - "brightness"
-#       context_area: true
-#       importance: "usable"
-#       example: "set the brightness in here to 50%"
-#     - slots:
-#         - "name"
-#         - "brightness"
-#       importance: "usable"
-#       example: "set the overhead light brightness to 50%"
-#     - slots:
-#         - "area"
-#         - "brightness"
-#       importance: "usable"
-#       example: "set the living room brightness to 50%"
-#     - slots:
-#         - "floor"
-#         - "brightness"
-#       importance: "complete"
-#       example: "set the main floor brightness to 50%"
-#     # color
-#     - slots:
-#         - "color"
-#       context_area: true
-#       importance: "usable"
-#       example: "set the lights in here to red"
-#     - slots:
-#         - "name"
-#         - "color"
-#       importance: "usable"
-#       example: "set the overhead light to red"
-#     - slots:
-#         - "area"
-#         - "color"
-#       importance: "usable"
-#       example: "set the living room to red"
-#     - slots:
-#         - "floor"
-#         - "color"
-#       importance: "complete"
-#       example: "set the main floor to red"
+# lights
+HassLightSet:
+  description: "Sets the brightness or color of a light"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+    brightness: "Brightness percentage from 0 to 100"
+    color: "Name of color"
+  slot_combinations:
+    # brightness
+    brightness_only:
+      slots:
+        - "brightness"
+      context_area: true
+      example: "set the brightness in here to 50%"
+    name_brightness:
+      slots:
+        - "name"
+        - "brightness"
+      domain: "light"
+      example: "set the overhead light brightness to 50%"
+    area_brightness:
+      slots:
+        - "area"
+        - "brightness"
+      example: "set the living room brightness to 50%"
+    # TODO: Add support in main repo
+    # floor_brightness:
+    #   slots:
+    #     - "floor"
+    #     - "brightness"
+    #   example: "set the main floor brightness to 50%"
+    # color
+    color_only:
+      slots:
+        - "color"
+      context_area: true
+      example: "set the lights in here to red"
+    name_color:
+      slots:
+        - "name"
+        - "color"
+      domain: "light"
+      example: "set the overhead light to red"
+    area_color:
+      slots:
+        - "area"
+        - "color"
+      example: "set the living room to red"
+    # TODO: Add support in main repo
+    # floor_color:
+    #   slots:
+    #     - "floor"
+    #     - "color"
+    #   example: "set the main floor to red"
 
 # timers
 HassStartTimer:

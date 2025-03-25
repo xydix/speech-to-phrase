@@ -11,6 +11,28 @@ entities:
     domain: "climate"
   - name: "TV"
     domain: "media_player"
+  - name: "RGB Light"
+    domain: "light"
+    light_supports_brightness: true
+    light_supports_color: true
+
+test_format_values:
+  timer_set:
+    - "set"
+    - "start"
+    - "create"
+  color:
+    - "white"
+    - "black"
+    - "red"
+    - "orange"
+    - "yellow"
+    - "green"
+    - "blue"
+    - "purple"
+    - "brown"
+    - "pink"
+    - "turquoise"
 
 tests:
   HassNevermind:
@@ -45,215 +67,349 @@ tests:
       - "what is today's date"
       - "what's today's date"
 
+  # lights
+  HassLightSet:
+    brightness_only:
+      - sentences:
+          - "set brightness to 10 percent"
+        context_area: true
+        slots:
+          brightness: 10
+
+      - sentences:
+          - "set brightness to 100 percent"
+        context_area: true
+        slots:
+          brightness: 100
+
+    name_brightness:
+      - sentences:
+          - "set brightness of RGB Light to 10 percent"
+          - "set RGB Light brightness to 10 percent"
+        slots:
+          name: "RGB Light"
+          brightness: 10
+
+      - sentences:
+          - "set brightness of RGB Light to 100 percent"
+          - "set RGB Light brightness to 100 percent"
+        slots:
+          name: "RGB Light"
+          brightness: 100
+
+    area_brightness:
+      - sentences:
+          - "set brightness of Office to 10 percent"
+          - "set Office brightness to 10 percent"
+        slots:
+          area: "Office"
+          brightness: 10
+
+      - sentences:
+          - "set brightness of Office to 100 percent"
+          - "set Office brightness to 100 percent"
+        slots:
+          area: "Office"
+          brightness: 100
+
+    # TODO: Add support in main repo
+    # floor_brightness:
+    #   - sentences:
+    #       - "set brightness of First Floor to 10 percent"
+    #       - "set First Floor brightness to 10 percent"
+    #     slots:
+    #       floor: "First Floor"
+    #       brightness: 10
+
+    #   - sentences:
+    #       - "set brightness of First Floor to 100 percent"
+    #       - "set First Floor brightness to 100 percent"
+    #     slots:
+    #       floor: "First Floor"
+    #       brightness: 100
+
+    color_only:
+      - sentences:
+          - "set lights to {color}"
+        context_area: true
+        uses_format_values: "color"
+        slots:
+          color: "{color}"
+
+    name_color:
+      - sentences:
+          - "set RGB Light to {color}"
+        uses_format_values: "color"
+        slots:
+          name: "RGB Light"
+          color: "{color}"
+
+    area_color:
+      - sentences:
+          - "set Office lights to {color}"
+          - "set lights in Office to {color}"
+        uses_format_values: "color"
+        slots:
+          area: "Office"
+          color: "{color}"
+
+    # TODO: Add support in main repo
+    # floor_color:
+    #   - sentences:
+    #       - "set First Floor lights to {color}"
+    #       - "set lights on First Floor to {color}"
+    #     uses_format_values: "color"
+    #     slots:
+    #       floor: "First Floor"
+    #       color: "{color}"
+
   # timers
   HassStartTimer:
     seconds_only:
       - sentences:
-          - "set timer for 10 seconds"
+          - "{timer_set} timer for 10 seconds"
+        uses_format_values: "timer_set"
         slots:
           seconds: 10
 
       - sentences:
-          - "set timer for 100 seconds"
+          - "{timer_set} timer for 100 seconds"
+        uses_format_values: "timer_set"
         slots:
           seconds: 100
 
     minutes_1:
       - sentences:
-          - "set timer for 1 minute"
+          - "{timer_set} timer for 1 minute"
+        uses_format_values: "timer_set"
         slots:
           minutes: 1
 
     minutes_1_half:
       - sentences:
-          - "set timer for 1 and a half minutes"
+          - "{timer_set} timer for 1 and a half minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 1
           seconds: 30
 
     minutes_only:
       - sentences:
-          - "set timer for 2 minutes"
+          - "{timer_set} timer for 2 minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 2
       - sentences:
-          - "set timer for 19 minutes"
+          - "{timer_set} timer for 19 minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 19
       - sentences:
-          - "set timer for 20 minutes"
+          - "{timer_set} timer for 20 minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 20
       - sentences:
-          - "set timer for 45 minutes"
-          - "set timer for forty five minutes"
+          - "{timer_set} timer for 45 minutes"
+          - "{timer_set} timer for forty five minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 45
       - sentences:
-          - "set timer for 100 minutes"
+          - "{timer_set} timer for 100 minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 100
 
     minutes_half:
       - sentences:
-          - "set timer for 2 and a half minutes"
+          - "{timer_set} timer for 2 and a half minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 2
           seconds: 30
       - sentences:
-          - "set timer for 19 and a half minutes"
+          - "{timer_set} timer for 19 and a half minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 19
           seconds: 30
       - sentences:
-          - "set timer for 20 and a half minutes"
+          - "{timer_set} timer for 20 and a half minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 20
           seconds: 30
       - sentences:
-          - "set timer for 45 and a half minutes"
-          - "set timer for forty five and a half minutes"
+          - "{timer_set} timer for 45 and a half minutes"
+          - "{timer_set} timer for forty five and a half minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 45
           seconds: 30
       - sentences:
-          - "set timer for 100 and a half minutes"
+          - "{timer_set} timer for 100 and a half minutes"
+        uses_format_values: "timer_set"
         slots:
           minutes: 100
           seconds: 30
 
     hours_1:
       - sentences:
-          - "set timer for 1 hour"
+          - "{timer_set} timer for 1 hour"
+        uses_format_values: "timer_set"
         slots:
           hours: 1
 
     hours_1_half:
       - sentences:
-          - "set timer for 1 and a half hours"
+          - "{timer_set} timer for 1 and a half hours"
+        uses_format_values: "timer_set"
         slots:
           hours: 1
           minutes: 30
 
     hours_only:
       - sentences:
-          - "set timer for 2 hours"
+          - "{timer_set} timer for 2 hours"
+        uses_format_values: "timer_set"
         slots:
           hours: 2
       - sentences:
-          - "set timer for 24 hours"
+          - "{timer_set} timer for 24 hours"
+        uses_format_values: "timer_set"
         slots:
           hours: 24
 
     hours_half:
       - sentences:
-          - "set timer for 2 and a half hours"
+          - "{timer_set} timer for 2 and a half hours"
+        uses_format_values: "timer_set"
         slots:
           hours: 2
           minutes: 30
       - sentences:
-          - "set timer for 24 and a half hours"
+          - "{timer_set} timer for 24 and a half hours"
+        uses_format_values: "timer_set"
         slots:
           hours: 24
           minutes: 30
 
     hours_1_minutes_1:
       - sentences:
-          - "set timer for 1 hour and 1 minute"
+          - "{timer_set} timer for 1 hour and 1 minute"
+        uses_format_values: "timer_set"
         slots:
           hours: 1
           minutes: 1
 
     hours_1_minutes:
       - sentences:
-          - "set timer for 1 hour and 2 minutes"
+          - "{timer_set} timer for 1 hour and 2 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 1
           minutes: 2
       - sentences:
-          - "set timer for 1 hour and 19 minutes"
+          - "{timer_set} timer for 1 hour and 19 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 1
           minutes: 19
       - sentences:
-          - "set timer for 1 hour and 20 minutes"
+          - "{timer_set} timer for 1 hour and 20 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 1
           minutes: 20
       - sentences:
-          - "set timer for 1 hour and 45 minutes"
-          - "set timer for 1 hour and forty five minutes"
+          - "{timer_set} timer for 1 hour and 45 minutes"
+          - "{timer_set} timer for 1 hour and forty five minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 1
           minutes: 45
       - sentences:
-          - "set timer for 1 hour and 100 minutes"
+          - "{timer_set} timer for 1 hour and 100 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 1
           minutes: 100
 
     hours_minutes_1:
       - sentences:
-          - "set timer for 2 hours and 1 minute"
+          - "{timer_set} timer for 2 hours and 1 minute"
+        uses_format_values: "timer_set"
         slots:
           hours: 2
           minutes: 1
       - sentences:
-          - "set timer for 24 hours and 1 minute"
+          - "{timer_set} timer for 24 hours and 1 minute"
+        uses_format_values: "timer_set"
         slots:
           hours: 24
           minutes: 1
 
     hours_minutes:
       - sentences:
-          - "set timer for 2 hours and 2 minutes"
+          - "{timer_set} timer for 2 hours and 2 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 2
           minutes: 2
       - sentences:
-          - "set timer for 2 hours and 19 minutes"
+          - "{timer_set} timer for 2 hours and 19 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 2
           minutes: 19
       - sentences:
-          - "set timer for 2 hours and 20 minutes"
+          - "{timer_set} timer for 2 hours and 20 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 2
           minutes: 20
       - sentences:
-          - "set timer for 2 hours and 45 minutes"
-          - "set timer for 2 hours and forty five minutes"
+          - "{timer_set} timer for 2 hours and 45 minutes"
+          - "{timer_set} timer for 2 hours and forty five minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 2
           minutes: 45
       - sentences:
-          - "set timer for 2 hours and 100 minutes"
+          - "{timer_set} timer for 2 hours and 100 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 2
           minutes: 100
       - sentences:
-          - "set timer for 24 hours and 2 minutes"
+          - "{timer_set} timer for 24 hours and 2 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 24
           minutes: 2
       - sentences:
-          - "set timer for 24 hours and 19 minutes"
+          - "{timer_set} timer for 24 hours and 19 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 24
           minutes: 19
       - sentences:
-          - "set timer for 24 hours and 20 minutes"
+          - "{timer_set} timer for 24 hours and 20 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 24
           minutes: 20
       - sentences:
-          - "set timer for 24 hours and 45 minutes"
-          - "set timer for 24 hours and forty five minutes"
+          - "{timer_set} timer for 24 hours and 45 minutes"
+          - "{timer_set} timer for 24 hours and forty five minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 24
           minutes: 45
       - sentences:
-          - "set timer for 24 hours and 100 minutes"
+          - "{timer_set} timer for 24 hours and 100 minutes"
+        uses_format_values: "timer_set"
         slots:
           hours: 24
           minutes: 100
