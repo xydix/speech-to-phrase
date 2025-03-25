@@ -224,65 +224,30 @@ HassTurnOff:
     #   domain: "cover"
     #   example: "close the curtains on the main floor"
 
-# HassGetState:
-#   description: "Gets or checks the state of an entity"
-#   slots:
-#     name: "Name of a device or entity"
-#     area: "Name of an area"
-#     floor: "Name of a floor"
-#     domain: "Domain of devices/entities in an area"
-#     device_class: "Device class of devices/entities in an area"
-#     state: "Name of state to match"
-#   slot_combinations:
-#     - slots: "name"
-#       domain: "sensor"
-#       example: "what is the value of sensor 1"
-#     - slots:
-#         - "name"
-#         - "area"
-#       example: "what is the value of sensor 1 in the kitchen"
-#     - slots:
-#         - "name"
-#         - "floor"
-#       importance: "complete"
-#       example: "what is the value of sensor 1 on the first floor"
-#     - slots:
-#         - "state"
-#         - "domain"
-#       importance: "optional"
-#       example: "are there any lights on"
-#     - slots:
-#         - "state"
-#         - "domain"
-#         - "area"
-#       importance: "optional"
-#       example: "are there any lights on in the kitchen"
-#     - slots:
-#         - "state"
-#         - "domain"
-#         - "floor"
-#       importance: "optional"
-#       example: "are there any lights on upstairs"
-#     - slots:
-#         - "state"
-#         - "device_class"
-#         - "domain"
-#       importance: "optional"
-#       example: "are any batteries charging"
-#     - slots:
-#         - "state"
-#         - "device_class"
-#         - "domain"
-#         - "area"
-#       importance: "optional"
-#       example: "are any batteries charging in the garage"
-#     - slots:
-#         - "state"
-#         - "device_class"
-#         - "domain"
-#         - "floor"
-#       importance: "optional"
-#       example: "are any batteries charging in the basement"
+HassGetState:
+  description: "Gets or checks the state of an entity"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+    domain: "Domain of devices/entities in an area"
+    device_class: "Device class of devices/entities in an area"
+    state: "Name of state to match"
+  slot_combinations:
+    name_cover:
+      slots: "name"
+      domain: "cover"
+      example: "is the sliding door open"
+    name_lock:
+      slots: "name"
+      domain: "lock"
+      example: "is the front door locked"
+    name_sensor:
+      slots: "name"
+      domain:
+        - "sensor"
+        - "binary_sensor"
+      example: "what is the value of sensor 1"
 
 # lights
 HassLightSet:

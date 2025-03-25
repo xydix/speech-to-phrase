@@ -29,6 +29,10 @@ entities:
     domain: "scene"
   - name: "Front Door"
     domain: "lock"
+  - name: "Test Sensor"
+    domain: "sensor"
+  - name: "Test Binary Sensor"
+    domain: "binary_sensor"
 
 test_format_values:
   timer_set:
@@ -346,6 +350,47 @@ tests:
         slots:
           name: "Front Door"
 
+  HassGetState:
+    name_cover:
+      - sentences:
+          - "is Sliding Door open"
+        slots:
+          domain: "cover"
+          name: "Sliding Door"
+          state: "open"
+
+      - sentences:
+          - "is Sliding Door closed"
+        slots:
+          domain: "cover"
+          name: "Sliding Door"
+          state: "closed"
+
+    name_lock:
+      - sentences:
+          - "is Front Door locked"
+        slots:
+          domain: "lock"
+          name: "Front Door"
+          state: "locked"
+
+      - sentences:
+          - "is Front Door unlocked"
+        slots:
+          domain: "lock"
+          name: "Front Door"
+          state: "unlocked"
+
+    name_sensor:
+      - sentences:
+          - "what is Test Sensor"
+        slots:
+          name: "Test Sensor"
+
+      - sentences:
+          - "what is Test Binary Sensor"
+        slots:
+          name: "Test Binary Sensor"
 
   # lights
   HassLightSet:

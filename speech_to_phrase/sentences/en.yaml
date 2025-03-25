@@ -638,29 +638,38 @@ intents:
       #   metadata:
       #     slot_combination: "floor_only"
 
-  # # questions
-  # HassGetState:
-  #   data:
-  #     # doors, etc.
-  #     - sentences:
-  #         - "is [the] {name} {cover_states:state}"
-  #       requires_context:
-  #         domain:
-  #           - cover
+  # questions
+  HassGetState:
+    data:
+      # doors, etc.
+      - sentences:
+          - "is [the] {name} {cover_states:state}"
+        requires_context:
+          domain: "cover"
+        slots:
+          domain: "cover"
+        metadata:
+          slot_combination: "name_cover"
 
-  #     # locks
-  #     - sentences:
-  #         - "is [the] {name} {lock_states:state}"
-  #       requires_context:
-  #         domain: lock
+      # locks
+      - sentences:
+          - "is [the] {name} {lock_states:state}"
+        slots:
+          domain: "lock"
+        requires_context:
+          domain: lock
+        metadata:
+          slot_combination: "name_lock"
 
-  #     # sensors, etc.
-  #     - sentences:
-  #         - "what is [the [value of [the]]] {name}"
-  #       requires_context:
-  #         domain:
-  #           - sensor
-  #           - binary_sensor
+      # sensors, etc.
+      - sentences:
+          - "what is [the [value of [the]]] {name}"
+        requires_context:
+          domain:
+            - sensor
+            - binary_sensor
+        metadata:
+          slot_combination: "name_sensor"
 
   # # todo
   # HassListAddItem:
