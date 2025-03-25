@@ -23,6 +23,12 @@ entities:
     domain: "input_boolean"
   - name: "Sliding Door"
     domain: "cover"
+  - name: "Party Time"
+    domain: "script"
+  - name: "Mood Lighting"
+    domain: "scene"
+  - name: "Front Door"
+    domain: "lock"
 
 test_format_values:
   timer_set:
@@ -199,6 +205,148 @@ tests:
           device_class: "{cover_classes}"
           area: "Office"
 
+    name_lock:
+      - sentences:
+          - "lock Front Door"
+        slots:
+          name: "Front Door"
+
+    name_script:
+      - sentences:
+          - "run Party Time"
+        slots:
+          name: "Party Time"
+          # TODO: fix in main repo
+          domain: "script"
+
+    name_scene:
+      - sentences:
+          - "activate Mood Lighting"
+        slots:
+          name: "Mood Lighting"
+          # TODO: fix in main repo
+          domain: "scene"
+
+  # turn off
+  HassTurnOff:
+    domain_light:
+      - sentences:
+          - "turn off lights"
+        context_area: true
+        slots:
+          domain: "light"
+
+    domain_fan:
+      - sentences:
+          - "turn off fans"
+        context_area: true
+        slots:
+          domain: "fan"
+
+    name:
+      - sentences:
+          - "turn off RGB Light"
+        slots:
+          name: "RGB Light"
+
+      - sentences:
+          - "turn off Test Switch"
+        slots:
+          name: "Test Switch"
+
+      - sentences:
+          - "turn off Test Fan"
+        slots:
+          name: "Test Fan"
+
+      - sentences:
+          - "turn off TV"
+        slots:
+          name: "TV"
+
+      - sentences:
+          - "turn off Test Input Boolean"
+        slots:
+          name: "Test Input Boolean"
+
+    name_cover:
+      - sentences:
+          - "close Sliding Door"
+        slots:
+          name: "Sliding Door"
+
+    area_domain_light:
+      - sentences:
+          - "turn off lights in Office"
+          - "turn off Office lights"
+        slots:
+          area: "Office"
+          domain: "light"
+
+    # TODO: add support in main repo
+    # area_domain_fan:
+    #   - sentences:
+    #       - "turn off fans in Office"
+    #       - "turn off Office fans"
+    #     slots:
+    #       area: "Office"
+    #       domain: "fan"
+
+    name_area:
+      - sentences:
+          - "turn off RGB Light in Office"
+        slots:
+          name: "RGB Light"
+          area: "Office"
+
+      - sentences:
+          - "turn off Test Switch in Office"
+        slots:
+          name: "Test Switch"
+          area: "Office"
+
+      - sentences:
+          - "turn off Test Fan in Office"
+        slots:
+          name: "Test Fan"
+          area: "Office"
+
+      - sentences:
+          - "turn off TV in Office"
+        slots:
+          name: "TV"
+          area: "Office"
+
+      - sentences:
+          - "turn off Test Input Boolean in Office"
+        slots:
+          name: "Test Input Boolean"
+          area: "Office"
+
+    name_area_cover:
+      - sentences:
+          - "close Sliding Door in Office"
+        slots:
+          name: "Sliding Door"
+          area: "Office"
+
+    area_device_class_cover:
+      - sentences:
+          - "close {cover_classes} in Office"
+          - "close Office {cover_classes}"
+        uses_format_values: "cover_classes"
+        slots:
+          domain: "cover"
+          device_class: "{cover_classes}"
+          area: "Office"
+
+    name_lock:
+      - sentences:
+          - "unlock Front Door"
+        slots:
+          name: "Front Door"
+
+
   # lights
   HassLightSet:
     brightness_only:
@@ -289,7 +437,7 @@ tests:
     # floor_color:
     #   - sentences:
     #       - "set First Floor lights to {color}"
-    #       - "set lights on First Floor to {color}"
+    #       - "set lights off First Floor to {color}"
     #     uses_format_values: "color"
     #     slots:
     #       floor: "First Floor"

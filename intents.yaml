@@ -105,6 +105,20 @@ HassTurnOn:
         - "device_class"
       domain: "cover"
       example: "open the curtains in the living room"
+    name_lock:
+      slots: "name"
+      domain: "lock"
+      example: "lock front door"
+    name_script:
+      slots: "name"
+      domain: "script"
+      example: "run party time script"
+    name_scene:
+      slots: "name"
+      domain: "scene"
+      example: "activate mood lighting scene"
+
+    # TODO: Add support in main repo
     # - slots:
     #     - "floor"
     #     - "domain"
@@ -119,60 +133,96 @@ HassTurnOn:
     #   domain: "cover"
     #   example: "open the curtains on the main floor"
 
-# HassTurnOff:
-#   description: "Turns off a device or entity"
-#   slots:
-#     name: "Name of a device or entity"
-#     area: "Name of an area"
-#     floor: "Name of a floor"
-#     domain: "Domain of devices/entities in an area"
-#     device_class: "Device class of devices/entities in an area"
-#   slot_combinations:
-#     - slots: "domain"
-#       context_area: true
-#       domain:
-#         - "light"
-#         - "fan"
-#       example: "turn off the lights in here"
-#     - slots: "name"
-#       domain:
-#         - "light"
-#         - "cover"
-#         - "switch"
-#         - "fan"
-#         - "media_player"
-#         - "input_boolean"
-#       example:
-#         - "turn off the overhead light"
-#         - "close the sliding door"
-#     - slots:
-#         - "area"
-#         - "domain"
-#       example: "turn off the lights in the kitchen"
-#     - slots:
-#         - "name"
-#         - "area"
-#       example: "turn off the overhead light in the kitchen"
-#     - slots:
-#         - "area"
-#         - "domain"
-#         - "device_class"
-#       example: "close the curtains in the living room"
-#     - slots:
-#         - "floor"
-#         - "domain"
-#       example: "turn off the upstairs lights"
-#     - slots:
-#         - "floor"
-#         - "domain"
-#         - "device_class"
-#       example: "close the curtains on the main floor"
-#     - slots:
-#         - "name"
-#         - "floor"
-#       example: "turn off the overhead light upstairs"
-#     - slots: "domain"
-#       example: "turn off all the lights in the house"
+HassTurnOff:
+  description: "Turns off a device or entity"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+    domain: "Domain of devices/entities in an area"
+    device_class: "Device class of devices/entities in an area"
+  slot_combinations:
+    domain_light:
+      slots: "domain"
+      context_area: true
+      domain: "light"
+      example: "turn off the lights in here"
+    domain_fan:
+      slots: "domain"
+      context_area: true
+      domain: "fan"
+      example: "turn off the fans in here"
+    name:
+      slots: "name"
+      domain:
+        - "light"
+        - "switch"
+        - "fan"
+        - "media_player"
+        - "input_boolean"
+      example:
+        - "turn off the overhead light"
+    name_cover:
+      slots: "name"
+      domain: "cover"
+      example:
+        - "close the sliding door"
+    area_domain_light:
+      slots:
+        - "area"
+        - "domain"
+      domain: "light"
+      example: "turn off the lights in the kitchen"
+    # TODO: add support in main repo
+    # area_domain_fan:
+    #   slots:
+    #     - "area"
+    #     - "domain"
+    #   domain: "fan"
+    #   example: "turn off the fans in the kitchen"
+    name_area:
+      slots:
+        - "name"
+        - "area"
+      domain:
+        - "light"
+        - "switch"
+        - "fan"
+        - "media_player"
+        - "input_boolean"
+      example: "turn off the overhead light in the kitchen"
+    name_area_cover:
+      slots:
+        - "name"
+        - "area"
+      domain: "cover"
+      example: "close the sliding door in the kitchen"
+    area_device_class_cover:
+      slots:
+        - "area"
+        - "domain"
+        - "device_class"
+      domain: "cover"
+      example: "open the curtains in the living room"
+    name_lock:
+      slots: "name"
+      domain: "lock"
+      example: "unlock front door"
+
+    # TODO: Add support in main repo
+    # - slots:
+    #     - "floor"
+    #     - "domain"
+    #   domain:
+    #     - "light"
+    #     - "fan"
+    #   example: "turn off the upstairs lights"
+    # - slots:
+    #     - "floor"
+    #     - "domain"
+    #     - "device_class"
+    #   domain: "cover"
+    #   example: "close the curtains on the main floor"
 
 # HassGetState:
 #   description: "Gets or checks the state of an entity"

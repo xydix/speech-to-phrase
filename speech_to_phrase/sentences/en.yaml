@@ -205,16 +205,10 @@ intents:
         metadata:
           slot_combination: "name_area_cover"
 
+  # TODO: add support in main repo
   #     - sentences:
   #         - "turn on [all|the|all of the] {floor} [floor] lights"
   #         - "turn on [all|the|all of the] lights (on|in) [the] {floor} [floor]"
-
-  #     # open
-  #     - sentences:
-  #         - "open [the] {name}"
-  #       requires_context:
-  #         domain:
-  #           - cover
 
       - sentences:
           - "open [the] {cover_classes:device_class} in [the] {area}"
@@ -224,70 +218,40 @@ intents:
         metadata:
           slot_combination: "area_device_class_cover"
 
+  # TODO: add support in main repo
   #     - sentences:
   #         - "open [the] {cover_classes} (on|in) [the] {floor} [floor]"
   #         - "open {floor} [floor] {cover_classes}"
 
-  #     # lock
-  #     - sentences:
-  #         - "lock [the] {name}"
-  #       requires_context:
-  #         domain: lock
+      # lock
+      - sentences:
+          - "lock [the] {name}"
+        requires_context:
+          domain: lock
+        metadata:
+          slot_combination: "name_lock"
 
-  #     # script
-  #     - sentences:
-  #         - "run {name} [script]"
-  #       requires_context:
-  #         domain: script
+      # script
+      - sentences:
+          - "run [the] {name} [script]"
+        requires_context:
+          domain: "script"
+        slots:
+          # TODO: fix in main repo
+          domain: "script"
+        metadata:
+          slot_combination: "name_script"
 
-  #     # scene
-  #     - sentences:
-  #         - "activate {name} [scene]"
-  #       requires_context:
-  #         domain: scene
-
-  # HassTurnOff:
-  #   data:
-  #     # turn off
-  #     - sentences:
-  #         - "turn off [the] lights"
-
-  #     - sentences:
-  #         - "turn off [the] {name}"
-  #       requires_context:
-  #         domain:
-  #           - light
-  #           - switch
-  #           - fan
-  #           - media_player
-  #           - input_boolean
-
-  #     - sentences:
-  #         - "turn off [all|the|all of the] {area} lights"
-  #         - "turn off [all|the|all of the] lights in [the] {area}"
-
-  #     - sentences:
-  #         - "turn off [all|the|all of the] {floor} [floor] lights"
-  #         - "turn off [all|the|all of the] lights (on|in) [the] {floor} [floor]"
-
-  #     # close
-  #     - sentences:
-  #         - "close [the] {name}"
-  #       requires_context:
-  #         domain:
-  #           - cover
-
-  #     - sentences:
-  #         - "close [the] {cover_classes} in [the] {area}"
-  #         - "close [the] {area} {cover_classes}"
-  #         - "close [the] {cover_classes} (on|in) [the] {floor} [floor]"
-  #         - "close [the] {floor} [floor] {cover_classes}"
-
-  #     # unlock
-  #     - sentences:
-  #         - "unlock [the] {name}"
-  #       requires_context:
-  #         domain: lock
+      # scene
+      - sentences:
+          - "activate [the] {name} [scene]"
+        requires_context:
+          domain: "scene"
+        slots:
+          # TODO: fix in main repo
+          domain: "scene"
+        metadata:
+          slot_combination: "name_scene"
 
   # lights
   HassLightSet:
@@ -350,6 +314,118 @@ intents:
       #     - "set lights (on|in) [the] {floor} to {color}"
       #   metadata:
       #     slot_combination: floor_color
+
+  HassTurnOff:
+    data:
+      # turn off
+      - sentences:
+          - "turn off [the] lights [in here]"
+        slots:
+          domain: "light"
+        metadata:
+          slot_combination: "domain_light"
+          context_area: true
+
+      - sentences:
+          - "turn off [the] fans [in here]"
+        slots:
+          domain: "fan"
+        metadata:
+          slot_combination: "domain_fan"
+          context_area: true
+
+      - sentences:
+          - "turn off [the] {name}"
+        requires_context:
+          domain:
+            - "light"
+            - "switch"
+            - "fan"
+            - "media_player"
+            - "input_boolean"
+        metadata:
+          slot_combination: "name"
+
+      - sentences:
+          - "close [the] {name}"
+        requires_context:
+          domain: "cover"
+        metadata:
+          slot_combination: "name_cover"
+
+  #     - sentences:
+  #         - "turn off [the] {name}"
+  #         - "turn off [the] {name} in [the] {area}"
+  #         - "turn off [the] {name} (on|in) [the] {floor} [floor]"
+  #       requires_context:
+  #         domain:
+  #           - light
+  #           - switch
+  #           - fan
+  #           - media_player
+  #           - input_boolean
+
+      - sentences:
+          - "turn off [all|the|all of the] {area} lights"
+          - "turn off [all|the|all of the] lights in [the] {area}"
+        slots:
+          domain: "light"
+        metadata:
+          slot_combination: "area_domain_light"
+
+      # TODO: add support in main repo
+      # - sentences:
+      #     - "turn off [all|the|all of the] {area} fans"
+      #     - "turn off [all|the|all of the] fans in [the] {area}"
+      #   slots:
+      #     domain: "fan"
+      #   metadata:
+      #     slot_combination: "area_domain_fan"
+
+      - sentences:
+          - "turn off [the] {name} in [the] {area}"
+        requires_context:
+          domain:
+            - "light"
+            - "switch"
+            - "fan"
+            - "media_player"
+            - "input_boolean"
+        metadata:
+          slot_combination: "name_area"
+
+      - sentences:
+          - "close [the] {name} in [the] {area}"
+        requires_context:
+          domain: "cover"
+        metadata:
+          slot_combination: "name_area_cover"
+
+  # TODO: add support in main repo
+  #     - sentences:
+  #         - "turn off [all|the|all of the] {floor} [floor] lights"
+  #         - "turn off [all|the|all of the] lights (on|in) [the] {floor} [floor]"
+
+      - sentences:
+          - "close [the] {cover_classes:device_class} in [the] {area}"
+          - "close [the] {area} {cover_classes:device_class}"
+        slots:
+          domain: "cover"
+        metadata:
+          slot_combination: "area_device_class_cover"
+
+  # TODO: add support in main repo
+  #     - sentences:
+  #         - "close [the] {cover_classes} (on|in) [the] {floor} [floor]"
+  #         - "close {floor} [floor] {cover_classes}"
+
+      # lock
+      - sentences:
+          - "unlock [the] {name}"
+        requires_context:
+          domain: lock
+        metadata:
+          slot_combination: "name_lock"
 
   # timers
   HassStartTimer:
