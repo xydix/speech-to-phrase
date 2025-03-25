@@ -34,69 +34,90 @@ HassGetWeather:
       domain: "weather"
       example: "what is the weather in New York"
 
-# HassTurnOn:
-#   description: "Turns on a device or entity"
-#   slots:
-#     name: "Name of a device or entity"
-#     area: "Name of an area"
-#     floor: "Name of a floor"
-#     domain: "Domain of devices/entities in an area"
-#     device_class: "Device class of devices/entities in an area"
-#   slot_combinations:
-#     - slots: "domain"
-#       context_area: true
-#       domain:
-#         - "light"
-#         - "fan"
-#       example: "turn on the lights in here"
-#     - slots: "name"
-#       domain:
-#         - "light"
-#         - "cover"
-#         - "switch"
-#         - "fan"
-#         - "media_player"
-#         - "input_boolean"
-#       example:
-#         - "turn on the overhead light"
-#         - "open the sliding door"
-#     - slots:
-#         - "area"
-#         - "domain"
-#       domain:
-#         - "light"
-#         - "fan"
-#       example: "turn on the lights in the kitchen"
-#     - slots:
-#         - "name"
-#         - "area"
-#       domain:
-#         - "light"
-#         - "cover"
-#         - "switch"
-#         - "fan"
-#         - "media_player"
-#         - "input_boolean"
-#       example: "turn on the overhead light in the kitchen"
-#     - slots:
-#         - "area"
-#         - "domain"
-#         - "device_class"
-#       domain: "cover"
-#       example: "open the curtains in the living room"
-#     - slots:
-#         - "floor"
-#         - "domain"
-#       domain:
-#         - "light"
-#         - "fan"
-#       example: "turn on the upstairs lights"
-#     - slots:
-#         - "floor"
-#         - "domain"
-#         - "device_class"
-#       domain: "cover"
-#       example: "open the curtains on the main floor"
+HassTurnOn:
+  description: "Turns on a device or entity"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+    domain: "Domain of devices/entities in an area"
+    device_class: "Device class of devices/entities in an area"
+  slot_combinations:
+    domain_light:
+      slots: "domain"
+      context_area: true
+      domain: "light"
+      example: "turn on the lights in here"
+    domain_fan:
+      slots: "domain"
+      context_area: true
+      domain: "fan"
+      example: "turn on the fans in here"
+    name:
+      slots: "name"
+      domain:
+        - "light"
+        - "switch"
+        - "fan"
+        - "media_player"
+        - "input_boolean"
+      example:
+        - "turn on the overhead light"
+    name_cover:
+      slots: "name"
+      domain: "cover"
+      example:
+        - "open the sliding door"
+    area_domain_light:
+      slots:
+        - "area"
+        - "domain"
+      domain: "light"
+      example: "turn on the lights in the kitchen"
+    # TODO: add support in main repo
+    # area_domain_fan:
+    #   slots:
+    #     - "area"
+    #     - "domain"
+    #   domain: "fan"
+    #   example: "turn on the fans in the kitchen"
+    name_area:
+      slots:
+        - "name"
+        - "area"
+      domain:
+        - "light"
+        - "switch"
+        - "fan"
+        - "media_player"
+        - "input_boolean"
+      example: "turn on the overhead light in the kitchen"
+    name_area_cover:
+      slots:
+        - "name"
+        - "area"
+      domain: "cover"
+      example: "open the sliding door in the kitchen"
+    area_device_class_cover:
+      slots:
+        - "area"
+        - "domain"
+        - "device_class"
+      domain: "cover"
+      example: "open the curtains in the living room"
+    # - slots:
+    #     - "floor"
+    #     - "domain"
+    #   domain:
+    #     - "light"
+    #     - "fan"
+    #   example: "turn on the upstairs lights"
+    # - slots:
+    #     - "floor"
+    #     - "domain"
+    #     - "device_class"
+    #   domain: "cover"
+    #   example: "open the curtains on the main floor"
 
 # HassTurnOff:
 #   description: "Turns off a device or entity"

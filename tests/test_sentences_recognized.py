@@ -239,9 +239,23 @@ def _coerce_list(str_or_list: Union[str, List[str]]) -> List[str]:
     return str_or_list
 
 
+def _get_format_values(
+    values: List[Union[str, Dict[str, str]]]
+) -> List[Tuple[str, str]]:
+    values_in_out: List[Tuple[str, str]] = []
+
+    for str_or_dict in values:
+        if isinstance(str_or_dict, str):
+            values_in_out.append((str_or_dict, str_or_dict))
+        else:
+            values_in_out.append((str_or_dict["in"], str_or_dict["out"]))
+
+    return values_in_out
+
+
 def _unpack_test_sentences(
     test_sentences: List[Union[str, Dict[str, Any]]],
-    test_format_values: Dict[str, List[str]],
+    test_format_values: Dict[str, List[Union[str, Dict[str, str]]]],
 ) -> Iterable[SentenceToTest]:
     for str_or_dict in test_sentences:
         if isinstance(str_or_dict, str):
@@ -265,15 +279,20 @@ def _unpack_test_sentences(
                 for test_sentence_text in sentence_list:
                     for format_value_combo in itertools.product(
                         *(
-                            test_format_values[values_key]
+                            _get_format_values(test_format_values[values_key])
                             for values_key in uses_format_values
                         )
                     ):
-                        format_args = dict(zip(uses_format_values, format_value_combo))
-                        formatted_text = test_sentence_text.format(**format_args)
+                        format_args_in = dict(
+                            zip(uses_format_values, (v[0] for v in format_value_combo))
+                        )
+                        format_args_out = dict(
+                            zip(uses_format_values, (v[1] for v in format_value_combo))
+                        )
+                        formatted_text = test_sentence_text.format(**format_args_in)
                         formatted_slots = {
                             slot_key: (
-                                slot_value.format(**format_args)
+                                slot_value.format(**format_args_out)
                                 if isinstance(slot_value, str)
                                 else slot_value
                             )
@@ -400,16 +419,24 @@ def test_sentences_recognized(
 
                 assert result_slots == (test_sentence.slots or {}), test_sentence
                 if expected_domains:
-                    # Verify that matched entity has an expected domain.
-                    # The domain is stored in the metadata in Things.to_lists_dict()
-                    assert "name" in result.entities
-                    name_entity = result.entities["name"]
-                    assert name_entity.metadata and ("domain" in name_entity.metadata)
-                    entity_domain = name_entity.metadata["domain"]
-                    assert entity_domain in expected_domains
-                    actual_domains.discard(entity_domain)
+                    assert ("name" in result.entities) or ("domain" in result.entities)
+                    if name_entity := result.entities.get("name"):
+                        # Verify that matched entity has an expected domain.
+                        # The domain is stored in the metadata in Things.to_lists_dict()
+                        assert name_entity.metadata and (
+                            "domain" in name_entity.metadata
+                        )
+                        entity_domain = name_entity.metadata["domain"]
+                        assert entity_domain in expected_domains
+                        actual_domains.add(entity_domain)
+                    else:
+                        # Verify that the domain was inferred from the sentence itself
+                        actual_domains.add(result.entities["domain"].value)
 
-            assert not actual_domains, "Missing tests for some entity domains"
+            if expected_domains:
+                assert (
+                    actual_domains == expected_domains
+                ), f"Missing tests for some domains in intent '{intent_name}' for slot combination: '{slot_combo_name}'"
 
             # Generate possible sentences and verify they can be recognized in Home Assistant
             for sentence in intent_data.sentences:
@@ -426,7 +453,7 @@ def test_sentences_recognized(
                     assert (
                         result is not None
                     ), f"Sentence not recognized with Home Assistant intents: '{gen_text}'"
-                    assert result.intent.name == intent_name, sentence
+                    assert result.intent.name == intent_name, sentence.text
                     result_slots = {
                         e_name: e.value for e_name, e in result.entities.items()
                     }
@@ -434,7 +461,7 @@ def test_sentences_recognized(
                         # Don't match against real slots
                         result_slots.pop("area", None)
 
-                    assert result_slots == gen_slots, sentence
+                    assert result_slots == gen_slots, gen_text
 
 
 @pytest.mark.parametrize("language", (Language.ENGLISH,))
@@ -490,4 +517,6 @@ def test_sentences_tested(
                 )
                 expected_test_sentences.update(s.strip() for s in possible_sentences)
 
-            assert expected_test_sentences == actual_test_sentences
+            assert (
+                expected_test_sentences == actual_test_sentences
+            ), "Possible test sentences do not match actual test sentences"

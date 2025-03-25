@@ -176,7 +176,7 @@ TEST_SENTENCES_SCHEMA = vol.Schema(
         # Requires "uses_format_values: <list of keys>" and "{key}" in sentence/slot.
         vol.Optional("test_format_values"): {
             # values key
-            str: [str]
+            str: [vol.Any(str, {vol.Required("in"): str, vol.Required("out"): str})]
         },
         vol.Optional("tests"): {
             # intent name

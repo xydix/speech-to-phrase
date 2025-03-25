@@ -15,6 +15,14 @@ entities:
     domain: "light"
     light_supports_brightness: true
     light_supports_color: true
+  - name: "Test Switch"
+    domain: "switch"
+  - name: "Test Fan"
+    domain: "fan"
+  - name: "Test Input Boolean"
+    domain: "input_boolean"
+  - name: "Sliding Door"
+    domain: "cover"
 
 test_format_values:
   timer_set:
@@ -33,6 +41,17 @@ test_format_values:
     - "brown"
     - "pink"
     - "turquoise"
+  cover_classes:
+    - in: "blinds"
+      out: "blind"
+    - in: "curtain"
+      out: "curtain"
+    - in: "curtains"
+      out: "curtain"
+    - in: "window"
+      out: "window"
+    - in: "windows"
+      out: "window"
 
 tests:
   HassNevermind:
@@ -66,6 +85,119 @@ tests:
       - "what's the date"
       - "what is today's date"
       - "what's today's date"
+
+  # turn on
+  HassTurnOn:
+    domain_light:
+      - sentences:
+          - "turn on lights"
+        context_area: true
+        slots:
+          domain: "light"
+
+    domain_fan:
+      - sentences:
+          - "turn on fans"
+        context_area: true
+        slots:
+          domain: "fan"
+
+    name:
+      - sentences:
+          - "turn on RGB Light"
+        slots:
+          name: "RGB Light"
+
+      - sentences:
+          - "turn on Test Switch"
+        slots:
+          name: "Test Switch"
+
+      - sentences:
+          - "turn on Test Fan"
+        slots:
+          name: "Test Fan"
+
+      - sentences:
+          - "turn on TV"
+        slots:
+          name: "TV"
+
+      - sentences:
+          - "turn on Test Input Boolean"
+        slots:
+          name: "Test Input Boolean"
+
+    name_cover:
+      - sentences:
+          - "open Sliding Door"
+        slots:
+          name: "Sliding Door"
+
+    area_domain_light:
+      - sentences:
+          - "turn on lights in Office"
+          - "turn on Office lights"
+        slots:
+          area: "Office"
+          domain: "light"
+
+    # TODO: add support in main repo
+    # area_domain_fan:
+    #   - sentences:
+    #       - "turn on fans in Office"
+    #       - "turn on Office fans"
+    #     slots:
+    #       area: "Office"
+    #       domain: "fan"
+
+    name_area:
+      - sentences:
+          - "turn on RGB Light in Office"
+        slots:
+          name: "RGB Light"
+          area: "Office"
+
+      - sentences:
+          - "turn on Test Switch in Office"
+        slots:
+          name: "Test Switch"
+          area: "Office"
+
+      - sentences:
+          - "turn on Test Fan in Office"
+        slots:
+          name: "Test Fan"
+          area: "Office"
+
+      - sentences:
+          - "turn on TV in Office"
+        slots:
+          name: "TV"
+          area: "Office"
+
+      - sentences:
+          - "turn on Test Input Boolean in Office"
+        slots:
+          name: "Test Input Boolean"
+          area: "Office"
+
+    name_area_cover:
+      - sentences:
+          - "open Sliding Door in Office"
+        slots:
+          name: "Sliding Door"
+          area: "Office"
+
+    area_device_class_cover:
+      - sentences:
+          - "open {cover_classes} in Office"
+          - "open Office {cover_classes}"
+        uses_format_values: "cover_classes"
+        slots:
+          domain: "cover"
+          device_class: "{cover_classes}"
+          area: "Office"
 
   # lights
   HassLightSet:
