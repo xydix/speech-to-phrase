@@ -159,92 +159,6 @@ def generate_sentences(
         raise ValueError(f"Unexpected expression: {e}")
 
 
-# def generate_test_sentences(
-#     e: Expression, intents: Intents, intent_data: IntentData
-# ) -> Iterable[str]:
-#     """Generate possible text strings from an expression."""
-#     if isinstance(e, TextChunk):
-#         chunk: TextChunk = e
-#         yield chunk.original_text
-#     elif isinstance(e, Group):
-#         grp: Group = e
-#         if isinstance(grp, Alternative):
-#             alt: Alternative = e
-#             # Skip optionals
-#             if alt.is_optional:
-#                 yield ""
-#             else:
-#                 for item in grp.items:
-#                     yield from generate_test_sentences(item, intents, intent_data)
-#         elif isinstance(grp, Sequence):
-#             seq_sentences = map(
-#                 partial(
-#                     generate_test_sentences,
-#                     intents=intents,
-#                     intent_data=intent_data,
-#                 ),
-#                 grp.items,
-#             )
-#             for sentence_text in itertools.product(*seq_sentences):
-#                 yield normalize_whitespace("".join(sentence_text))
-#         else:
-#             raise ValueError(f"Unexpected group type: {grp}")
-#     elif isinstance(e, ListReference):
-#         # {list}
-#         list_ref: ListReference = e
-
-#         slot_list = intent_data.slot_lists.get(list_ref.list_name)
-#         if slot_list is None:
-#             slot_list = intents.slot_lists.get(list_ref.list_name)
-
-#         if slot_list is None:
-#             raise ValueError(f"Missing slot list: {list_ref.list_name}")
-
-#         if isinstance(slot_list, TextSlotList):
-#             text_list: TextSlotList = slot_list
-
-#             for text_value in text_list.values:
-#                 if intent_data.requires_context and (
-#                     not check_required_context(
-#                         intent_data.requires_context,
-#                         text_value.context,
-#                         allow_missing_keys=True,
-#                     )
-#                 ):
-#                     continue
-
-#                 if intent_data.excludes_context and (
-#                     not check_excluded_context(
-#                         intent_data.excludes_context, text_value.context
-#                     )
-#                 ):
-#                     continue
-
-#                 yield from generate_test_sentences(
-#                     text_value.text_in, intents, intent_data
-#                 )
-#         elif isinstance(slot_list, RangeSlotList):
-#             range_list: RangeSlotList = slot_list
-
-#             yield str(range_list.start)
-#             yield str(range_list.stop)
-#         else:
-#             raise ValueError(f"Unexpected slot list type: {slot_list}")
-#     elif isinstance(e, RuleReference):
-#         # <rule>
-#         rule_ref: RuleReference = e
-#         rule_body = intent_data.expansion_rules.get(rule_ref.rule_name)
-#         if rule_body is None:
-#             rule_body = intents.expansion_rules.get(rule_ref.rule_name)
-
-#         if rule_body is None:
-#             raise ValueError(f"Missing expansion rule: {rule_ref.rule_name}")
-
-#         yield from generate_test_sentences(rule_body.expression, intents, intent_data)
-#     else:
-#         raise ValueError(f"Unexpected expression: {e}")
-
-
 def _coerce_list(str_or_list: Union[str, List[str]]) -> List[str]:
     if isinstance(str_or_list, str):
         return [str_or_list]
@@ -353,6 +267,17 @@ def test_sentences_recognized(
 
     test_things = Things.from_dict(lang_test_sentences_dict)
     test_things_lists_dict = {"lists": test_things.to_lists_dict()}
+
+    # Add wildcard values
+    test_wildcard_lists = {
+        "lists": {
+            list_name: {"wildcard": False, "values": list_values}
+            for list_name, list_values in lang_test_sentences_dict.get(
+                "test_wildcard_values", {}
+            ).items()
+        }
+    }
+    merge_dict(test_things_lists_dict, test_wildcard_lists)
 
     # Load Speech-to-Phrase intents
     lang_sentences_path = _SENTENCES_DIR / f"{lang_code}.yaml"
@@ -496,6 +421,17 @@ def test_sentences_tested(
 
     test_things = Things.from_dict(lang_test_sentences_dict)
     test_things_lists_dict = {"lists": test_things.to_lists_dict()}
+
+    # Add wildcard values
+    test_wildcard_lists = {
+        "lists": {
+            list_name: {"wildcard": False, "values": list_values}
+            for list_name, list_values in lang_test_sentences_dict.get(
+                "test_wildcard_values", {}
+            ).items()
+        }
+    }
+    merge_dict(test_things_lists_dict, test_wildcard_lists)
 
     # Load Speech-to-Phrase intents
     lang_sentences_path = _SENTENCES_DIR / f"{lang_code}.yaml"

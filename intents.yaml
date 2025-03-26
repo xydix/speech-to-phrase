@@ -464,3 +464,18 @@ HassClimateGetTemperature:
     floor_only:
       slots: "floor"
       example: "what is the temperature downstairs"
+
+
+# todo
+HassListAddItem:
+  description: "Adds an item to a todo list"
+  slots:
+    item: "Item to add"
+    name: "Name of the list"
+  slot_combinations:
+    name_item:
+      slots:
+        - "item"
+        - "name"
+      domain: "todo"
+      example: "add apples to my shopping list"

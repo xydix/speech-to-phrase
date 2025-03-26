@@ -2216,5 +2216,13 @@
       "name": "Test Binary Sensor"
     },
     "context_area": false
+  },
+  "add apples to Shopping List": {
+    "intent": "HassListAddItem",
+    "slots": {
+      "name": "Shopping List",
+      "item": "apples"
+    },
+    "context_area": false
   }
 }

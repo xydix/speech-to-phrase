@@ -37,15 +37,15 @@ lists:
     values:
       - in: "45"
         out: 45
-      - in: forty five
+      - in: "forty five"
         out: 45
   minutes_half:
     values:
-      - in: half
+      - in: "half"
         out: 30
   hours_half:
     values:
-      - in: half
+      - in: "half"
         out: 30
   hours:
     range:
@@ -71,6 +71,8 @@ lists:
     values:
       - "locked"
       - "unlocked"
+  todo_item:
+    wildcard: true
 
 expansion_rules:
   timer_set: "(set|start|create)"
@@ -261,7 +263,7 @@ intents:
           - "set [the] brightness [in here] to {brightness} percent"
         metadata:
           context_area: true
-          slot_combination: brightness_only
+          slot_combination: "brightness_only"
 
       - sentences:
           - "set [the] brightness of [the] {name} to {brightness} percent"
@@ -269,13 +271,13 @@ intents:
         requires_context:
           domain: light
         metadata:
-          slot_combination: name_brightness
+          slot_combination: "name_brightness"
 
       - sentences:
           - "set [the] brightness of [the] {area} to {brightness} percent"
           - "set [the] {area} brightness to {brightness} percent"
         metadata:
-          slot_combination: area_brightness
+          slot_combination: "area_brightness"
 
       # TODO: Add support in main repo
       # sentences:
@@ -289,23 +291,23 @@ intents:
           - "set [the] lights [in here] to {color}"
           - "set [[the] color of the] lights [in here] to {color}"
         metadata:
-          slot_combination: color_only
+          slot_combination: "color_only"
           context_area: true
 
       - sentences:
           - "set [the] [color of [the]] {name} to {color}"
           - "set [the] {name} [color] to {color}"
         requires_context:
-          domain: light
+          domain: "light"
         metadata:
-          slot_combination: name_color
+          slot_combination: "name_color"
 
       - sentences:
           - "set [the] [color of [the]] {area} lights to {color}"
           - "set [the] {area} lights to {color}"
           - "set lights in [the] {area} to {color}"
         metadata:
-          slot_combination: area_color
+          slot_combination: "area_color"
 
       # TODO: Add support in main repo
       # - sentences:
@@ -573,7 +575,7 @@ intents:
       - sentences:
           - "pause [the] {name}"
         requires_context:
-          domain: media_player
+          domain: "media_player"
         metadata:
           slot_combination: "name_only"
 
@@ -605,7 +607,7 @@ intents:
           - "next [(track|item)] on [the] {name}"
           - "skip [[the ](track|song)] on [the] {name}"
         requires_context:
-          domain: media_player
+          domain: "media_player"
         metadata:
           slot_combination: "name_only"
 
@@ -622,7 +624,7 @@ intents:
           - "(what is|what's) the {name} (temp|temperature)"
           - "(what is|what's) the (temp|temperature) of [the] {name}"
         requires_context:
-          domain: climate
+          domain: "climate"
         metadata:
           slot_combination: "name_only"
 
@@ -657,7 +659,7 @@ intents:
         slots:
           domain: "lock"
         requires_context:
-          domain: lock
+          domain: "lock"
         metadata:
           slot_combination: "name_lock"
 
@@ -666,15 +668,17 @@ intents:
           - "what is [the [value of [the]]] {name}"
         requires_context:
           domain:
-            - sensor
-            - binary_sensor
+            - "sensor"
+            - "binary_sensor"
         metadata:
           slot_combination: "name_sensor"
 
-  # # todo
-  # HassListAddItem:
-  #   data:
-  #     - sentences:
-  #         - "add {todo_item} to [the|my] {name} [list]"
-  #       requires_context:
-  #         domain: todo
+  # todo
+  HassListAddItem:
+    data:
+      - sentences:
+          - "add {todo_item:item} to [the|my] {name}"
+        requires_context:
+          domain: "todo"
+        metadata:
+          slot_combination: "name_item"

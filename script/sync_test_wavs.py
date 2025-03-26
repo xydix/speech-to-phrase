@@ -60,7 +60,9 @@ def main() -> None:
             print(lang_code, "OK")
             continue
 
-        extra_sentences = generated_sentences - expected_sentences
+        extra_sentences = (
+            set.union(actual_sentences, generated_sentences) - expected_sentences
+        )
         for sentence in extra_sentences:
             if args.delete:
                 (generated_wav_dir / f"{sentence}.wav").unlink()
@@ -79,7 +81,8 @@ def main() -> None:
                     sentence,
                     args.hass_token,
                     args.hass_url,
-                ]
+                ],
+                stdout=subprocess.DEVNULL,
             )
 
 

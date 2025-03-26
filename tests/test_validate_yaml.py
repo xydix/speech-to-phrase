@@ -131,6 +131,7 @@ SENTENCES_SCHEMA = vol.Schema(
                         vol.Optional("step"): int,
                     }
                 },
+                {vol.Required("wildcard"): True},
             )
         },
         vol.Optional("expansion_rules"): {
@@ -177,6 +178,11 @@ TEST_SENTENCES_SCHEMA = vol.Schema(
         vol.Optional("test_format_values"): {
             # values key
             str: [vol.Any(str, {vol.Required("in"): str, vol.Required("out"): str})]
+        },
+        # Values for wildcards
+        vol.Optional("test_wildcard_values"): {
+            # wildcard list name
+            str: [str]
         },
         vol.Optional("tests"): {
             # intent name

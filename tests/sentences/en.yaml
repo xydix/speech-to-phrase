@@ -33,6 +33,8 @@ entities:
     domain: "sensor"
   - name: "Test Binary Sensor"
     domain: "binary_sensor"
+  - name: "Shopping List"
+    domain: "todo"
 
 test_format_values:
   timer_set:
@@ -62,6 +64,10 @@ test_format_values:
       out: "window"
     - in: "windows"
       out: "window"
+
+test_wildcard_values:
+  todo_item:
+    - "apples"
 
 tests:
   HassNevermind:
@@ -849,3 +855,12 @@ tests:
     #       - "what's the temp on First Floor"
     #     slots:
     #       floor: "First Floor"
+
+  # todo
+  HassListAddItem:
+    name_item:
+      - sentences:
+          - "add apples to Shopping List"
+        slots:
+          name: "Shopping List"
+          item: "apples"
