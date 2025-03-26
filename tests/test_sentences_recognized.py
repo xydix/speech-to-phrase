@@ -1,6 +1,7 @@
 """Test that sentences can be recognized in Home Assistant."""
 
 import itertools
+import json
 from collections.abc import Iterable
 from dataclasses import dataclass
 from functools import partial
@@ -37,6 +38,7 @@ _MODULE_DIR = _PROGRAM_DIR / "speech_to_phrase"
 _SENTENCES_DIR = _MODULE_DIR / "sentences"
 _TESTS_DIR = _PROGRAM_DIR / "tests"
 _TEST_SENTENCES_DIR = _TESTS_DIR / "sentences"
+_EXAMPLE_SENTENCES_DIR = _TESTS_DIR / "example_sentences"
 
 
 @dataclass
@@ -51,6 +53,7 @@ def generate_sentences(
     intents: Intents,
     intent_data: IntentData,
     slots: Dict[str, Any],
+    skip_optionals: bool = False,
 ) -> Iterable[Tuple[str, Dict[str, Any]]]:
     """Generate possible text strings and slot values from an expression."""
     if isinstance(e, TextChunk):
@@ -59,8 +62,14 @@ def generate_sentences(
     elif isinstance(e, Group):
         grp: Group = e
         if isinstance(grp, Alternative):
-            for item in grp.items:
-                yield from generate_sentences(item, intents, intent_data, slots)
+            alt: Alternative = grp
+            if alt.is_optional:
+                yield ("", slots)
+            else:
+                for item in grp.items:
+                    yield from generate_sentences(
+                        item, intents, intent_data, slots, skip_optionals
+                    )
         elif isinstance(grp, Sequence):
             seq_sentences = map(
                 partial(
@@ -68,6 +77,7 @@ def generate_sentences(
                     intents=intents,
                     intent_data=intent_data,
                     slots=slots,
+                    skip_optionals=skip_optionals,
                 ),
                 grp.items,
             )
@@ -117,6 +127,7 @@ def generate_sentences(
                     intents,
                     intent_data,
                     {list_ref.slot_name: text_value.value_out},
+                    skip_optionals,
                 )
         elif isinstance(slot_list, RangeSlotList):
             range_list: RangeSlotList = slot_list
@@ -141,95 +152,97 @@ def generate_sentences(
         if rule_body is None:
             raise ValueError(f"Missing expansion rule: {rule_ref.rule_name}")
 
-        yield from generate_sentences(rule_body.expression, intents, intent_data, slots)
+        yield from generate_sentences(
+            rule_body.expression, intents, intent_data, slots, skip_optionals
+        )
     else:
         raise ValueError(f"Unexpected expression: {e}")
 
 
-def generate_test_sentences(
-    e: Expression, intents: Intents, intent_data: IntentData
-) -> Iterable[str]:
-    """Generate possible text strings from an expression."""
-    if isinstance(e, TextChunk):
-        chunk: TextChunk = e
-        yield chunk.original_text
-    elif isinstance(e, Group):
-        grp: Group = e
-        if isinstance(grp, Alternative):
-            alt: Alternative = e
-            # Skip optionals
-            if alt.is_optional:
-                yield ""
-            else:
-                for item in grp.items:
-                    yield from generate_test_sentences(item, intents, intent_data)
-        elif isinstance(grp, Sequence):
-            seq_sentences = map(
-                partial(
-                    generate_test_sentences,
-                    intents=intents,
-                    intent_data=intent_data,
-                ),
-                grp.items,
-            )
-            for sentence_text in itertools.product(*seq_sentences):
-                yield normalize_whitespace("".join(sentence_text))
-        else:
-            raise ValueError(f"Unexpected group type: {grp}")
-    elif isinstance(e, ListReference):
-        # {list}
-        list_ref: ListReference = e
+# def generate_test_sentences(
+#     e: Expression, intents: Intents, intent_data: IntentData
+# ) -> Iterable[str]:
+#     """Generate possible text strings from an expression."""
+#     if isinstance(e, TextChunk):
+#         chunk: TextChunk = e
+#         yield chunk.original_text
+#     elif isinstance(e, Group):
+#         grp: Group = e
+#         if isinstance(grp, Alternative):
+#             alt: Alternative = e
+#             # Skip optionals
+#             if alt.is_optional:
+#                 yield ""
+#             else:
+#                 for item in grp.items:
+#                     yield from generate_test_sentences(item, intents, intent_data)
+#         elif isinstance(grp, Sequence):
+#             seq_sentences = map(
+#                 partial(
+#                     generate_test_sentences,
+#                     intents=intents,
+#                     intent_data=intent_data,
+#                 ),
+#                 grp.items,
+#             )
+#             for sentence_text in itertools.product(*seq_sentences):
+#                 yield normalize_whitespace("".join(sentence_text))
+#         else:
+#             raise ValueError(f"Unexpected group type: {grp}")
+#     elif isinstance(e, ListReference):
+#         # {list}
+#         list_ref: ListReference = e
 
-        slot_list = intent_data.slot_lists.get(list_ref.list_name)
-        if slot_list is None:
-            slot_list = intents.slot_lists.get(list_ref.list_name)
+#         slot_list = intent_data.slot_lists.get(list_ref.list_name)
+#         if slot_list is None:
+#             slot_list = intents.slot_lists.get(list_ref.list_name)
 
-        if slot_list is None:
-            raise ValueError(f"Missing slot list: {list_ref.list_name}")
+#         if slot_list is None:
+#             raise ValueError(f"Missing slot list: {list_ref.list_name}")
 
-        if isinstance(slot_list, TextSlotList):
-            text_list: TextSlotList = slot_list
+#         if isinstance(slot_list, TextSlotList):
+#             text_list: TextSlotList = slot_list
 
-            for text_value in text_list.values:
-                if intent_data.requires_context and (
-                    not check_required_context(
-                        intent_data.requires_context,
-                        text_value.context,
-                        allow_missing_keys=True,
-                    )
-                ):
-                    continue
+#             for text_value in text_list.values:
+#                 if intent_data.requires_context and (
+#                     not check_required_context(
+#                         intent_data.requires_context,
+#                         text_value.context,
+#                         allow_missing_keys=True,
+#                     )
+#                 ):
+#                     continue
 
-                if intent_data.excludes_context and (
-                    not check_excluded_context(
-                        intent_data.excludes_context, text_value.context
-                    )
-                ):
-                    continue
+#                 if intent_data.excludes_context and (
+#                     not check_excluded_context(
+#                         intent_data.excludes_context, text_value.context
+#                     )
+#                 ):
+#                     continue
 
-                yield from generate_test_sentences(
-                    text_value.text_in, intents, intent_data
-                )
-        elif isinstance(slot_list, RangeSlotList):
-            range_list: RangeSlotList = slot_list
+#                 yield from generate_test_sentences(
+#                     text_value.text_in, intents, intent_data
+#                 )
+#         elif isinstance(slot_list, RangeSlotList):
+#             range_list: RangeSlotList = slot_list
 
-            yield str(range_list.start)
-            yield str(range_list.stop)
-        else:
-            raise ValueError(f"Unexpected slot list type: {slot_list}")
-    elif isinstance(e, RuleReference):
-        # <rule>
-        rule_ref: RuleReference = e
-        rule_body = intent_data.expansion_rules.get(rule_ref.rule_name)
-        if rule_body is None:
-            rule_body = intents.expansion_rules.get(rule_ref.rule_name)
+#             yield str(range_list.start)
+#             yield str(range_list.stop)
+#         else:
+#             raise ValueError(f"Unexpected slot list type: {slot_list}")
+#     elif isinstance(e, RuleReference):
+#         # <rule>
+#         rule_ref: RuleReference = e
+#         rule_body = intent_data.expansion_rules.get(rule_ref.rule_name)
+#         if rule_body is None:
+#             rule_body = intents.expansion_rules.get(rule_ref.rule_name)
 
-        if rule_body is None:
-            raise ValueError(f"Missing expansion rule: {rule_ref.rule_name}")
+#         if rule_body is None:
+#             raise ValueError(f"Missing expansion rule: {rule_ref.rule_name}")
 
-        yield from generate_test_sentences(rule_body.expression, intents, intent_data)
-    else:
-        raise ValueError(f"Unexpected expression: {e}")
+#         yield from generate_test_sentences(rule_body.expression, intents, intent_data)
+#     else:
+#         raise ValueError(f"Unexpected expression: {e}")
 
 
 def _coerce_list(str_or_list: Union[str, List[str]]) -> List[str]:
@@ -493,6 +506,10 @@ def test_sentences_tested(
     merge_dict(lang_sentences_dict, test_things_lists_dict)
     lang_intents = Intents.from_dict(lang_sentences_dict)
 
+    example_sentences_path = _EXAMPLE_SENTENCES_DIR / f"{lang_code}.json"
+    example_sentences_path.parent.mkdir(parents=True, exist_ok=True)
+
+    example_sentences_dict: dict[str, Any] = {}
     for intent_name, intent_info in lang_intents.intents.items():
         test_intent_info = lang_test_intents_dict[intent_name]
         for intent_data in intent_info.data:
@@ -502,21 +519,41 @@ def test_sentences_tested(
                 slot_combo_name in test_intent_info
             ), f"No tests for slot combination of intent '{intent_name}': {slot_combo_name}"
 
-            actual_test_sentences = set(
-                ts.text
+            actual_test_sentences: Dict[str, SentenceToTest] = {
+                ts.text: ts
                 for ts in _unpack_test_sentences(
                     test_intent_info[slot_combo_name], lang_test_format_values
                 )
-            )
+            }
 
             # Generate test sentences and verify they are present
-            expected_test_sentences: Set[str] = set()
             for sentence in intent_data.sentences:
-                possible_sentences = generate_test_sentences(
-                    sentence.expression, lang_intents, intent_data
+                possible_sentences = generate_sentences(
+                    sentence.expression,
+                    lang_intents,
+                    intent_data,
+                    {},
+                    skip_optionals=True,
                 )
-                expected_test_sentences.update(s.strip() for s in possible_sentences)
+                for possible_text, possible_slots in possible_sentences:
+                    possible_text = possible_text.strip()
+                    test_sentence = actual_test_sentences.get(possible_text)
+                    assert test_sentence, f"Missing test sentence: {possible_text}"
 
-            assert (
-                expected_test_sentences == actual_test_sentences
-            ), "Possible test sentences do not match actual test sentences"
+                    test_slots = test_sentence.slots or {}
+                    for slot_key, slot_value in possible_slots.items():
+                        assert (
+                            slot_key in test_slots
+                        ), f"Missing {slot_key} for {possible_text}"
+                        assert test_slots[slot_key] == slot_value, possible_text
+
+                    example_sentences_dict[possible_text] = {
+                        "intent": intent_name,
+                        "slots": test_slots,
+                        "context_area": intent_data.metadata.get("context_area", False),
+                    }
+
+    with open(example_sentences_path, "w", encoding="utf-8") as example_sentences_file:
+        json.dump(
+            example_sentences_dict, example_sentences_file, ensure_ascii=False, indent=2
+        )
