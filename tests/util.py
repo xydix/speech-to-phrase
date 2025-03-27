@@ -33,13 +33,21 @@ class SentenceToTest:
     context_area: bool = False
 
 
+@dataclass
+class ValueWithMetadata:
+    """Slot value with optional metadata."""
+
+    value: Any
+    metadata: Optional[Dict[str, Any]] = None
+
+
 def generate_sentences(
     e: Expression,
     intents: Intents,
     intent_data: IntentData,
     slots: Dict[str, Any],
     skip_optionals: bool = False,
-) -> Iterable[Tuple[str, Dict[str, Any]]]:
+) -> Iterable[Tuple[str, Dict[str, ValueWithMetadata]]]:
     """Generate possible text strings and slot values from an expression."""
     if isinstance(e, TextChunk):
         chunk: TextChunk = e
@@ -111,7 +119,11 @@ def generate_sentences(
                     text_value.text_in,
                     intents,
                     intent_data,
-                    {list_ref.slot_name: text_value.value_out},
+                    {
+                        list_ref.slot_name: ValueWithMetadata(
+                            text_value.value_out, text_value.metadata
+                        )
+                    },
                     skip_optionals,
                 )
         elif isinstance(slot_list, RangeSlotList):
@@ -119,11 +131,11 @@ def generate_sentences(
 
             yield str(range_list.start), {
                 **slots,
-                list_ref.slot_name: range_list.start,
+                list_ref.slot_name: ValueWithMetadata(range_list.start),
             }
             yield str(range_list.stop), {
                 **slots,
-                list_ref.slot_name: range_list.stop,
+                list_ref.slot_name: ValueWithMetadata(range_list.stop),
             }
         else:
             raise ValueError(f"Unexpected slot list type: {slot_list}")

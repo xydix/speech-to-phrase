@@ -5,7 +5,9 @@
       "name": "Mood Lighting",
       "domain": "scene"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_scene",
+    "domain": "scene"
   },
   "add apples to Shopping List": {
     "intent": "HassListAddItem",
@@ -13,17 +15,21 @@
       "name": "Shopping List",
       "item": "apples"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_item",
+    "domain": "todo"
   },
   "cancel all timers": {
     "intent": "HassCancelAllTimers",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "cancel timer": {
     "intent": "HassCancelTimer",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "close Office blinds": {
     "intent": "HassTurnOff",
@@ -32,7 +38,9 @@
       "device_class": "blind",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close Office curtain": {
     "intent": "HassTurnOff",
@@ -41,7 +49,9 @@
       "device_class": "curtain",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close Office curtains": {
     "intent": "HassTurnOff",
@@ -50,7 +60,9 @@
       "device_class": "curtain",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close Office window": {
     "intent": "HassTurnOff",
@@ -59,7 +71,9 @@
       "device_class": "window",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close Office windows": {
     "intent": "HassTurnOff",
@@ -68,14 +82,18 @@
       "device_class": "window",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close Sliding Door": {
     "intent": "HassTurnOff",
     "slots": {
       "name": "Sliding Door"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_cover",
+    "domain": "cover"
   },
   "close Sliding Door in Office": {
     "intent": "HassTurnOff",
@@ -83,7 +101,9 @@
       "name": "Sliding Door",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area_cover",
+    "domain": "cover"
   },
   "close blinds in Office": {
     "intent": "HassTurnOff",
@@ -92,7 +112,9 @@
       "device_class": "blind",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close curtain in Office": {
     "intent": "HassTurnOff",
@@ -101,7 +123,9 @@
       "device_class": "curtain",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close curtains in Office": {
     "intent": "HassTurnOff",
@@ -110,7 +134,9 @@
       "device_class": "curtain",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close window in Office": {
     "intent": "HassTurnOff",
@@ -119,7 +145,9 @@
       "device_class": "window",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "close windows in Office": {
     "intent": "HassTurnOff",
@@ -128,7 +156,9 @@
       "device_class": "window",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "create timer for 1 and a half hours": {
     "intent": "HassStartTimer",
@@ -136,7 +166,8 @@
       "hours": 1,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_half"
   },
   "create timer for 1 and a half minutes": {
     "intent": "HassStartTimer",
@@ -144,14 +175,16 @@
       "minutes": 1,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_1_half"
   },
   "create timer for 1 hour": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1"
   },
   "create timer for 1 hour and 1 minute": {
     "intent": "HassStartTimer",
@@ -159,7 +192,8 @@
       "hours": 1,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes_1"
   },
   "create timer for 1 hour and 100 minutes": {
     "intent": "HassStartTimer",
@@ -167,7 +201,8 @@
       "hours": 1,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "create timer for 1 hour and 19 minutes": {
     "intent": "HassStartTimer",
@@ -175,7 +210,8 @@
       "hours": 1,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "create timer for 1 hour and 2 minutes": {
     "intent": "HassStartTimer",
@@ -183,7 +219,8 @@
       "hours": 1,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "create timer for 1 hour and 20 minutes": {
     "intent": "HassStartTimer",
@@ -191,7 +228,8 @@
       "hours": 1,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "create timer for 1 hour and 45 minutes": {
     "intent": "HassStartTimer",
@@ -199,7 +237,8 @@
       "hours": 1,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "create timer for 1 hour and forty five minutes": {
     "intent": "HassStartTimer",
@@ -207,21 +246,24 @@
       "hours": 1,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "create timer for 1 minute": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_1"
   },
   "create timer for 10 seconds": {
     "intent": "HassStartTimer",
     "slots": {
       "seconds": 10
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "seconds_only"
   },
   "create timer for 100 and a half minutes": {
     "intent": "HassStartTimer",
@@ -229,21 +271,24 @@
       "minutes": 100,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "create timer for 100 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "create timer for 100 seconds": {
     "intent": "HassStartTimer",
     "slots": {
       "seconds": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "seconds_only"
   },
   "create timer for 19 and a half minutes": {
     "intent": "HassStartTimer",
@@ -251,14 +296,16 @@
       "minutes": 19,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "create timer for 19 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "create timer for 2 and a half hours": {
     "intent": "HassStartTimer",
@@ -266,7 +313,8 @@
       "hours": 2,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_half"
   },
   "create timer for 2 and a half minutes": {
     "intent": "HassStartTimer",
@@ -274,14 +322,16 @@
       "minutes": 2,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "create timer for 2 hours": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_only"
   },
   "create timer for 2 hours and 1 minute": {
     "intent": "HassStartTimer",
@@ -289,7 +339,8 @@
       "hours": 2,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes_1"
   },
   "create timer for 2 hours and 100 minutes": {
     "intent": "HassStartTimer",
@@ -297,7 +348,8 @@
       "hours": 2,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 2 hours and 19 minutes": {
     "intent": "HassStartTimer",
@@ -305,7 +357,8 @@
       "hours": 2,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 2 hours and 2 minutes": {
     "intent": "HassStartTimer",
@@ -313,7 +366,8 @@
       "hours": 2,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 2 hours and 20 minutes": {
     "intent": "HassStartTimer",
@@ -321,7 +375,8 @@
       "hours": 2,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 2 hours and 45 minutes": {
     "intent": "HassStartTimer",
@@ -329,7 +384,8 @@
       "hours": 2,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 2 hours and forty five minutes": {
     "intent": "HassStartTimer",
@@ -337,14 +393,16 @@
       "hours": 2,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 2 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "create timer for 20 and a half minutes": {
     "intent": "HassStartTimer",
@@ -352,14 +410,16 @@
       "minutes": 20,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "create timer for 20 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "create timer for 24 and a half hours": {
     "intent": "HassStartTimer",
@@ -367,14 +427,16 @@
       "hours": 24,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_half"
   },
   "create timer for 24 hours": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 24
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_only"
   },
   "create timer for 24 hours and 1 minute": {
     "intent": "HassStartTimer",
@@ -382,7 +444,8 @@
       "hours": 24,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes_1"
   },
   "create timer for 24 hours and 100 minutes": {
     "intent": "HassStartTimer",
@@ -390,7 +453,8 @@
       "hours": 24,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 24 hours and 19 minutes": {
     "intent": "HassStartTimer",
@@ -398,7 +462,8 @@
       "hours": 24,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 24 hours and 2 minutes": {
     "intent": "HassStartTimer",
@@ -406,7 +471,8 @@
       "hours": 24,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 24 hours and 20 minutes": {
     "intent": "HassStartTimer",
@@ -414,7 +480,8 @@
       "hours": 24,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 24 hours and 45 minutes": {
     "intent": "HassStartTimer",
@@ -422,7 +489,8 @@
       "hours": 24,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 24 hours and forty five minutes": {
     "intent": "HassStartTimer",
@@ -430,7 +498,8 @@
       "hours": 24,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "create timer for 45 and a half minutes": {
     "intent": "HassStartTimer",
@@ -438,14 +507,16 @@
       "minutes": 45,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "create timer for 45 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "create timer for forty five and a half minutes": {
     "intent": "HassStartTimer",
@@ -453,14 +524,16 @@
       "minutes": 45,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "create timer for forty five minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "is Front Door locked": {
     "intent": "HassGetState",
@@ -469,7 +542,9 @@
       "name": "Front Door",
       "state": "locked"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_lock",
+    "domain": "lock"
   },
   "is Front Door unlocked": {
     "intent": "HassGetState",
@@ -478,7 +553,9 @@
       "name": "Front Door",
       "state": "unlocked"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_lock",
+    "domain": "lock"
   },
   "is Sliding Door closed": {
     "intent": "HassGetState",
@@ -487,7 +564,9 @@
       "name": "Sliding Door",
       "state": "closed"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_cover",
+    "domain": "cover"
   },
   "is Sliding Door open": {
     "intent": "HassGetState",
@@ -496,31 +575,39 @@
       "name": "Sliding Door",
       "state": "open"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_cover",
+    "domain": "cover"
   },
   "lock Front Door": {
     "intent": "HassTurnOn",
     "slots": {
       "name": "Front Door"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_lock",
+    "domain": "lock"
   },
   "nevermind": {
     "intent": "HassNevermind",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "next": {
     "intent": "HassMediaNext",
     "slots": {},
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "default"
   },
   "next on TV": {
     "intent": "HassMediaNext",
     "slots": {
       "name": "TV"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "media_player"
   },
   "open Office blinds": {
     "intent": "HassTurnOn",
@@ -529,7 +616,9 @@
       "device_class": "blind",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open Office curtain": {
     "intent": "HassTurnOn",
@@ -538,7 +627,9 @@
       "device_class": "curtain",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open Office curtains": {
     "intent": "HassTurnOn",
@@ -547,7 +638,9 @@
       "device_class": "curtain",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open Office window": {
     "intent": "HassTurnOn",
@@ -556,7 +649,9 @@
       "device_class": "window",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open Office windows": {
     "intent": "HassTurnOn",
@@ -565,14 +660,18 @@
       "device_class": "window",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open Sliding Door": {
     "intent": "HassTurnOn",
     "slots": {
       "name": "Sliding Door"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_cover",
+    "domain": "cover"
   },
   "open Sliding Door in Office": {
     "intent": "HassTurnOn",
@@ -580,7 +679,9 @@
       "name": "Sliding Door",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area_cover",
+    "domain": "cover"
   },
   "open blinds in Office": {
     "intent": "HassTurnOn",
@@ -589,7 +690,9 @@
       "device_class": "blind",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open curtain in Office": {
     "intent": "HassTurnOn",
@@ -598,7 +701,9 @@
       "device_class": "curtain",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open curtains in Office": {
     "intent": "HassTurnOn",
@@ -607,7 +712,9 @@
       "device_class": "curtain",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open window in Office": {
     "intent": "HassTurnOn",
@@ -616,7 +723,9 @@
       "device_class": "window",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "open windows in Office": {
     "intent": "HassTurnOn",
@@ -625,41 +734,51 @@
       "device_class": "window",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_device_class_cover",
+    "domain": "cover"
   },
   "pause": {
     "intent": "HassMediaPause",
     "slots": {},
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "default"
   },
   "pause TV": {
     "intent": "HassMediaPause",
     "slots": {
       "name": "TV"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "media_player"
   },
   "pause timer": {
     "intent": "HassPauseTimer",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "resume": {
     "intent": "HassMediaUnpause",
     "slots": {},
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "default"
   },
   "resume TV": {
     "intent": "HassMediaUnpause",
     "slots": {
       "name": "TV"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "media_player"
   },
   "resume timer": {
     "intent": "HassUnpauseTimer",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "run Party Time": {
     "intent": "HassTurnOn",
@@ -667,7 +786,9 @@
       "name": "Party Time",
       "domain": "script"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_script",
+    "domain": "script"
   },
   "set Office brightness to 10 percent": {
     "intent": "HassLightSet",
@@ -675,7 +796,8 @@
       "area": "Office",
       "brightness": 10
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_brightness"
   },
   "set Office brightness to 100 percent": {
     "intent": "HassLightSet",
@@ -683,7 +805,8 @@
       "area": "Office",
       "brightness": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_brightness"
   },
   "set Office lights to black": {
     "intent": "HassLightSet",
@@ -691,7 +814,8 @@
       "area": "Office",
       "color": "black"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to blue": {
     "intent": "HassLightSet",
@@ -699,7 +823,8 @@
       "area": "Office",
       "color": "blue"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to brown": {
     "intent": "HassLightSet",
@@ -707,7 +832,8 @@
       "area": "Office",
       "color": "brown"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to green": {
     "intent": "HassLightSet",
@@ -715,7 +841,8 @@
       "area": "Office",
       "color": "green"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to orange": {
     "intent": "HassLightSet",
@@ -723,7 +850,8 @@
       "area": "Office",
       "color": "orange"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to pink": {
     "intent": "HassLightSet",
@@ -731,7 +859,8 @@
       "area": "Office",
       "color": "pink"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to purple": {
     "intent": "HassLightSet",
@@ -739,7 +868,8 @@
       "area": "Office",
       "color": "purple"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to red": {
     "intent": "HassLightSet",
@@ -747,7 +877,8 @@
       "area": "Office",
       "color": "red"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to turquoise": {
     "intent": "HassLightSet",
@@ -755,7 +886,8 @@
       "area": "Office",
       "color": "turquoise"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to white": {
     "intent": "HassLightSet",
@@ -763,7 +895,8 @@
       "area": "Office",
       "color": "white"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set Office lights to yellow": {
     "intent": "HassLightSet",
@@ -771,7 +904,8 @@
       "area": "Office",
       "color": "yellow"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set RGB Light brightness to 10 percent": {
     "intent": "HassLightSet",
@@ -779,7 +913,9 @@
       "name": "RGB Light",
       "brightness": 10
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_brightness",
+    "domain": "light"
   },
   "set RGB Light brightness to 100 percent": {
     "intent": "HassLightSet",
@@ -787,7 +923,9 @@
       "name": "RGB Light",
       "brightness": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_brightness",
+    "domain": "light"
   },
   "set RGB Light to black": {
     "intent": "HassLightSet",
@@ -795,7 +933,9 @@
       "name": "RGB Light",
       "color": "black"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to blue": {
     "intent": "HassLightSet",
@@ -803,7 +943,9 @@
       "name": "RGB Light",
       "color": "blue"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to brown": {
     "intent": "HassLightSet",
@@ -811,7 +953,9 @@
       "name": "RGB Light",
       "color": "brown"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to green": {
     "intent": "HassLightSet",
@@ -819,7 +963,9 @@
       "name": "RGB Light",
       "color": "green"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to orange": {
     "intent": "HassLightSet",
@@ -827,7 +973,9 @@
       "name": "RGB Light",
       "color": "orange"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to pink": {
     "intent": "HassLightSet",
@@ -835,7 +983,9 @@
       "name": "RGB Light",
       "color": "pink"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to purple": {
     "intent": "HassLightSet",
@@ -843,7 +993,9 @@
       "name": "RGB Light",
       "color": "purple"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to red": {
     "intent": "HassLightSet",
@@ -851,7 +1003,9 @@
       "name": "RGB Light",
       "color": "red"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to turquoise": {
     "intent": "HassLightSet",
@@ -859,7 +1013,9 @@
       "name": "RGB Light",
       "color": "turquoise"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to white": {
     "intent": "HassLightSet",
@@ -867,7 +1023,9 @@
       "name": "RGB Light",
       "color": "white"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set RGB Light to yellow": {
     "intent": "HassLightSet",
@@ -875,7 +1033,9 @@
       "name": "RGB Light",
       "color": "yellow"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_color",
+    "domain": "light"
   },
   "set brightness of Office to 10 percent": {
     "intent": "HassLightSet",
@@ -883,7 +1043,8 @@
       "area": "Office",
       "brightness": 10
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_brightness"
   },
   "set brightness of Office to 100 percent": {
     "intent": "HassLightSet",
@@ -891,7 +1052,8 @@
       "area": "Office",
       "brightness": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_brightness"
   },
   "set brightness of RGB Light to 10 percent": {
     "intent": "HassLightSet",
@@ -899,7 +1061,9 @@
       "name": "RGB Light",
       "brightness": 10
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_brightness",
+    "domain": "light"
   },
   "set brightness of RGB Light to 100 percent": {
     "intent": "HassLightSet",
@@ -907,21 +1071,25 @@
       "name": "RGB Light",
       "brightness": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_brightness",
+    "domain": "light"
   },
   "set brightness to 10 percent": {
     "intent": "HassLightSet",
     "slots": {
       "brightness": 10
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "brightness_only"
   },
   "set brightness to 100 percent": {
     "intent": "HassLightSet",
     "slots": {
       "brightness": 100
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "brightness_only"
   },
   "set lights in Office to black": {
     "intent": "HassLightSet",
@@ -929,7 +1097,8 @@
       "area": "Office",
       "color": "black"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to blue": {
     "intent": "HassLightSet",
@@ -937,7 +1106,8 @@
       "area": "Office",
       "color": "blue"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to brown": {
     "intent": "HassLightSet",
@@ -945,7 +1115,8 @@
       "area": "Office",
       "color": "brown"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to green": {
     "intent": "HassLightSet",
@@ -953,7 +1124,8 @@
       "area": "Office",
       "color": "green"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to orange": {
     "intent": "HassLightSet",
@@ -961,7 +1133,8 @@
       "area": "Office",
       "color": "orange"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to pink": {
     "intent": "HassLightSet",
@@ -969,7 +1142,8 @@
       "area": "Office",
       "color": "pink"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to purple": {
     "intent": "HassLightSet",
@@ -977,7 +1151,8 @@
       "area": "Office",
       "color": "purple"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to red": {
     "intent": "HassLightSet",
@@ -985,7 +1160,8 @@
       "area": "Office",
       "color": "red"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to turquoise": {
     "intent": "HassLightSet",
@@ -993,7 +1169,8 @@
       "area": "Office",
       "color": "turquoise"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to white": {
     "intent": "HassLightSet",
@@ -1001,7 +1178,8 @@
       "area": "Office",
       "color": "white"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights in Office to yellow": {
     "intent": "HassLightSet",
@@ -1009,84 +1187,96 @@
       "area": "Office",
       "color": "yellow"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_color"
   },
   "set lights to black": {
     "intent": "HassLightSet",
     "slots": {
       "color": "black"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to blue": {
     "intent": "HassLightSet",
     "slots": {
       "color": "blue"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to brown": {
     "intent": "HassLightSet",
     "slots": {
       "color": "brown"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to green": {
     "intent": "HassLightSet",
     "slots": {
       "color": "green"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to orange": {
     "intent": "HassLightSet",
     "slots": {
       "color": "orange"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to pink": {
     "intent": "HassLightSet",
     "slots": {
       "color": "pink"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to purple": {
     "intent": "HassLightSet",
     "slots": {
       "color": "purple"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to red": {
     "intent": "HassLightSet",
     "slots": {
       "color": "red"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to turquoise": {
     "intent": "HassLightSet",
     "slots": {
       "color": "turquoise"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to white": {
     "intent": "HassLightSet",
     "slots": {
       "color": "white"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set lights to yellow": {
     "intent": "HassLightSet",
     "slots": {
       "color": "yellow"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "color_only"
   },
   "set timer for 1 and a half hours": {
     "intent": "HassStartTimer",
@@ -1094,7 +1284,8 @@
       "hours": 1,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_half"
   },
   "set timer for 1 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1102,14 +1293,16 @@
       "minutes": 1,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_1_half"
   },
   "set timer for 1 hour": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1"
   },
   "set timer for 1 hour and 1 minute": {
     "intent": "HassStartTimer",
@@ -1117,7 +1310,8 @@
       "hours": 1,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes_1"
   },
   "set timer for 1 hour and 100 minutes": {
     "intent": "HassStartTimer",
@@ -1125,7 +1319,8 @@
       "hours": 1,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "set timer for 1 hour and 19 minutes": {
     "intent": "HassStartTimer",
@@ -1133,7 +1328,8 @@
       "hours": 1,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "set timer for 1 hour and 2 minutes": {
     "intent": "HassStartTimer",
@@ -1141,7 +1337,8 @@
       "hours": 1,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "set timer for 1 hour and 20 minutes": {
     "intent": "HassStartTimer",
@@ -1149,7 +1346,8 @@
       "hours": 1,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "set timer for 1 hour and 45 minutes": {
     "intent": "HassStartTimer",
@@ -1157,7 +1355,8 @@
       "hours": 1,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "set timer for 1 hour and forty five minutes": {
     "intent": "HassStartTimer",
@@ -1165,21 +1364,24 @@
       "hours": 1,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "set timer for 1 minute": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_1"
   },
   "set timer for 10 seconds": {
     "intent": "HassStartTimer",
     "slots": {
       "seconds": 10
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "seconds_only"
   },
   "set timer for 100 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1187,21 +1389,24 @@
       "minutes": 100,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "set timer for 100 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "set timer for 100 seconds": {
     "intent": "HassStartTimer",
     "slots": {
       "seconds": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "seconds_only"
   },
   "set timer for 19 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1209,14 +1414,16 @@
       "minutes": 19,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "set timer for 19 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "set timer for 2 and a half hours": {
     "intent": "HassStartTimer",
@@ -1224,7 +1431,8 @@
       "hours": 2,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_half"
   },
   "set timer for 2 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1232,14 +1440,16 @@
       "minutes": 2,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "set timer for 2 hours": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_only"
   },
   "set timer for 2 hours and 1 minute": {
     "intent": "HassStartTimer",
@@ -1247,7 +1457,8 @@
       "hours": 2,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes_1"
   },
   "set timer for 2 hours and 100 minutes": {
     "intent": "HassStartTimer",
@@ -1255,7 +1466,8 @@
       "hours": 2,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 2 hours and 19 minutes": {
     "intent": "HassStartTimer",
@@ -1263,7 +1475,8 @@
       "hours": 2,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 2 hours and 2 minutes": {
     "intent": "HassStartTimer",
@@ -1271,7 +1484,8 @@
       "hours": 2,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 2 hours and 20 minutes": {
     "intent": "HassStartTimer",
@@ -1279,7 +1493,8 @@
       "hours": 2,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 2 hours and 45 minutes": {
     "intent": "HassStartTimer",
@@ -1287,7 +1502,8 @@
       "hours": 2,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 2 hours and forty five minutes": {
     "intent": "HassStartTimer",
@@ -1295,14 +1511,16 @@
       "hours": 2,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 2 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "set timer for 20 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1310,14 +1528,16 @@
       "minutes": 20,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "set timer for 20 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "set timer for 24 and a half hours": {
     "intent": "HassStartTimer",
@@ -1325,14 +1545,16 @@
       "hours": 24,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_half"
   },
   "set timer for 24 hours": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 24
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_only"
   },
   "set timer for 24 hours and 1 minute": {
     "intent": "HassStartTimer",
@@ -1340,7 +1562,8 @@
       "hours": 24,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes_1"
   },
   "set timer for 24 hours and 100 minutes": {
     "intent": "HassStartTimer",
@@ -1348,7 +1571,8 @@
       "hours": 24,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 24 hours and 19 minutes": {
     "intent": "HassStartTimer",
@@ -1356,7 +1580,8 @@
       "hours": 24,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 24 hours and 2 minutes": {
     "intent": "HassStartTimer",
@@ -1364,7 +1589,8 @@
       "hours": 24,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 24 hours and 20 minutes": {
     "intent": "HassStartTimer",
@@ -1372,7 +1598,8 @@
       "hours": 24,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 24 hours and 45 minutes": {
     "intent": "HassStartTimer",
@@ -1380,7 +1607,8 @@
       "hours": 24,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 24 hours and forty five minutes": {
     "intent": "HassStartTimer",
@@ -1388,7 +1616,8 @@
       "hours": 24,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "set timer for 45 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1396,14 +1625,16 @@
       "minutes": 45,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "set timer for 45 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "set timer for forty five and a half minutes": {
     "intent": "HassStartTimer",
@@ -1411,26 +1642,31 @@
       "minutes": 45,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "set timer for forty five minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "skip": {
     "intent": "HassMediaNext",
     "slots": {},
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "default"
   },
   "skip on TV": {
     "intent": "HassMediaNext",
     "slots": {
       "name": "TV"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "media_player"
   },
   "start timer for 1 and a half hours": {
     "intent": "HassStartTimer",
@@ -1438,7 +1674,8 @@
       "hours": 1,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_half"
   },
   "start timer for 1 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1446,14 +1683,16 @@
       "minutes": 1,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_1_half"
   },
   "start timer for 1 hour": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1"
   },
   "start timer for 1 hour and 1 minute": {
     "intent": "HassStartTimer",
@@ -1461,7 +1700,8 @@
       "hours": 1,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes_1"
   },
   "start timer for 1 hour and 100 minutes": {
     "intent": "HassStartTimer",
@@ -1469,7 +1709,8 @@
       "hours": 1,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "start timer for 1 hour and 19 minutes": {
     "intent": "HassStartTimer",
@@ -1477,7 +1718,8 @@
       "hours": 1,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "start timer for 1 hour and 2 minutes": {
     "intent": "HassStartTimer",
@@ -1485,7 +1727,8 @@
       "hours": 1,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "start timer for 1 hour and 20 minutes": {
     "intent": "HassStartTimer",
@@ -1493,7 +1736,8 @@
       "hours": 1,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "start timer for 1 hour and 45 minutes": {
     "intent": "HassStartTimer",
@@ -1501,7 +1745,8 @@
       "hours": 1,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "start timer for 1 hour and forty five minutes": {
     "intent": "HassStartTimer",
@@ -1509,21 +1754,24 @@
       "hours": 1,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_1_minutes"
   },
   "start timer for 1 minute": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_1"
   },
   "start timer for 10 seconds": {
     "intent": "HassStartTimer",
     "slots": {
       "seconds": 10
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "seconds_only"
   },
   "start timer for 100 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1531,21 +1779,24 @@
       "minutes": 100,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "start timer for 100 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "start timer for 100 seconds": {
     "intent": "HassStartTimer",
     "slots": {
       "seconds": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "seconds_only"
   },
   "start timer for 19 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1553,14 +1804,16 @@
       "minutes": 19,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "start timer for 19 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "start timer for 2 and a half hours": {
     "intent": "HassStartTimer",
@@ -1568,7 +1821,8 @@
       "hours": 2,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_half"
   },
   "start timer for 2 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1576,14 +1830,16 @@
       "minutes": 2,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "start timer for 2 hours": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_only"
   },
   "start timer for 2 hours and 1 minute": {
     "intent": "HassStartTimer",
@@ -1591,7 +1847,8 @@
       "hours": 2,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes_1"
   },
   "start timer for 2 hours and 100 minutes": {
     "intent": "HassStartTimer",
@@ -1599,7 +1856,8 @@
       "hours": 2,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 2 hours and 19 minutes": {
     "intent": "HassStartTimer",
@@ -1607,7 +1865,8 @@
       "hours": 2,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 2 hours and 2 minutes": {
     "intent": "HassStartTimer",
@@ -1615,7 +1874,8 @@
       "hours": 2,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 2 hours and 20 minutes": {
     "intent": "HassStartTimer",
@@ -1623,7 +1883,8 @@
       "hours": 2,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 2 hours and 45 minutes": {
     "intent": "HassStartTimer",
@@ -1631,7 +1892,8 @@
       "hours": 2,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 2 hours and forty five minutes": {
     "intent": "HassStartTimer",
@@ -1639,14 +1901,16 @@
       "hours": 2,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 2 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "start timer for 20 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1654,14 +1918,16 @@
       "minutes": 20,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "start timer for 20 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "start timer for 24 and a half hours": {
     "intent": "HassStartTimer",
@@ -1669,14 +1935,16 @@
       "hours": 24,
       "minutes": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_half"
   },
   "start timer for 24 hours": {
     "intent": "HassStartTimer",
     "slots": {
       "hours": 24
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_only"
   },
   "start timer for 24 hours and 1 minute": {
     "intent": "HassStartTimer",
@@ -1684,7 +1952,8 @@
       "hours": 24,
       "minutes": 1
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes_1"
   },
   "start timer for 24 hours and 100 minutes": {
     "intent": "HassStartTimer",
@@ -1692,7 +1961,8 @@
       "hours": 24,
       "minutes": 100
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 24 hours and 19 minutes": {
     "intent": "HassStartTimer",
@@ -1700,7 +1970,8 @@
       "hours": 24,
       "minutes": 19
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 24 hours and 2 minutes": {
     "intent": "HassStartTimer",
@@ -1708,7 +1979,8 @@
       "hours": 24,
       "minutes": 2
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 24 hours and 20 minutes": {
     "intent": "HassStartTimer",
@@ -1716,7 +1988,8 @@
       "hours": 24,
       "minutes": 20
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 24 hours and 45 minutes": {
     "intent": "HassStartTimer",
@@ -1724,7 +1997,8 @@
       "hours": 24,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 24 hours and forty five minutes": {
     "intent": "HassStartTimer",
@@ -1732,7 +2006,8 @@
       "hours": 24,
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "hours_minutes"
   },
   "start timer for 45 and a half minutes": {
     "intent": "HassStartTimer",
@@ -1740,14 +2015,16 @@
       "minutes": 45,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "start timer for 45 minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "start timer for forty five and a half minutes": {
     "intent": "HassStartTimer",
@@ -1755,39 +2032,46 @@
       "minutes": 45,
       "seconds": 30
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_half"
   },
   "start timer for forty five minutes": {
     "intent": "HassStartTimer",
     "slots": {
       "minutes": 45
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "minutes_only"
   },
   "status of timer": {
     "intent": "HassTimerStatus",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "stop all timers": {
     "intent": "HassCancelAllTimers",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "stop timer": {
     "intent": "HassCancelTimer",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "time left on timer": {
     "intent": "HassTimerStatus",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "timer status": {
     "intent": "HassTimerStatus",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "turn off Office lights": {
     "intent": "HassTurnOff",
@@ -1795,14 +2079,18 @@
       "area": "Office",
       "domain": "light"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_domain_light",
+    "domain": "light"
   },
   "turn off RGB Light": {
     "intent": "HassTurnOff",
     "slots": {
       "name": "RGB Light"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "light"
   },
   "turn off RGB Light in Office": {
     "intent": "HassTurnOff",
@@ -1810,14 +2098,18 @@
       "name": "RGB Light",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "light"
   },
   "turn off TV": {
     "intent": "HassTurnOff",
     "slots": {
       "name": "TV"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "media_player"
   },
   "turn off TV in Office": {
     "intent": "HassTurnOff",
@@ -1825,14 +2117,18 @@
       "name": "TV",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "media_player"
   },
   "turn off Test Fan": {
     "intent": "HassTurnOff",
     "slots": {
       "name": "Test Fan"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "fan"
   },
   "turn off Test Fan in Office": {
     "intent": "HassTurnOff",
@@ -1840,14 +2136,18 @@
       "name": "Test Fan",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "fan"
   },
   "turn off Test Input Boolean": {
     "intent": "HassTurnOff",
     "slots": {
       "name": "Test Input Boolean"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "input_boolean"
   },
   "turn off Test Input Boolean in Office": {
     "intent": "HassTurnOff",
@@ -1855,14 +2155,18 @@
       "name": "Test Input Boolean",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "input_boolean"
   },
   "turn off Test Switch": {
     "intent": "HassTurnOff",
     "slots": {
       "name": "Test Switch"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "switch"
   },
   "turn off Test Switch in Office": {
     "intent": "HassTurnOff",
@@ -1870,21 +2174,27 @@
       "name": "Test Switch",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "switch"
   },
   "turn off fans": {
     "intent": "HassTurnOff",
     "slots": {
       "domain": "fan"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "domain_fan",
+    "domain": "fan"
   },
   "turn off lights": {
     "intent": "HassTurnOff",
     "slots": {
       "domain": "light"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "domain_light",
+    "domain": "light"
   },
   "turn off lights in Office": {
     "intent": "HassTurnOff",
@@ -1892,7 +2202,9 @@
       "area": "Office",
       "domain": "light"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_domain_light",
+    "domain": "light"
   },
   "turn on Office lights": {
     "intent": "HassTurnOn",
@@ -1900,14 +2212,18 @@
       "area": "Office",
       "domain": "light"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_domain_light",
+    "domain": "light"
   },
   "turn on RGB Light": {
     "intent": "HassTurnOn",
     "slots": {
       "name": "RGB Light"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "light"
   },
   "turn on RGB Light in Office": {
     "intent": "HassTurnOn",
@@ -1915,14 +2231,18 @@
       "name": "RGB Light",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "light"
   },
   "turn on TV": {
     "intent": "HassTurnOn",
     "slots": {
       "name": "TV"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "media_player"
   },
   "turn on TV in Office": {
     "intent": "HassTurnOn",
@@ -1930,14 +2250,18 @@
       "name": "TV",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "media_player"
   },
   "turn on Test Fan": {
     "intent": "HassTurnOn",
     "slots": {
       "name": "Test Fan"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "fan"
   },
   "turn on Test Fan in Office": {
     "intent": "HassTurnOn",
@@ -1945,14 +2269,18 @@
       "name": "Test Fan",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "fan"
   },
   "turn on Test Input Boolean": {
     "intent": "HassTurnOn",
     "slots": {
       "name": "Test Input Boolean"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "input_boolean"
   },
   "turn on Test Input Boolean in Office": {
     "intent": "HassTurnOn",
@@ -1960,14 +2288,18 @@
       "name": "Test Input Boolean",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "input_boolean"
   },
   "turn on Test Switch": {
     "intent": "HassTurnOn",
     "slots": {
       "name": "Test Switch"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "switch"
   },
   "turn on Test Switch in Office": {
     "intent": "HassTurnOn",
@@ -1975,21 +2307,27 @@
       "name": "Test Switch",
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_area",
+    "domain": "switch"
   },
   "turn on fans": {
     "intent": "HassTurnOn",
     "slots": {
       "domain": "fan"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "domain_fan",
+    "domain": "fan"
   },
   "turn on lights": {
     "intent": "HassTurnOn",
     "slots": {
       "domain": "light"
     },
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "domain_light",
+    "domain": "light"
   },
   "turn on lights in Office": {
     "intent": "HassTurnOn",
@@ -1997,232 +2335,285 @@
       "area": "Office",
       "domain": "light"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_domain_light",
+    "domain": "light"
   },
   "unlock Front Door": {
     "intent": "HassTurnOff",
     "slots": {
       "name": "Front Door"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_lock",
+    "domain": "lock"
   },
   "what is Test Binary Sensor": {
     "intent": "HassGetState",
     "slots": {
       "name": "Test Binary Sensor"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_sensor",
+    "domain": "binary_sensor"
   },
   "what is Test Sensor": {
     "intent": "HassGetState",
     "slots": {
       "name": "Test Sensor"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_sensor",
+    "domain": "sensor"
   },
   "what is the EcoBee temp": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "name": "EcoBee"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "climate"
   },
   "what is the EcoBee temperature": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "name": "EcoBee"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "climate"
   },
   "what is the New York weather": {
     "intent": "HassGetWeather",
     "slots": {
       "name": "New York"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "weather"
   },
   "what is the Office temp": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_only"
   },
   "what is the Office temperature": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_only"
   },
   "what is the date": {
     "intent": "HassGetCurrentDate",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "what is the temp": {
     "intent": "HassClimateGetTemperature",
     "slots": {},
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "default"
   },
   "what is the temp in Office": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_only"
   },
   "what is the temp of EcoBee": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "name": "EcoBee"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "climate"
   },
   "what is the temperature": {
     "intent": "HassClimateGetTemperature",
     "slots": {},
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "default"
   },
   "what is the temperature in Office": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_only"
   },
   "what is the temperature of EcoBee": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "name": "EcoBee"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "climate"
   },
   "what is the time": {
     "intent": "HassGetCurrentTime",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "what is the weather": {
     "intent": "HassGetWeather",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "what is the weather in New York": {
     "intent": "HassGetWeather",
     "slots": {
       "name": "New York"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "weather"
   },
   "what is today's date": {
     "intent": "HassGetCurrentDate",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "what time is it": {
     "intent": "HassGetCurrentTime",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "what's the EcoBee temp": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "name": "EcoBee"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "climate"
   },
   "what's the EcoBee temperature": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "name": "EcoBee"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "climate"
   },
   "what's the New York weather": {
     "intent": "HassGetWeather",
     "slots": {
       "name": "New York"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "weather"
   },
   "what's the Office temp": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_only"
   },
   "what's the Office temperature": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_only"
   },
   "what's the date": {
     "intent": "HassGetCurrentDate",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "what's the temp": {
     "intent": "HassClimateGetTemperature",
     "slots": {},
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "default"
   },
   "what's the temp in Office": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_only"
   },
   "what's the temp of EcoBee": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "name": "EcoBee"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "climate"
   },
   "what's the temperature": {
     "intent": "HassClimateGetTemperature",
     "slots": {},
-    "context_area": true
+    "context_area": true,
+    "slot_combination": "default"
   },
   "what's the temperature in Office": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "area": "Office"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "area_only"
   },
   "what's the temperature of EcoBee": {
     "intent": "HassClimateGetTemperature",
     "slots": {
       "name": "EcoBee"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "climate"
   },
   "what's the time": {
     "intent": "HassGetCurrentTime",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "what's the weather": {
     "intent": "HassGetWeather",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   },
   "what's the weather in New York": {
     "intent": "HassGetWeather",
     "slots": {
       "name": "New York"
     },
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "name_only",
+    "domain": "weather"
   },
   "what's today's date": {
     "intent": "HassGetCurrentDate",
     "slots": {},
-    "context_area": false
+    "context_area": false,
+    "slot_combination": "default"
   }
 }

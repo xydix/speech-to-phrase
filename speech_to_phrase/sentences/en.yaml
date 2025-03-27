@@ -150,7 +150,7 @@ intents:
             - "media_player"
             - "input_boolean"
         metadata:
-          slot_combination: "name"
+          slot_combination: "name_only"
 
       - sentences:
           - "open [the] {name}"
@@ -346,7 +346,7 @@ intents:
             - "media_player"
             - "input_boolean"
         metadata:
-          slot_combination: "name"
+          slot_combination: "name_only"
 
       - sentences:
           - "close [the] {name}"

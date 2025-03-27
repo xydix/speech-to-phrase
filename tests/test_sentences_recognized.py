@@ -10,7 +10,13 @@ from home_assistant_intents import get_intents
 
 from speech_to_phrase import Language, Things
 
-from .util import SentenceToTest, coerce_list, generate_sentences, unpack_test_sentences
+from .util import (
+    SentenceToTest,
+    ValueWithMetadata,
+    coerce_list,
+    generate_sentences,
+    unpack_test_sentences,
+)
 
 _DIR = Path(__file__).parent
 _PROGRAM_DIR = _DIR.parent
@@ -183,7 +189,10 @@ def test_sentences_recognized(
                         # Don't match against real slots
                         result_slots.pop("area", None)
 
-                    assert result_slots == gen_slots, gen_text
+                    assert result_slots == {
+                        k: v.value if isinstance(v, ValueWithMetadata) else v
+                        for k, v in gen_slots.items()
+                    }, gen_text
 
 
 @pytest.mark.parametrize("language", (Language.ENGLISH,))
@@ -261,4 +270,4 @@ def test_sentences_tested(
                         assert (
                             slot_key in test_slots
                         ), f"Missing {slot_key} for {possible_text}"
-                        assert test_slots[slot_key] == slot_value, possible_text
+                        assert test_slots[slot_key] == slot_value.value, possible_text

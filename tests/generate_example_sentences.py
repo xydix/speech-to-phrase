@@ -4,7 +4,7 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import yaml
 from hassil import Intents, merge_dict
@@ -102,17 +102,32 @@ def main() -> None:
                     assert test_sentence, f"Missing test sentence: {possible_text}"
 
                     test_slots = test_sentence.slots or {}
+                    example_domain: Optional[str] = None
                     for slot_key, slot_value in possible_slots.items():
                         assert (
                             slot_key in test_slots
                         ), f"Missing {slot_key} for {possible_text}"
-                        assert test_slots[slot_key] == slot_value, possible_text
+                        assert test_slots[slot_key] == slot_value.value, possible_text
 
-                    example_sentences_dict[possible_text] = {
+                        if slot_value.metadata:
+                            example_domain = slot_value.metadata.get(
+                                "domain", example_domain
+                            )
+
+                    if (not example_domain) and ("domain" in test_slots):
+                        example_domain = test_slots["domain"]
+
+                    example = {
                         "intent": intent_name,
                         "slots": test_slots,
                         "context_area": intent_data.metadata.get("context_area", False),
+                        "slot_combination": slot_combo_name,
                     }
+
+                    if example_domain:
+                        example["domain"] = example_domain
+
+                    example_sentences_dict[possible_text] = example
 
     with open(example_sentences_path, "w", encoding="utf-8") as example_sentences_file:
         json.dump(

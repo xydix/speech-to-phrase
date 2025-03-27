@@ -118,7 +118,7 @@ tests:
         slots:
           domain: "fan"
 
-    name:
+    name_only:
       - sentences:
           - "turn on RGB Light"
         slots:
@@ -253,7 +253,7 @@ tests:
         slots:
           domain: "fan"
 
-    name:
+    name_only:
       - sentences:
           - "turn off RGB Light"
         slots:

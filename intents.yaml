@@ -1,5 +1,4 @@
 ---
-
 HassNevermind:
   description: "Does nothing. Used to cancel a request"
   slot_combinations:
@@ -53,7 +52,7 @@ HassTurnOn:
       context_area: true
       domain: "fan"
       example: "turn on the fans in here"
-    name:
+    name_only:
       slots: "name"
       domain:
         - "light"
@@ -152,7 +151,7 @@ HassTurnOff:
       context_area: true
       domain: "fan"
       example: "turn off the fans in here"
-    name:
+    name_only:
       slots: "name"
       domain:
         - "light"
@@ -442,7 +441,6 @@ HassMediaNext:
       slots: "name"
       example: "next track on the stereo"
 
-
 # temperature
 HassClimateGetTemperature:
   description: "Gets the current temperature of a climate device or entity"
@@ -457,6 +455,7 @@ HassClimateGetTemperature:
       example: "what is the temperature"
     name_only:
       slots: "name"
+      domain: "climate"
       example: "what is the temperature of the EcoBee"
     area_only:
       slots: "area"
@@ -464,7 +463,6 @@ HassClimateGetTemperature:
     floor_only:
       slots: "floor"
       example: "what is the temperature downstairs"
-
 
 # todo
 HassListAddItem:
