@@ -1,5 +1,18 @@
 language: en
 
+# Lists available as {list_name} in sentence templates.
+# A list can either be a fixed set of values, a range, or a wildcard.
+#
+# For a fixed value list, each value of the list must be tested.
+# You will probably want to add test_format_values in the tests to make this
+# easier.
+#
+# For range lists, the minimum and maximum values of the range are automatically
+# tested.
+#
+# Wildcards are not technically supported, so you must declare
+# "test_wildcard_values" for each one in the tests. Users will need to
+# re-declare these as fixed value lists in their custom sentences.
 lists:
   color:
     values:
@@ -76,6 +89,24 @@ lists:
 
 expansion_rules:
   timer_set: "(set|start|create)"
+
+# -----------------------------------------------------------------------------
+
+# Sentence templates for intents.
+# Format:
+# intents:
+#   <intent name>
+#     data:
+#       - sentences:
+#           - "sentence template 1"
+#           - "sentence template 2"
+#         metadata:
+#           slot_combination: "name of slot combination from intents.yaml"
+#           context_area: true if area of voice satellite is required (must match intents.yaml)
+#         requires_context:
+#           domain: "domain of entities matched with {name}"
+#         slots:
+#           <name of inferred slot>: <slot value>
 
 intents:
   # nevermind

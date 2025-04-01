@@ -1,4 +1,19 @@
 ---
+
+# Available intents and slot combinations.
+# Format:
+#
+# <intent name>:
+#   description: "Description of the intent"
+#   slots:
+#     <slot name>: "Description of slot"
+#   slot_combinations:
+#     <slot combination name>:
+#       slots: [], single slot name, or list of slot names that are required.
+#       example: "English example of voice command."
+#       context_area: true if the area of the voice satellite is required.
+#       domain: [], single domain name, or list of domain names for entities matching {name}.
+
 HassNevermind:
   description: "Does nothing. Used to cancel a request"
   slot_combinations:
