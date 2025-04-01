@@ -1,3 +1,4 @@
+---
 language: fr
 lists:
   color:
@@ -26,11 +27,11 @@ lists:
   seconds:
     range:
       from: 10
-      to: 60
+      to: 100
   minutes:
     range:
       from: 1
-      to: 60
+      to: 100
   hours:
     range:
       from: 1
@@ -51,7 +52,7 @@ lists:
       # - portails
 
 expansion_rules:
-  le: (le |la |les |l')
+  le: "(le |la |les |l')"
   dans: "(dans|du|de|des|à|au|aux|sur)"
   de: "(du|de|des)"
   tous: "(tout|tous|toute[s])"
@@ -71,8 +72,8 @@ expansion_rules:
   supprime: "(supprime|supprimer)"
   verrouille: "(verrouiller|verrouille)"
   deverrouille: "(déverrouiller|déverrouille)"
-  monte: (monte|monter)
-  baisse: (baisse|baisser|descendre|descends)
+  monte: "(monte|monter)"
+  baisse: "(baisse|baisser|descendre|descends)"
 
   # Domains and Things
   lumiere: "(lumière[s])"
@@ -89,41 +90,74 @@ intents:
           - "chut"
           - "tais toi"
           - "silence"
+        metadata:
+          slot_combination: "default"
 
   # date, time, weather
   HassGetCurrentTime:
     data:
       - sentences:
           - "quelle heure est-il"
+        metadata:
+          slot_combination: "default"
 
   HassGetCurrentDate:
     data:
       - sentences:
           - "quel jour sommes-nous"
+        metadata:
+          slot_combination: "default"
   
   HassGetWeather:
     data:
       - sentences:
           - "quel temps fait-il"
+        metadata:
+          slot_combination: "default"
 
       - sentences:
           - "quel temps fait-il à [<le>]{name}"
         requires_context:
           domain: weather
+        metadata:
+          slot_combination: "name_only"
 
   # HassTurnOn (Generic):
   HassTurnOn:
     data:
+      # area + context awareness
+      - sentences:
+          - "<allume> la lumière"
+          - "<allume> les lumières"
+        slots:
+          domain: light
+        metadata:
+          slot_combination: "domain_light"
+          context_area: true
+
       - sentences:
           - "<active> [<le>]{name}"
+        requires_context:
+          domain:
+            - "light"
+            - "fan"
+            - "switch"
+            - "media_player"
+            - "input_boolean"
+        metadata:
+          slot_combination: "name_only"
+
+      - sentences:
           - "<active> [<le>]{name} <dans> [<le>]{area}"
         requires_context:
           domain:
-            - light
-            - fan
-            - switch
-            - input_boleean
-            - media_player
+            - "light"
+            - "fan"
+            - "switch"
+            - "media_player"
+            - "input_boolean"
+        metadata:
+          slot_combination: "name_area"
             
       # HassTurnOn (Light):
       # area
@@ -132,20 +166,15 @@ intents:
           - "<allume> [<le>]{area}"
         slots:
           domain: light
+        metadata:
+          slot_combination: "area_domain_light"
 
-      # area + context awareness
-      - sentences:
-          - "<allume> la lumière"
-          - "<allume> les lumières"
-          
-        slots:
-          domain: light
-
+      # TODO: decide if we really want this by default
       # all
-      - sentences:
-          - "<allume> toutes les lumières"
-        slots:
-          domain: light
+      # - sentences:
+      #     - "<allume> toutes les lumières"
+      #   slots:
+      #     domain: light
 
       # floor
       - sentences:
@@ -153,6 +182,8 @@ intents:
           - "<allume> [<le>]{floor}"
         slots:
           domain: light
+        metadata:
+          slot_combination: "floor_domain_light"
 
       # HassTurnOn (Cover):
       # name
@@ -160,30 +191,40 @@ intents:
           - "<ouvre> [<le>]{name}"
         requires_context:
           domain: cover
+        metadata:
+          slot_combination: "name_cover"
 
       # device_class and area
       - sentences:
           - "<ouvre> [<tous>] [<le>]{cover_classes} [<dans>] [<le>]{area}"
         slots:
           domain: cover
+        metadata:
+          slot_combination: "area_device_class_cover"
 
+      # TODO: decide if we really want this by default
       # device_class
-      - sentences:
-          - "<ouvre> <tous> [<le>]{cover_classes}"
-        slots:
-          domain: cover
+      # - sentences:
+      #     - "<ouvre> <tous> [<le>]{cover_classes}"
+      #   slots:
+      #     domain: cover
 
       # Context area awareness
       - sentences:
           - "<ouvre> [<le>]{cover_classes}"
         slots:
           domain: cover
+        metadata:
+          slot_combination: "device_class_cover"
+          context_area: true
 
       # device_class and floor
       - sentences:
           - "<ouvre> [<tous>] [<le>]{cover_classes} [<dans>] [<le>]{floor}"
         slots:
           domain: cover
+        metadata:
+          slot_combination: "floor_device_class_cover"
 
       # HassTurnOn (Locks):
       # name
@@ -191,46 +232,74 @@ intents:
           - "<verrouille> [<le>]{name}"
         requires_context:
           domain: lock
+        metadata:
+          slot_combination: "name_lock"
 
+      # TODO: decide if we really want this by default
       # area
-      - sentences:
-          - "<verrouille> [<le>]{area}"
-          - "<verrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{area}"
-        slots:
-          domain: lock
+      # - sentences:
+      #     - "<verrouille> [<le>]{area}"
+      #     - "<verrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{area}"
+      #   slots:
+      #     domain: lock
 
+      # TODO: decide if we really want this by default
       # context area awareness
-      - sentences:
-          - "<verrouille> [<le>] <serrure>"
-        slots:
-          domain: lock
+      # - sentences:
+      #     - "<verrouille> [<le>] <serrure>"
+      #   slots:
+      #     domain: lock
 
+      # TODO: decide if we really want this by default
       # floor
-      - sentences:
-          - "<verrouille> [<le>]{floor}"
-          - "<verrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{floor}"
-        slots:
-          domain: lock
+      # - sentences:
+      #     - "<verrouille> [<le>]{floor}"
+      #     - "<verrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{floor}"
+      #   slots:
+      #     domain: lock
 
+      # TODO: decide if we really want this by default
       # the whole house
-      - sentences:
-          - "<verrouille> <tous> [<le>] <serrure>"
-        slots:
-          domain: lock
+      # - sentences:
+      #     - "<verrouille> <tous> [<le>] <serrure>"
+      #   slots:
+      #     domain: lock
 
   # HassTurnOff (Generic)
   HassTurnOff:
     data:
+      # area + context awareness
+      - sentences:
+          - "<eteins> [<le>]<lumiere>"
+        slots:
+          domain: light
+        metadata:
+          slot_combination: "domain_light"
+          context_area: true
+
       - sentences:
           - "<eteins> [<le>]{name}"
+        requires_context:
+          domain:
+            - "light"
+            - "fan"
+            - "switch"
+            - "input_boolean"
+            - "media_player"
+        metadata:
+          slot_combination: "name_only"
+
+      - sentences:
           - "<eteins> [<le>]{name} <dans> [<le>]{area}"
         requires_context:
           domain:
-            - light
-            - fan
-            - switch
-            - input_boleean
-            - media_player
+            - "light"
+            - "fan"
+            - "switch"
+            - "input_boolean"
+            - "media_player"
+        metadata:
+          slot_combination: "name_area"
 
       # HassTurnOff (Light)
       # area
@@ -239,18 +308,15 @@ intents:
           - "<eteins> [<le>]{area}"
         slots:
           domain: light
+        metadata:
+          slot_combination: "area_domain_light"
 
-      # area + context awareness
-      - sentences:
-          - "<eteins> [<le>]<lumiere>"
-        slots:
-          domain: light
-
+      # TODO: decide if we really want this by default
       # all
-      - sentences:
-          - "<eteins> <tous> [<le>]<lumiere>"
-        slots:
-          domain: light
+      # - sentences:
+      #     - "<eteins> <tous> [<le>]<lumiere>"
+      #   slots:
+      #     domain: light
 
       # floor
       - sentences:
@@ -258,7 +324,8 @@ intents:
           - "<eteins> [<le>]{floor}"
         slots:
           domain: light
-
+        metadata:
+          slot_combination: "floor_domain_light"
 
       # HassTurnOff (Cover)
       # name
@@ -266,63 +333,79 @@ intents:
           - "<ferme> [<le>]{name}"
         requires_context:
           domain: cover
+        metadata:
+          slot_combination: "name_cover"
 
       # device_class and area
       - sentences:
           - "<ferme> [<tous>] [<le>]{cover_classes} [<dans>] [<le>]{area}"
         slots:
           domain: cover
+        metadata:
+          slot_combination: "area_device_class_cover"
 
+      # TODO: decide if we really want this by default
       # device_class
-      - sentences:
-          - "<ferme> <tous> [<le>]{cover_classes}"
-        slots:
-          domain: cover
+      # - sentences:
+      #     - "<ferme> <tous> [<le>]{cover_classes}"
+      #   slots:
+      #     domain: cover
 
       # Context area awareness
       - sentences:
           - "<ferme> [<le>]{cover_classes}"
         slots:
           domain: cover
+        metadata:
+          slot_combination: "device_class_cover"
+          context_area: true
 
       # device_class and floor
       - sentences:
           - "<ferme> [<tous>] [<le>]{cover_classes} [<dans>] [<le>]{floor}"
         slots:
           domain: cover
+        metadata:
+          slot_combination: "floor_device_class_cover"
 
-      # HassTurnOff (Lock)
+      # HassTurnOff (Locks)
       # name
       - sentences:
           - "<deverrouille> [<le>]{name}"
         requires_context:
           domain: lock
+        metadata:
+          slot_combination: "name_lock"
 
+      # TODO: decide if we really want this by default
       # area
-      - sentences:
-          - "<deverrouille> [<le>]{area}"
-          - "<deverrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{area}"
-        slots:
-          domain: lock
+      # - sentences:
+      #     - "<deverrouille> [<le>]{area}"
+      #     - "<deverrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{area}"
+      #   slots:
+      #     domain: lock
 
+      # TODO: decide if we really want this by default
       # context area awareness
-      - sentences:
-          - "<deverrouille> [<le>] <serrure>"
-        slots:
-          domain: lock
+      # - sentences:
+      #     - "<deverrouille> [<le>] <serrure>"
+      #   slots:
+      #     domain: lock
 
+      # TODO: decide if we really want this by default
       # floor
-      - sentences:
-          - "<deverrouille> [<le>]{floor}"
-          - "<deverrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{floor}"
-        slots:
-          domain: lock
+      # - sentences:
+      #     - "<deverrouille> [<le>]{floor}"
+      #     - "<deverrouille> [<tous>] [<le>] <serrure> [<dans>] [<le>]{floor}"
+      #   slots:
+      #     domain: lock
 
+      # TODO: decide if we really want this by default
       # the whole house
-      - sentences:
-          - "<deverrouille> <tous> [<le>] <serrure>"
-        slots:
-          domain: lock
+      # - sentences:
+      #     - "<deverrouille> <tous> [<le>] <serrure>"
+      #   slots:
+      #     domain: lock
       
 
   # HassLightSet
@@ -334,39 +417,57 @@ intents:
           - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{name} à {brightness} pourcent"
         requires_context:
           domain: light
+        metadata:
+          slot_combination: "name_brightness"
 
       # brightness (area)
       - sentences:
           - "(<regle>|<augmente>|<diminue>) la luminosité [<dans>] [<le>]{area} à {brightness} pourcent"
           - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{area} à {brightness} pourcent"
+        metadata:
+          slot_combination: "area_brightness"
 
       # brigtness (area + context awareness)
       - sentences:
           - "(<regle>|<augmente>|<diminue>) la luminosité à {brightness} pourcent"
+        metadata:
+          slot_combination: "brightness_only"
+          context_area: true
 
       # brightness (floor)
       - sentences:
           - "(<regle>|<augmente>|<diminue>) la luminosité [<dans>] [<le>]{floor} à {brightness} pourcent"
           - "(<allume>|<regle>|<augmente>|<diminue>) [<le>]{floor} à {brightness} pourcent"
+        metadata:
+          slot_combination: "floor_brightness"
 
       # color (name)
       - sentences:
           - "(<regle>|<allume>) [<le>]{name} en {color}"
         requires_context:
           domain: light
+        metadata:
+          slot_combination: "name_color"
 
       # color (area)
       - sentences:
           - "(<regle>|<allume>) [<le>]{area} en {color}"
+        metadata:
+          slot_combination: "area_color"
 
       # color (area + context awareness)
       - sentences:
           - "<regle> la couleur [en] {color}"
           - "(<regle>|<allume>) les lumières en {color}"
+        metadata:
+          slot_combination: "color_only"
+          context_area: true
 
       # color (floor)
       - sentences:
           - "(<regle>|<allume>) [<le>]{floor} en {color}"
+        metadata:
+          slot_combination: "floor_color"
 
   # HassStartTimer
   HassStartTimer:
@@ -374,18 +475,26 @@ intents:
       # seconds
       - sentences:
           - "minuteur {seconds} secondes"
+        metadata:
+          slot_combination: "seconds_only"
       
       # minutes
       - sentences:
           - "minuteur {minutes} minutes"
+        metadata:
+          slot_combination: "minutes_only"
 
       # hours
       - sentences:
           - "minuteur {hours} heures"
+        metadata:
+          slot_combination: "hours_only"
 
       # hours + minutes
       - sentences:
           - "minuteur {hours} heures et {minutes} minutes"
+        metadata:
+          slot_combination: "hours_minutes"
 
   # HassCancelTimer:
   HassCancelTimer:
@@ -393,6 +502,8 @@ intents:
       # No name
       - sentences:
           - "<supprime> [le] minuteur"
+        metadata:
+          slot_combination: "default"
 
   # HassCancelAllTimers:
   HassCancelAllTimers:
@@ -400,6 +511,8 @@ intents:
       # All timers
       - sentences:
           - "<supprime> tous (les|mes) minuteurs"
+        metadata:
+          slot_combination: "default"
 
   # HassPauseTimer
   HassPauseTimer:
@@ -407,6 +520,8 @@ intents:
       # No name
       - sentences:
           - "<mets> [le] minuteur en pause"
+        metadata:
+          slot_combination: "default"
 
   # HassUnpauseTimer
   HassUnpauseTimer:
@@ -414,6 +529,8 @@ intents:
       # No name
       - sentences:
           - "<reprends> [le] minuteur"
+        metadata:
+          slot_combination: "default"
 
   # HassTimerStatus:
   HassTimerStatus:
@@ -422,6 +539,8 @@ intents:
       - sentences:
           - "combien de temps reste-t-il"
           - "combien de temps reste-t-il (sur|dans) (le|mon) minuteur"
+        metadata:
+          slot_combination: "default"
 
   # HassMediaPause:
   HassMediaPause:
@@ -431,14 +550,21 @@ intents:
           - "<mets> [<le>]{name} (sur|en) pause"
         requires_context:
           domain: media_player
+        metadata:
+          slot_combination: "name_only"
 
-      # Area (Context awarenes)
+      # Area (Context awareness)
       - sentences:
           - "pause"
+        metadata:
+          slot_combination: "default"
+          context_area: true
 
       # Area
       - sentences:
           - "<mets> [<le>]<media> (sur|en) pause <dans> [<le>]{area}"
+        metadata:
+          slot_combination: "area_only"
 
   # HassMediaUnpause:
   HassMediaUnpause:
@@ -448,14 +574,21 @@ intents:
           - "<lecture> sur [<le>]{name}"
         requires_context:
           domain: media_player
+        metadata:
+          slot_combination: "name_only"
 
-      # Area (Context awarenes)
+      # Area (Context awareness)
       - sentences:
           - "<lecture>"
+        metadata:
+          slot_combination: "default"
+          context_area: true
 
       # Area
       - sentences:
           - "<lecture> <dans> [<le>]{area}"
+        metadata:
+          slot_combination: "area_only"
 
   # HassMediaNext:
   HassMediaNext:
@@ -465,14 +598,21 @@ intents:
           - "<media> suivant[e] sur [<le>]{name}"
         requires_context:
           domain: media_player
+        metadata:
+          slot_combination: "name_only"
 
-      # Area (Context awarenes)
+      # Area (Context awareness)
       - sentences:
           - "[<media>] suivant[e]"
+        metadata:
+          slot_combination: "default"
+          context_area: true
 
       # Area
       - sentences:
           - "<media> suivant[e] <dans> [<le>]{area}"
+        metadata:
+          slot_combination: "area_only"
 
   # HassGetTemperature:
   HassClimateGetTemperature:
@@ -480,10 +620,15 @@ intents:
       # area
       - sentences:
           - "combien fait-il <dans> [<le>]{area}"
+        metadata:
+          slot_combination: "area_only"
 
       # context awareness
       - sentences:
           - "combien fait-il"
+        metadata:
+          slot_combination: "default"
+          context_area: true
 
   # HassGetState
   HassGetState:
@@ -492,5 +637,7 @@ intents:
           - "quel est [(l'état|le statut|la valeur) de] [<le>]{name} [<dans> [<le>]{area}]"
         requires_context:
           domain:
-            - sensor
-            - binary_sensor
+            - "sensor"
+            - "binary_sensor"
+        metadata:
+          slot_combination: "name_sensor"

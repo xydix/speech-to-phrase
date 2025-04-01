@@ -19,6 +19,7 @@ HassNevermind:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "nevermind"
 
 HassGetCurrentTime:
@@ -88,6 +89,19 @@ HassTurnOn:
         - "domain"
       domain: "light"
       example: "turn on the lights in the kitchen"
+    floor_domain_light:
+      slots:
+        - "floor"
+        - "domain"
+      domain: "light"
+      example: "turn on the lights on the first floor"
+    device_class_cover:
+      slots:
+        - "domain"
+        - "device_class"
+      context_area: true
+      domain: "cover"
+      example: "open the windows in here"
     # TODO: add support in main repo
     # area_domain_fan:
     #   slots:
@@ -119,6 +133,13 @@ HassTurnOn:
         - "device_class"
       domain: "cover"
       example: "open the curtains in the living room"
+    floor_device_class_cover:
+      slots:
+        - "floor"
+        - "domain"
+        - "device_class"
+      domain: "cover"
+      example: "open the curtains on the first floor"
     name_lock:
       slots: "name"
       domain: "lock"
@@ -187,6 +208,26 @@ HassTurnOff:
         - "domain"
       domain: "light"
       example: "turn off the lights in the kitchen"
+    floor_domain_light:
+      slots:
+        - "floor"
+        - "domain"
+      domain: "light"
+      example: "turn off the lights on the first floor"
+    device_class_cover:
+      slots:
+        - "domain"
+        - "device_class"
+      context_area: true
+      domain: "cover"
+      example: "close the windows in here"
+    floor_device_class_cover:
+      slots:
+        - "floor"
+        - "domain"
+        - "device_class"
+      domain: "cover"
+      example: "close the curtains on the first floor"
     # TODO: add support in main repo
     # area_domain_fan:
     #   slots:
@@ -223,21 +264,7 @@ HassTurnOff:
       domain: "lock"
       example: "unlock front door"
 
-    # TODO: Add support in main repo
-    # - slots:
-    #     - "floor"
-    #     - "domain"
-    #   domain:
-    #     - "light"
-    #     - "fan"
-    #   example: "turn off the upstairs lights"
-    # - slots:
-    #     - "floor"
-    #     - "domain"
-    #     - "device_class"
-    #   domain: "cover"
-    #   example: "close the curtains on the main floor"
-
+# sensors
 HassGetState:
   description: "Gets or checks the state of an entity"
   slots:
@@ -290,12 +317,11 @@ HassLightSet:
         - "area"
         - "brightness"
       example: "set the living room brightness to 50%"
-    # TODO: Add support in main repo
-    # floor_brightness:
-    #   slots:
-    #     - "floor"
-    #     - "brightness"
-    #   example: "set the main floor brightness to 50%"
+    floor_brightness:
+      slots:
+        - "floor"
+        - "brightness"
+      example: "set the main floor brightness to 50%"
     # color
     color_only:
       slots:
@@ -313,12 +339,11 @@ HassLightSet:
         - "area"
         - "color"
       example: "set the living room to red"
-    # TODO: Add support in main repo
-    # floor_color:
-    #   slots:
-    #     - "floor"
-    #     - "color"
-    #   example: "set the main floor to red"
+    floor_color:
+      slots:
+        - "floor"
+        - "color"
+      example: "set the main floor to red"
 
 # timers
 HassStartTimer:
@@ -429,6 +454,9 @@ HassMediaPause:
     name_only:
       slots: "name"
       example: "pause TV"
+    area_only:
+      slots: "area"
+      example: "pause music in the kitchen"
 
 HassMediaUnpause:
   description: "Unpauses a media player"
@@ -442,6 +470,9 @@ HassMediaUnpause:
     name_only:
       slots: "name"
       example: "resume TV"
+    area_only:
+      slots: "area"
+      example: "resume music in the kitchen"
 
 HassMediaNext:
   description: "Skips a media player to the next item"
@@ -455,6 +486,9 @@ HassMediaNext:
     name_only:
       slots: "name"
       example: "next track on the stereo"
+    area_only:
+      slots: "area"
+      example: "next track in the kitchen"
 
 # temperature
 HassClimateGetTemperature:

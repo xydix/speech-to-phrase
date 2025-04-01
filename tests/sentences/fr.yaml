@@ -1,0 +1,23 @@
+---
+language: "fr"
+
+floors:
+  - name: "Premier Étage"
+areas:
+  - name: "Bureau"
+entities:
+  - name: "New York"
+    domain: "weather"
+  - name: "Porte d'entrée"
+    domain: "lock"
+
+# -----------------------------------------------------------------------------
+
+tests:
+  HassNevermind:
+    default:
+      - "oublie"
+      - "annule"
+      - "chut"
+      - "tais toi"
+      - "silence"

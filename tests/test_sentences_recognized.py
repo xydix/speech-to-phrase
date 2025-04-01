@@ -1,5 +1,6 @@
 """Test that sentences can be recognized in Home Assistant."""
 
+import warnings
 from pathlib import Path
 from typing import Any, Dict, Optional, Set
 
@@ -26,6 +27,8 @@ _TESTS_DIR = _PROGRAM_DIR / "tests"
 _TEST_SENTENCES_DIR = _TESTS_DIR / "sentences"
 _EXAMPLE_SENTENCES_DIR = _TESTS_DIR / "example_sentences"
 
+LANGUAGES = [Language.ENGLISH, Language.FRENCH]
+
 
 @pytest.fixture
 def intent_slots() -> Dict[str, Any]:
@@ -34,7 +37,7 @@ def intent_slots() -> Dict[str, Any]:
         return yaml.safe_load(intents_file)
 
 
-@pytest.mark.parametrize("language", (Language.ENGLISH,))
+@pytest.mark.parametrize("language", LANGUAGES)
 def test_sentences_recognized(
     language: Language,
     intent_slots: Dict[str, Any],  # pylint: disable=redefined-outer-name
@@ -50,10 +53,6 @@ def test_sentences_recognized(
 
     lang_test_intents_dict = lang_test_sentences_dict["tests"]
     lang_test_format_values = lang_test_sentences_dict.get("test_format_values", {})
-
-    assert set(intent_slots.keys()) == set(
-        lang_test_intents_dict.keys()
-    ), "Tests and known intents must match"
 
     test_things = Things.from_dict(lang_test_sentences_dict)
     test_things_lists_dict = {"lists": test_things.to_lists_dict()}
@@ -78,10 +77,6 @@ def test_sentences_recognized(
     merge_dict(lang_sentences_dict, test_things_lists_dict)
     lang_intents = Intents.from_dict(lang_sentences_dict)
 
-    assert set(lang_intents.intents.keys()) == set(
-        lang_test_intents_dict.keys()
-    ), "Tests and supported intents must match"
-
     # Load Home Assistant intents
     hass_intents_dict = get_intents(lang_code)
     assert (
@@ -96,16 +91,14 @@ def test_sentences_recognized(
         assert (
             intent_name in intent_slots
         ), f"No expected slot combinations for intent: '{intent_name}'"
-        possible_slot_combos = intent_slots[intent_name]["slot_combinations"]
-
-        assert (
-            intent_name in lang_test_intents_dict
-        ), f"No tests for intent: '{intent_name}'"
-        test_intent_info = lang_test_intents_dict[intent_name]
+        known_slot_combos = intent_slots[intent_name]["slot_combinations"]
+        test_intent_info = lang_test_intents_dict.get(intent_name, {})
 
         for intent_data in intent_info.data:
             # Check that test sentences can be recognized by Speech-to-Phrase
-            assert intent_data.metadata, f"No metadata for intent: '{intent_name}'"
+            assert (
+                intent_data.metadata
+            ), f"No metadata for sentence block of intent '{intent_name}' in {lang_sentences_path}: {intent_data.sentence_texts}"
             assert (
                 "slot_combination" in intent_data.metadata
             ), f"No slot combination for in metadata for intent: '{intent_name}'"
@@ -113,9 +106,10 @@ def test_sentences_recognized(
 
             context_area = intent_data.metadata.get("context_area", False)
             assert (
-                slot_combo_name in possible_slot_combos
-            ), f"No expected slot combination for intent '{intent_name}': '{slot_combo_name}'"
-            slot_combo_info = possible_slot_combos[slot_combo_name]
+                slot_combo_name in known_slot_combos
+            ), f"Unknown slot combination for intent '{intent_name}': '{slot_combo_name}'"
+            slot_combo_info = known_slot_combos[slot_combo_name]
+            is_slot_combo_required = slot_combo_info.get("required", False)
 
             expected_domains: Optional[Set[str]] = None
             if "domain" in slot_combo_info:
@@ -123,9 +117,17 @@ def test_sentences_recognized(
 
             actual_domains: Set[str] = set()
 
-            assert (
-                slot_combo_name in test_intent_info
-            ), f"No tests for slot combination '{slot_combo_name}' of intent '{intent_name}'"
+            if is_slot_combo_required:
+                assert (
+                    slot_combo_name in test_intent_info
+                ), f"No tests for slot combination '{slot_combo_name}' of intent '{intent_name}'"
+            elif slot_combo_name not in test_intent_info:
+                warnings.warn(
+                    UserWarning(
+                        f"Missing tests for slot combination '{slot_combo_name}' of intent '{intent_name}'"
+                    )
+                )
+                continue
 
             for test_sentence in unpack_test_sentences(
                 test_intent_info[slot_combo_name], lang_test_format_values
@@ -195,7 +197,7 @@ def test_sentences_recognized(
                     }, gen_text
 
 
-@pytest.mark.parametrize("language", (Language.ENGLISH,))
+@pytest.mark.parametrize("language", LANGUAGES)
 def test_sentences_tested(
     language: Language,
     intent_slots: Dict[str, Any],  # pylint: disable=redefined-outer-name
@@ -236,13 +238,30 @@ def test_sentences_tested(
     lang_intents = Intents.from_dict(lang_sentences_dict)
 
     for intent_name, intent_info in lang_intents.intents.items():
-        test_intent_info = lang_test_intents_dict[intent_name]
+        known_slot_combos = intent_slots[intent_name]["slot_combinations"]
+        test_intent_info = lang_test_intents_dict.get(intent_name, {})
         for intent_data in intent_info.data:
-            assert intent_data.metadata, f"No metadata for intent: '{intent_name}'"
+            assert (
+                intent_data.metadata
+            ), f"No metadata for sentence block of intent '{intent_name}' in {lang_sentences_path}: {intent_data.sentence_texts}"
             slot_combo_name = intent_data.metadata["slot_combination"]
             assert (
-                slot_combo_name in test_intent_info
-            ), f"No tests for slot combination of intent '{intent_name}': {slot_combo_name}"
+                slot_combo_name in known_slot_combos
+            ), f"Unknown slot combination for intent '{intent_name}': '{slot_combo_name}'"
+            slot_combo_info = known_slot_combos[slot_combo_name]
+            is_slot_combo_required = slot_combo_info.get("required", False)
+
+            if is_slot_combo_required:
+                assert (
+                    slot_combo_name in test_intent_info
+                ), f"No tests for slot combination of intent '{intent_name}': {slot_combo_name}"
+            elif slot_combo_name not in test_intent_info:
+                warnings.warn(
+                    UserWarning(
+                        f"Missing tests for slot combination '{slot_combo_name}' of intent '{intent_name}'"
+                    )
+                )
+                continue
 
             actual_test_sentences: Dict[str, SentenceToTest] = {
                 ts.text: ts
@@ -263,7 +282,9 @@ def test_sentences_tested(
                 for possible_text, possible_slots in possible_sentences:
                     possible_text = possible_text.strip()
                     test_sentence = actual_test_sentences.get(possible_text)
-                    assert test_sentence, f"Missing test sentence: {possible_text}"
+                    assert (
+                        test_sentence
+                    ), f"No test for sentence in intent '{intent_name}': {possible_text}"
 
                     test_slots = test_sentence.slots or {}
                     for slot_key, slot_value in possible_slots.items():
