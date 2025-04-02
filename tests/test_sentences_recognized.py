@@ -11,6 +11,7 @@ from home_assistant_intents import get_intents
 
 from speech_to_phrase import Language, Things
 
+from . import TEST_LANGUAGES
 from .util import (
     SentenceToTest,
     ValueWithMetadata,
@@ -27,8 +28,6 @@ _TESTS_DIR = _PROGRAM_DIR / "tests"
 _TEST_SENTENCES_DIR = _TESTS_DIR / "sentences"
 _EXAMPLE_SENTENCES_DIR = _TESTS_DIR / "example_sentences"
 
-LANGUAGES = [Language.ENGLISH, Language.FRENCH]
-
 
 @pytest.fixture
 def intent_slots() -> Dict[str, Any]:
@@ -37,7 +36,7 @@ def intent_slots() -> Dict[str, Any]:
         return yaml.safe_load(intents_file)
 
 
-@pytest.mark.parametrize("language", LANGUAGES)
+@pytest.mark.parametrize("language", TEST_LANGUAGES)
 def test_sentences_recognized(
     language: Language,
     intent_slots: Dict[str, Any],  # pylint: disable=redefined-outer-name
@@ -197,7 +196,7 @@ def test_sentences_recognized(
                     }, gen_text
 
 
-@pytest.mark.parametrize("language", LANGUAGES)
+@pytest.mark.parametrize("language", TEST_LANGUAGES)
 def test_sentences_tested(
     language: Language,
     intent_slots: Dict[str, Any],  # pylint: disable=redefined-outer-name
