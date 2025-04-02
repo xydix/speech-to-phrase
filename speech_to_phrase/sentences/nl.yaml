@@ -1,3 +1,4 @@
+---
 language: nl
 
 lists:
@@ -15,7 +16,6 @@ lists:
       - "roze"
   brightness:
     range:
-      type: "percentage"
       from: 10
       to: 100
       step: 10

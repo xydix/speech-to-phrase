@@ -1,4 +1,6 @@
+---
 language: de
+
 lists:
   color:
     values:
@@ -13,7 +15,6 @@ lists:
       - "braun"
   brightness:
     range:
-      type: "percentage"
       from: 10
       to: 100
       step: 10
@@ -33,25 +34,25 @@ lists:
       step: 10
   minutes_extra:
     values:
-      - in: fünfzehn
+      - in: "fünfzehn"
         out: 15
-      - in: fünfundvierzig
+      - in: "fünfundvierzig"
         out: 45
   minutes_half:
     values:
-      - in: einhalb
+      - in: "einhalb"
         out: 30
   hours_half:
     values:
-      - in: einhalb
+      - in: "einhalb"
         out: 30
   hours_special:
     values:
-      - in: viertel
+      - in: "viertel"
         out: 15
-      - in: halbe
+      - in: "halbe"
         out: 30
-      - in: dreiviertel
+      - in: "dreiviertel"
         out: 45
   hours:
     range:
@@ -83,7 +84,7 @@ expansion_rules:
   timer_cancel: "beende|stoppe"
   # Media Players
   naechster: "nächste[r|s|n]"
-  starte: (starte|spiele)
+  starte: "(starte|spiele)"
   song: "(Titel|Lied|Song|Track|Stück)"
 
 intents:
@@ -96,6 +97,8 @@ intents:
           - "abbrechen"
           - "Abbruch"
           - "[doch ](nicht[s]|nix)"
+        metadata:
+          slot_combination: "default"
 
   # date, time, weather
   HassGetCurrentTime:
@@ -103,23 +106,34 @@ intents:
       - sentences:
           - "wie spät ist es"
           - "(wie viel|wieviel) uhr (ist es|haben wir[ es])[ jetzt]"
+        metadata:
+          slot_combination: "default"
 
   HassGetCurrentDate:
     data:
       - sentences:
           - "(welchen tag|welches datum) haben wir heute"
           - "(welcher tag|welches datum) ist heute"
+        metadata:
+          slot_combination: "default"
 
   HassGetWeather:
     data:
       - sentences:
           - "wie ist das Wetter"
+        metadata:
+          slot_combination: "default"
+
       - sentences:
           - "wie ist das Wetter (für|in) <name>"
           - "wie ist das <name>[er|s] Wetter"
           - "was für[ ein] Wetter (ist|hat es) in <name>"
         requires_context:
-          domain: weather
+          domain: "weather"
+        slots:
+          domain: "weater"
+        metadata:
+          slot_combination: "name_only"
 
   # turn on/off
   # open/close
@@ -129,6 +143,10 @@ intents:
       # turn on all lights
       - sentences:
           - "<schalte> <alle_lichter> an"
+        slots:
+          domain: "light"
+        metadata:
+          slot_combination: "default"
 
       # turn on named light or switch
       # named light or switch in area and
@@ -139,11 +157,11 @@ intents:
           - "<schalte> <area_floor> <name> an"
         requires_context:
           domain:
-            - light
-            - switch
-            - fan
-            - media_player
-            - input_boolean
+            - "light"
+            - "switch"
+            - "fan"
+            - "media_player"
+            - "input_boolean"
 
       # turn on all lights in area or on floor
       - sentences:

@@ -1,0 +1,530 @@
+---
+
+# Available intents and slot combinations.
+# Format:
+#
+# <intent name>:
+#   description: "Description of the intent"
+#   slots:
+#     <slot name>: "Description of slot"
+#   slot_combinations:
+#     <slot combination name>:
+#       slots: [], single slot name, or list of slot names that are required.
+#       required: true if slot combination must be covered by sentence templates and tested.
+#       example: "English example of voice command."
+#       context_area: true if the area of the voice satellite is required.
+#       domain: [], single domain name, or list of domain names for entities matching {name}.
+
+HassNevermind:
+  description: "Does nothing. Used to cancel a request"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "nevermind"
+
+HassGetCurrentTime:
+  description: "Gets the current time"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "what time is it"
+
+HassGetCurrentDate:
+  description: "Gets the current date"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "what is the date"
+
+HassGetWeather:
+  description: "Gets the current weather"
+  slots:
+    name: "Name of the weather entity to use"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "what is the weather"
+    name_only:
+      slots: "name"
+      required: true
+      domain: "weather"
+      example: "what is the weather in New York"
+
+HassTurnOn:
+  description: "Turns on a device or entity"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+    domain: "Domain of devices/entities in an area"
+    device_class: "Device class of devices/entities in an area"
+  slot_combinations:
+
+    # Required
+    domain_light:
+      slots: "domain"
+      required: true
+      context_area: true
+      domain: "light"
+      example: "turn on the lights in here"
+    name_only:
+      slots: "name"
+      required: true
+      domain:
+        - "light"
+        - "switch"
+        - "fan"
+        - "media_player"
+        - "input_boolean"
+      example:
+        - "turn on the overhead light"
+    name_cover:
+      slots: "name"
+      required: true
+      domain: "cover"
+      example:
+        - "open the sliding door"
+    name_area:
+      slots:
+        - "name"
+        - "area"
+      required: true
+      domain:
+        - "light"
+        - "switch"
+        - "fan"
+        - "media_player"
+        - "input_boolean"
+      example: "turn on the overhead light in the kitchen"
+    name_area_cover:
+      slots:
+        - "name"
+        - "area"
+      required: true
+      domain: "cover"
+      example: "open the sliding door in the kitchen"
+    area_domain_light:
+      slots:
+        - "area"
+        - "domain"
+      required: true
+      domain: "light"
+      example: "turn on the lights in the kitchen"
+    area_device_class_cover:
+      slots:
+        - "area"
+        - "domain"
+        - "device_class"
+      required: true
+      domain: "cover"
+      example: "open the curtains in the living room"
+    name_lock:
+      slots: "name"
+      required: true
+      domain: "lock"
+      example: "lock front door"
+
+    # Optional
+    domain_fan:
+      slots: "domain"
+      context_area: true
+      domain: "fan"
+      example: "turn on the fans in here"
+    device_class_cover:
+      slots:
+        - "domain"
+        - "device_class"
+      context_area: true
+      domain: "cover"
+      example: "open the windows in here"
+    name_script:
+      slots: "name"
+      domain: "script"
+      example: "run party time script"
+    name_scene:
+      slots: "name"
+      domain: "scene"
+      example: "activate mood lighting scene"
+    area_domain_fan:
+      slots:
+        - "area"
+        - "domain"
+      domain: "fan"
+      example: "turn on the fans in the kitchen"
+    floor_domain_light:
+      slots:
+        - "floor"
+        - "domain"
+      domain: "light"
+      example: "turn on the lights on the first floor"
+    floor_device_class_cover:
+      slots:
+        - "floor"
+        - "domain"
+        - "device_class"
+      domain: "cover"
+      example: "open the curtains on the first floor"
+
+HassTurnOff:
+  description: "Turns off a device or entity"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+    domain: "Domain of devices/entities in an area"
+    device_class: "Device class of devices/entities in an area"
+  slot_combinations:
+
+    # Required
+    domain_light:
+      slots: "domain"
+      required: true
+      context_area: true
+      domain: "light"
+      example: "turn off the lights in here"
+    name_only:
+      slots: "name"
+      required: true
+      domain:
+        - "light"
+        - "switch"
+        - "fan"
+        - "media_player"
+        - "input_boolean"
+      example:
+        - "turn off the overhead light"
+    name_cover:
+      slots: "name"
+      required: true
+      domain: "cover"
+      example:
+        - "close the sliding door"
+    name_area:
+      slots:
+        - "name"
+        - "area"
+      required: true
+      domain:
+        - "light"
+        - "switch"
+        - "fan"
+        - "media_player"
+        - "input_boolean"
+      example: "turn off the overhead light in the kitchen"
+    name_area_cover:
+      slots:
+        - "name"
+        - "area"
+      required: true
+      domain: "cover"
+      example: "close the sliding door in the kitchen"
+    area_domain_light:
+      slots:
+        - "area"
+        - "domain"
+      required: true
+      domain: "light"
+      example: "turn off the lights in the kitchen"
+    area_device_class_cover:
+      slots:
+        - "area"
+        - "domain"
+        - "device_class"
+      required: true
+      domain: "cover"
+      example: "open the curtains in the living room"
+    name_lock:
+      slots: "name"
+      required: true
+      domain: "lock"
+      example: "unlock front door"
+
+    # Optional
+    domain_fan:
+      slots: "domain"
+      context_area: true
+      domain: "fan"
+      example: "turn off the fans in here"
+    device_class_cover:
+      slots:
+        - "domain"
+        - "device_class"
+      context_area: true
+      domain: "cover"
+      example: "close the windows in here"
+    area_domain_fan:
+      slots:
+        - "area"
+        - "domain"
+      domain: "fan"
+      example: "turn off the fans in the kitchen"
+    floor_domain_light:
+      slots:
+        - "floor"
+        - "domain"
+      domain: "light"
+      example: "turn off the lights on the first floor"
+    floor_device_class_cover:
+      slots:
+        - "floor"
+        - "domain"
+        - "device_class"
+      domain: "cover"
+      example: "close the curtains on the first floor"
+
+# sensors
+HassGetState:
+  description: "Gets or checks the state of an entity"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+    domain: "Domain of devices/entities in an area"
+    device_class: "Device class of devices/entities in an area"
+    state: "Name of state to match"
+  slot_combinations:
+    name_cover:
+      slots: "name"
+      domain: "cover"
+      example: "is the sliding door open"
+    name_lock:
+      slots: "name"
+      domain: "lock"
+      example: "is the front door locked"
+    name_sensor:
+      slots: "name"
+      domain:
+        - "sensor"
+        - "binary_sensor"
+      example: "what is the value of sensor 1"
+
+# lights
+HassLightSet:
+  description: "Sets the brightness or color of a light"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+    brightness: "Brightness percentage from 0 to 100"
+    color: "Name of color"
+  slot_combinations:
+    # brightness
+    brightness_only:
+      slots: "brightness"
+      context_area: true
+      example: "set the brightness in here to 50%"
+    name_brightness:
+      slots:
+        - "name"
+        - "brightness"
+      required: true
+      domain: "light"
+      example: "set the overhead light brightness to 50%"
+    area_brightness:
+      slots:
+        - "area"
+        - "brightness"
+      example: "set the living room brightness to 50%"
+    floor_brightness:
+      slots:
+        - "floor"
+        - "brightness"
+      example: "set the main floor brightness to 50%"
+    # color
+    color_only:
+      slots: "color"
+      context_area: true
+      example: "set the lights in here to red"
+    name_color:
+      slots:
+        - "name"
+        - "color"
+      required: true
+      domain: "light"
+      example: "set the overhead light to red"
+    area_color:
+      slots:
+        - "area"
+        - "color"
+      example: "set the living room to red"
+    floor_color:
+      slots:
+        - "floor"
+        - "color"
+      example: "set the main floor to red"
+
+# timers
+HassStartTimer:
+  description: "Starts a timer"
+  slots:
+    hours: "Number of hours"
+    minutes: "Number of minutes"
+    seconds: "Number of seconds"
+  slot_combinations:
+
+    # Required
+    seconds_only:
+      slots: "seconds"
+      required: true
+      example: "set a timer for 30 seconds"
+    minutes_only:
+      slots: "minutes"
+      required: true
+      example: "set a timer for 10 minutes"
+    hours_only:
+      slots: "hours"
+      required: true
+      example: "set a timer for 2 hours"
+
+    # Optional
+    hours_minutes:
+      slots:
+        - "hours"
+        - "minutes"
+      example: "set a timer for 1 hour and 10 minutes"
+    minutes_half:
+      slots: "minutes"
+      example: "set a timer for 10 and a half minutes"
+    hours_half:
+      slots:
+        - "hours"
+        - "minutes"
+      example: "set a timer for 2 and a half hours"
+
+HassCancelAllTimers:
+  description: "Cancels all timers"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "cancel all timers"
+
+HassCancelTimer:
+  description: "Cancels a timer"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "cancel my timer"
+
+HassPauseTimer:
+  description: "Pauses a running timer"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "pause my timer"
+
+HassUnpauseTimer:
+  description: "Resumes a paused timer"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "resume my timer"
+
+HassTimerStatus:
+  description: "Reports status of one or more timers"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      example: "how much time is left on my timer"
+
+# media players
+HassMediaPause:
+  description: "Pauses a media player"
+  slots:
+    name: "Name of a device or entity"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      context_area: true
+      example: "pause"
+    name_only:
+      slots: "name"
+      required: true
+      example: "pause TV"
+    area_only:
+      slots: "area"
+      example: "pause music in the kitchen"
+
+HassMediaUnpause:
+  description: "Unpauses a media player"
+  slots:
+    name: "Name of a device or entity"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      context_area: true
+      example: "resume"
+    name_only:
+      slots: "name"
+      required: true
+      example: "resume TV"
+    area_only:
+      slots: "area"
+      example: "resume music in the kitchen"
+
+HassMediaNext:
+  description: "Skips a media player to the next item"
+  slots:
+    name: "Name of a device or entity"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      context_area: true
+      example: "next track"
+    name_only:
+      slots: "name"
+      required: true
+      example: "next track on the stereo"
+    area_only:
+      slots: "area"
+      example: "next track in the kitchen"
+
+# temperature
+HassClimateGetTemperature:
+  description: "Gets the current temperature of a climate device or entity"
+  slots:
+    name: "Name of a device or entity"
+    area: "Name of an area"
+    floor: "Name of a floor"
+  slot_combinations:
+    default:
+      slots: []
+      required: true
+      context_area: true
+      example: "what is the temperature"
+    name_only:
+      slots: "name"
+      required: true
+      domain: "climate"
+      example: "what is the temperature of the EcoBee"
+    area_only:
+      slots: "area"
+      example: "what is the temperature in the bedroom"
+    floor_only:
+      slots: "floor"
+      example: "what is the temperature downstairs"
+
+# todo
+HassListAddItem:
+  description: "Adds an item to a todo list"
+  slots:
+    item: "Item to add"
+    name: "Name of the list"
+  slot_combinations:
+    name_item:
+      slots:
+        - "item"
+        - "name"
+      domain: "todo"
+      example: "add apples to my shopping list"

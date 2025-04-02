@@ -91,6 +91,7 @@ def test_template_syntax_removed() -> None:
                     "in": "test entity with template syntax",
                     "out": "<test> {entity} [with] (template) syntax>](",
                     "context": {"domain": "test"},
+                    "metadata": {"domain": "test"},
                 }
             ]
         },

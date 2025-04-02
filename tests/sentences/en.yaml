@@ -1,0 +1,877 @@
+---
+language: "en"
+
+# Test things.
+# Format:
+# floors:
+#   - name: "Name of floor 1"
+#   - name: "Name of floor 2"
+# area:
+#   - name: "Name of area 1"
+#   - name: "Name of area 2"
+# entities
+#   - name: "Name of entity 1"
+#     domain: "Domain of entity 1"
+#   - name: "Name of entity 2"
+#     domain: "Domain of entity 2"
+floors:
+  - name: "First Floor"
+areas:
+  - name: "Office"
+entities:
+  - name: "New York"
+    domain: "weather"
+  - name: "EcoBee"
+    domain: "climate"
+  - name: "TV"
+    domain: "media_player"
+  - name: "RGB Light"
+    domain: "light"
+    light_supports_brightness: true
+    light_supports_color: true
+  - name: "Test Switch"
+    domain: "switch"
+  - name: "Test Fan"
+    domain: "fan"
+  - name: "Test Input Boolean"
+    domain: "input_boolean"
+  - name: "Sliding Door"
+    domain: "cover"
+  - name: "Party Time"
+    domain: "script"
+  - name: "Mood Lighting"
+    domain: "scene"
+  - name: "Front Door"
+    domain: "lock"
+  - name: "Test Sensor"
+    domain: "sensor"
+  - name: "Test Binary Sensor"
+    domain: "binary_sensor"
+  - name: "Shopping List"
+    domain: "todo"
+
+# -----------------------------------------------------------------------------
+
+# Values used to format sentence templates and slot values below.
+# These are separate from lists, but there is likely a lot of overlap.
+#
+# When you add a test value list named "timer_set", for example, then:
+# 1. You must list "timer_set" in "uses_format_values" for the test sentence
+#    block.
+# 2. Any {timer_set} in the sentence templates or slot values will be replaced
+#    by each value in turn, as if you had written out the individual tests.
+test_format_values:
+  timer_set:
+    - "set"
+    - "start"
+    - "create"
+  color:
+    - "white"
+    - "black"
+    - "red"
+    - "orange"
+    - "yellow"
+    - "green"
+    - "blue"
+    - "purple"
+    - "brown"
+    - "pink"
+    - "turquoise"
+  cover_classes:
+    - in: "blinds"
+      out: "blind"
+    - in: "curtain"
+      out: "curtain"
+    - in: "curtains"
+      out: "curtain"
+    - in: "window"
+      out: "window"
+    - in: "windows"
+      out: "window"
+
+# Values to use when testing wildcard lists
+test_wildcard_values:
+  todo_item:
+    - "apples"
+
+tests:
+  HassNevermind:
+    default:
+      - "nevermind"
+
+  # weather and date/time
+  HassGetWeather:
+    default:
+      - "what is the weather"
+      - "what's the weather"
+
+    name_only:
+      - sentences:
+          - "what is the weather in New York"
+          - "what is the New York weather"
+          - "what's the weather in New York"
+          - "what's the New York weather"
+        slots:
+          name: "New York"
+
+  HassGetCurrentTime:
+    default:
+      - "what time is it"
+      - "what is the time"
+      - "what's the time"
+
+  HassGetCurrentDate:
+    default:
+      - "what is the date"
+      - "what's the date"
+      - "what is today's date"
+      - "what's today's date"
+
+  # turn on
+  HassTurnOn:
+    domain_light:
+      - sentences:
+          - "turn on lights"
+        context_area: true
+        slots:
+          domain: "light"
+
+    domain_fan:
+      - sentences:
+          - "turn on fans"
+        context_area: true
+        slots:
+          domain: "fan"
+
+    name_only:
+      - sentences:
+          - "turn on RGB Light"
+        slots:
+          name: "RGB Light"
+
+      - sentences:
+          - "turn on Test Switch"
+        slots:
+          name: "Test Switch"
+
+      - sentences:
+          - "turn on Test Fan"
+        slots:
+          name: "Test Fan"
+
+      - sentences:
+          - "turn on TV"
+        slots:
+          name: "TV"
+
+      - sentences:
+          - "turn on Test Input Boolean"
+        slots:
+          name: "Test Input Boolean"
+
+    name_cover:
+      - sentences:
+          - "open Sliding Door"
+        slots:
+          name: "Sliding Door"
+
+    area_domain_light:
+      - sentences:
+          - "turn on lights in Office"
+          - "turn on Office lights"
+        slots:
+          area: "Office"
+          domain: "light"
+
+    # TODO: add support in main repo
+    # area_domain_fan:
+    #   - sentences:
+    #       - "turn on fans in Office"
+    #       - "turn on Office fans"
+    #     slots:
+    #       area: "Office"
+    #       domain: "fan"
+
+    name_area:
+      - sentences:
+          - "turn on RGB Light in Office"
+        slots:
+          name: "RGB Light"
+          area: "Office"
+
+      - sentences:
+          - "turn on Test Switch in Office"
+        slots:
+          name: "Test Switch"
+          area: "Office"
+
+      - sentences:
+          - "turn on Test Fan in Office"
+        slots:
+          name: "Test Fan"
+          area: "Office"
+
+      - sentences:
+          - "turn on TV in Office"
+        slots:
+          name: "TV"
+          area: "Office"
+
+      - sentences:
+          - "turn on Test Input Boolean in Office"
+        slots:
+          name: "Test Input Boolean"
+          area: "Office"
+
+    name_area_cover:
+      - sentences:
+          - "open Sliding Door in Office"
+        slots:
+          name: "Sliding Door"
+          area: "Office"
+
+    area_device_class_cover:
+      - sentences:
+          - "open {cover_classes} in Office"
+          - "open Office {cover_classes}"
+        uses_format_values: "cover_classes"
+        slots:
+          domain: "cover"
+          device_class: "{cover_classes}"
+          area: "Office"
+
+    name_lock:
+      - sentences:
+          - "lock Front Door"
+        slots:
+          name: "Front Door"
+
+    name_script:
+      - sentences:
+          - "run Party Time"
+        slots:
+          name: "Party Time"
+          # TODO: fix in main repo
+          domain: "script"
+
+    name_scene:
+      - sentences:
+          - "activate Mood Lighting"
+        slots:
+          name: "Mood Lighting"
+          # TODO: fix in main repo
+          domain: "scene"
+
+  # turn off
+  HassTurnOff:
+    domain_light:
+      - sentences:
+          - "turn off lights"
+        context_area: true
+        slots:
+          domain: "light"
+
+    domain_fan:
+      - sentences:
+          - "turn off fans"
+        context_area: true
+        slots:
+          domain: "fan"
+
+    name_only:
+      - sentences:
+          - "turn off RGB Light"
+        slots:
+          name: "RGB Light"
+
+      - sentences:
+          - "turn off Test Switch"
+        slots:
+          name: "Test Switch"
+
+      - sentences:
+          - "turn off Test Fan"
+        slots:
+          name: "Test Fan"
+
+      - sentences:
+          - "turn off TV"
+        slots:
+          name: "TV"
+
+      - sentences:
+          - "turn off Test Input Boolean"
+        slots:
+          name: "Test Input Boolean"
+
+    name_cover:
+      - sentences:
+          - "close Sliding Door"
+        slots:
+          name: "Sliding Door"
+
+    area_domain_light:
+      - sentences:
+          - "turn off lights in Office"
+          - "turn off Office lights"
+        slots:
+          area: "Office"
+          domain: "light"
+
+    # TODO: add support in main repo
+    # area_domain_fan:
+    #   - sentences:
+    #       - "turn off fans in Office"
+    #       - "turn off Office fans"
+    #     slots:
+    #       area: "Office"
+    #       domain: "fan"
+
+    name_area:
+      - sentences:
+          - "turn off RGB Light in Office"
+        slots:
+          name: "RGB Light"
+          area: "Office"
+
+      - sentences:
+          - "turn off Test Switch in Office"
+        slots:
+          name: "Test Switch"
+          area: "Office"
+
+      - sentences:
+          - "turn off Test Fan in Office"
+        slots:
+          name: "Test Fan"
+          area: "Office"
+
+      - sentences:
+          - "turn off TV in Office"
+        slots:
+          name: "TV"
+          area: "Office"
+
+      - sentences:
+          - "turn off Test Input Boolean in Office"
+        slots:
+          name: "Test Input Boolean"
+          area: "Office"
+
+    name_area_cover:
+      - sentences:
+          - "close Sliding Door in Office"
+        slots:
+          name: "Sliding Door"
+          area: "Office"
+
+    area_device_class_cover:
+      - sentences:
+          - "close {cover_classes} in Office"
+          - "close Office {cover_classes}"
+        uses_format_values: "cover_classes"
+        slots:
+          domain: "cover"
+          device_class: "{cover_classes}"
+          area: "Office"
+
+    name_lock:
+      - sentences:
+          - "unlock Front Door"
+        slots:
+          name: "Front Door"
+
+  HassGetState:
+    name_cover:
+      - sentences:
+          - "is Sliding Door open"
+        slots:
+          domain: "cover"
+          name: "Sliding Door"
+          state: "open"
+
+      - sentences:
+          - "is Sliding Door closed"
+        slots:
+          domain: "cover"
+          name: "Sliding Door"
+          state: "closed"
+
+    name_lock:
+      - sentences:
+          - "is Front Door locked"
+        slots:
+          domain: "lock"
+          name: "Front Door"
+          state: "locked"
+
+      - sentences:
+          - "is Front Door unlocked"
+        slots:
+          domain: "lock"
+          name: "Front Door"
+          state: "unlocked"
+
+    name_sensor:
+      - sentences:
+          - "what is Test Sensor"
+        slots:
+          name: "Test Sensor"
+
+      - sentences:
+          - "what is Test Binary Sensor"
+        slots:
+          name: "Test Binary Sensor"
+
+  # lights
+  HassLightSet:
+    brightness_only:
+      - sentences:
+          - "set brightness to 10 percent"
+        context_area: true
+        slots:
+          brightness: 10
+
+      - sentences:
+          - "set brightness to 100 percent"
+        context_area: true
+        slots:
+          brightness: 100
+
+    name_brightness:
+      - sentences:
+          - "set brightness of RGB Light to 10 percent"
+          - "set RGB Light brightness to 10 percent"
+        slots:
+          name: "RGB Light"
+          brightness: 10
+
+      - sentences:
+          - "set brightness of RGB Light to 100 percent"
+          - "set RGB Light brightness to 100 percent"
+        slots:
+          name: "RGB Light"
+          brightness: 100
+
+    area_brightness:
+      - sentences:
+          - "set brightness of Office to 10 percent"
+          - "set Office brightness to 10 percent"
+        slots:
+          area: "Office"
+          brightness: 10
+
+      - sentences:
+          - "set brightness of Office to 100 percent"
+          - "set Office brightness to 100 percent"
+        slots:
+          area: "Office"
+          brightness: 100
+
+    # TODO: Add support in main repo
+    # floor_brightness:
+    #   - sentences:
+    #       - "set brightness of First Floor to 10 percent"
+    #       - "set First Floor brightness to 10 percent"
+    #     slots:
+    #       floor: "First Floor"
+    #       brightness: 10
+
+    #   - sentences:
+    #       - "set brightness of First Floor to 100 percent"
+    #       - "set First Floor brightness to 100 percent"
+    #     slots:
+    #       floor: "First Floor"
+    #       brightness: 100
+
+    color_only:
+      - sentences:
+          - "set lights to {color}"
+        context_area: true
+        uses_format_values: "color"
+        slots:
+          color: "{color}"
+
+    name_color:
+      - sentences:
+          - "set RGB Light to {color}"
+        uses_format_values: "color"
+        slots:
+          name: "RGB Light"
+          color: "{color}"
+
+    area_color:
+      - sentences:
+          - "set Office lights to {color}"
+          - "set lights in Office to {color}"
+        uses_format_values: "color"
+        slots:
+          area: "Office"
+          color: "{color}"
+
+    # TODO: Add support in main repo
+    # floor_color:
+    #   - sentences:
+    #       - "set First Floor lights to {color}"
+    #       - "set lights off First Floor to {color}"
+    #     uses_format_values: "color"
+    #     slots:
+    #       floor: "First Floor"
+    #       color: "{color}"
+
+  # timers
+  HassStartTimer:
+    seconds_only:
+      - sentences:
+          - "{timer_set} timer for 10 seconds"
+        uses_format_values: "timer_set"
+        slots:
+          seconds: 10
+
+      - sentences:
+          - "{timer_set} timer for 100 seconds"
+        uses_format_values: "timer_set"
+        slots:
+          seconds: 100
+
+    minutes_only:
+      - sentences:
+          - "{timer_set} timer for 1 minute"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 1
+      - sentences:
+          - "{timer_set} timer for 2 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 2
+      - sentences:
+          - "{timer_set} timer for 19 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 19
+      - sentences:
+          - "{timer_set} timer for 20 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 20
+      - sentences:
+          - "{timer_set} timer for 45 minutes"
+          - "{timer_set} timer for forty five minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 45
+      - sentences:
+          - "{timer_set} timer for 100 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 100
+
+    minutes_half:
+      - sentences:
+          - "{timer_set} timer for 1 and a half minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 1
+          seconds: 30
+      - sentences:
+          - "{timer_set} timer for 2 and a half minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 2
+          seconds: 30
+      - sentences:
+          - "{timer_set} timer for 19 and a half minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 19
+          seconds: 30
+      - sentences:
+          - "{timer_set} timer for 20 and a half minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 20
+          seconds: 30
+      - sentences:
+          - "{timer_set} timer for 45 and a half minutes"
+          - "{timer_set} timer for forty five and a half minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 45
+          seconds: 30
+      - sentences:
+          - "{timer_set} timer for 100 and a half minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 100
+          seconds: 30
+
+    hours_only:
+      - sentences:
+          - "{timer_set} timer for 1 hour"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+      - sentences:
+          - "{timer_set} timer for 2 hours"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+      - sentences:
+          - "{timer_set} timer for 24 hours"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+
+    hours_half:
+      - sentences:
+          - "{timer_set} timer for 1 and a half hours"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 30
+      - sentences:
+          - "{timer_set} timer for 2 and a half hours"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 30
+      - sentences:
+          - "{timer_set} timer for 24 and a half hours"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 30
+
+    hours_minutes:
+      - sentences:
+          - "{timer_set} timer for 1 hour and 1 minute"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 1
+      - sentences:
+          - "{timer_set} timer for 1 hour and 2 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 2
+      - sentences:
+          - "{timer_set} timer for 1 hour and 19 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 19
+      - sentences:
+          - "{timer_set} timer for 1 hour and 20 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 20
+      - sentences:
+          - "{timer_set} timer for 1 hour and 45 minutes"
+          - "{timer_set} timer for 1 hour and forty five minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 45
+      - sentences:
+          - "{timer_set} timer for 1 hour and 100 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 100
+      - sentences:
+          - "{timer_set} timer for 2 hours and 1 minute"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 1
+      - sentences:
+          - "{timer_set} timer for 24 hours and 1 minute"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 1
+      - sentences:
+          - "{timer_set} timer for 2 hours and 2 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 2
+      - sentences:
+          - "{timer_set} timer for 2 hours and 19 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 19
+      - sentences:
+          - "{timer_set} timer for 2 hours and 20 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 20
+      - sentences:
+          - "{timer_set} timer for 2 hours and 45 minutes"
+          - "{timer_set} timer for 2 hours and forty five minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 45
+      - sentences:
+          - "{timer_set} timer for 2 hours and 100 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 100
+      - sentences:
+          - "{timer_set} timer for 24 hours and 2 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 2
+      - sentences:
+          - "{timer_set} timer for 24 hours and 19 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 19
+      - sentences:
+          - "{timer_set} timer for 24 hours and 20 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 20
+      - sentences:
+          - "{timer_set} timer for 24 hours and 45 minutes"
+          - "{timer_set} timer for 24 hours and forty five minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 45
+      - sentences:
+          - "{timer_set} timer for 24 hours and 100 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 100
+
+  HassCancelTimer:
+    default:
+      - "cancel timer"
+      - "stop timer"
+
+  HassCancelAllTimers:
+    default:
+      - "cancel all timers"
+      - "stop all timers"
+
+  HassPauseTimer:
+    default:
+      - "pause timer"
+
+  HassUnpauseTimer:
+    default:
+      - "resume timer"
+
+  HassTimerStatus:
+    default:
+      - sentences:
+          - "timer status"
+          - "status of timer"
+          - "time left on timer"
+
+  # media players
+  HassMediaPause:
+    default:
+      - sentences:
+          - "pause"
+        context_area: true
+    name_only:
+      - sentences:
+          - "pause TV"
+        slots:
+          name: "TV"
+
+  HassMediaUnpause:
+    default:
+      - sentences:
+          - "resume"
+        context_area: true
+    name_only:
+      - sentences:
+          - "resume TV"
+        slots:
+          name: "TV"
+
+  HassMediaNext:
+    default:
+      - sentences:
+          - "next"
+          - "skip"
+        context_area: true
+    name_only:
+      - sentences:
+          - "next on TV"
+          - "skip on TV"
+        slots:
+          name: "TV"
+
+  # temperature
+  HassClimateGetTemperature:
+    default:
+      - sentences:
+          - "what is the temperature"
+          - "what is the temp"
+          - "what's the temperature"
+          - "what's the temp"
+        context_area: true
+
+    name_only:
+      - sentences:
+          - "what is the EcoBee temperature"
+          - "what is the EcoBee temp"
+          - "what's the EcoBee temperature"
+          - "what's the EcoBee temp"
+          - "what is the temperature of EcoBee"
+          - "what is the temp of EcoBee"
+          - "what's the temperature of EcoBee"
+          - "what's the temp of EcoBee"
+        slots:
+          name: "EcoBee"
+
+    area_only:
+      - sentences:
+          - "what is the Office temperature"
+          - "what is the Office temp"
+          - "what's the Office temperature"
+          - "what's the Office temp"
+          - "what is the temperature in Office"
+          - "what is the temp in Office"
+          - "what's the temperature in Office"
+          - "what's the temp in Office"
+        slots:
+          area: "Office"
+
+    # TODO: need support in intents repo
+    # floor_only:
+    #   - sentences:
+    #       - "what is the First Floor temperature"
+    #       - "what is the First Floor temp"
+    #       - "what's the First Floor temperature"
+    #       - "what's the First Floor temp"
+    #       - "what is the temperature on First Floor"
+    #       - "what is the temp on First Floor"
+    #       - "what's the temperature on First Floor"
+    #       - "what's the temp on First Floor"
+    #     slots:
+    #       floor: "First Floor"
+
+  # todo
+  HassListAddItem:
+    name_item:
+      - sentences:
+          - "add apples to Shopping List"
+        slots:
+          name: "Shopping List"
+          item: "apples"

@@ -9,14 +9,25 @@ _VENV_DIR = _PROGRAM_DIR / ".venv"
 _MODULE_DIR = _PROGRAM_DIR / "speech_to_phrase"
 _TESTS_DIR = _PROGRAM_DIR / "tests"
 _TEST_FILES = [str(p) for p in _TESTS_DIR.glob("*.py")]
+_SCRIPT_DIR = _PROGRAM_DIR / "script"
 
 context = venv.EnvBuilder().ensure_directories(_VENV_DIR)
 subprocess.check_call(
-    [context.env_exe, "-m", "black", str(_MODULE_DIR)] + _TEST_FILES + ["--check"]
+    [context.env_exe, "-m", "black", str(_MODULE_DIR), str(_SCRIPT_DIR)]
+    + _TEST_FILES
+    + ["--check"]
 )
 subprocess.check_call(
-    [context.env_exe, "-m", "isort", str(_MODULE_DIR)] + _TEST_FILES + ["--check"]
+    [context.env_exe, "-m", "isort", str(_MODULE_DIR), str(_SCRIPT_DIR)]
+    + _TEST_FILES
+    + ["--check"]
 )
-subprocess.check_call([context.env_exe, "-m", "flake8", str(_MODULE_DIR)] + _TEST_FILES)
-subprocess.check_call([context.env_exe, "-m", "pylint", str(_MODULE_DIR)] + _TEST_FILES)
-subprocess.check_call([context.env_exe, "-m", "mypy", str(_MODULE_DIR)] + _TEST_FILES)
+subprocess.check_call(
+    [context.env_exe, "-m", "flake8", str(_MODULE_DIR), str(_SCRIPT_DIR)] + _TEST_FILES
+)
+subprocess.check_call(
+    [context.env_exe, "-m", "pylint", str(_MODULE_DIR), str(_SCRIPT_DIR)] + _TEST_FILES
+)
+subprocess.check_call(
+    [context.env_exe, "-m", "mypy", str(_MODULE_DIR), str(_SCRIPT_DIR)] + _TEST_FILES
+)
