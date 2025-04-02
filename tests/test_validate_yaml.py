@@ -1,6 +1,5 @@
 """Validate sentence YAML files."""
 
-from pathlib import Path
 from typing import Any
 
 import pytest
@@ -18,11 +17,12 @@ from voluptuous.humanize import validate_with_humanized_errors
 
 from speech_to_phrase import Language
 
-_TESTS_DIR = Path(__file__).parent
-_PROGRAM_DIR = _TESTS_DIR.parent
-_MODULE_DIR = _PROGRAM_DIR / "speech_to_phrase"
-_SENTENCES_DIR = _MODULE_DIR / "sentences"
-_TEST_SENTENCES_DIR = _TESTS_DIR / "sentences"
+from . import TEST_LANGUAGES, TESTS_DIR
+
+PROGRAM_DIR = TESTS_DIR.parent
+MODULE_DIR = PROGRAM_DIR / "speech_to_phrase"
+SENTENCES_DIR = MODULE_DIR / "sentences"
+TEST_SENTENCES_DIR = TESTS_DIR / "sentences"
 
 
 def _visit_expression(e: Expression, visitor, visitor_arg: Any):
@@ -211,18 +211,18 @@ TEST_SENTENCES_SCHEMA = vol.Schema(
 
 def test_validate_intents() -> None:
     """Test that the intents YAML file matches expected schema."""
-    intents_path = _PROGRAM_DIR / "intents.yaml"
+    intents_path = PROGRAM_DIR / "intents.yaml"
     with open(intents_path, "r", encoding="utf-8") as intents_file:
         intents_dict = yaml.safe_load(intents_file)
         validate_with_humanized_errors(intents_dict, INTENTS_SCHEMA)
 
 
-@pytest.mark.parametrize("language", (Language.ENGLISH,))
+@pytest.mark.parametrize("language", TEST_LANGUAGES)
 def test_validate_sentences(language: Language) -> None:
     """Test that sentence YAML files match expected schema."""
     lang_code = language.value
 
-    lang_sentences_path = _SENTENCES_DIR / f"{lang_code}.yaml"
+    lang_sentences_path = SENTENCES_DIR / f"{lang_code}.yaml"
     assert (
         lang_sentences_path.exists()
     ), f"Missing sentences file for language '{lang_code}' at '{lang_sentences_path}'"
@@ -232,12 +232,12 @@ def test_validate_sentences(language: Language) -> None:
         validate_with_humanized_errors(lang_sentences_dict, SENTENCES_SCHEMA)
 
 
-@pytest.mark.parametrize("language", (Language.ENGLISH,))
+@pytest.mark.parametrize("language", TEST_LANGUAGES)
 def test_validate_tests(language: Language) -> None:
     """Test that test YAML files match expected schema."""
     lang_code = language.value
 
-    lang_test_sentences_path = _TEST_SENTENCES_DIR / f"{lang_code}.yaml"
+    lang_test_sentences_path = TEST_SENTENCES_DIR / f"{lang_code}.yaml"
     assert (
         lang_test_sentences_path.exists()
     ), f"Missing test sentences file for language '{lang_code}' at '{lang_test_sentences_path}'"

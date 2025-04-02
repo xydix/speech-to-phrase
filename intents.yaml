@@ -371,55 +371,24 @@ HassStartTimer:
       slots: "seconds"
       required: true
       example: "set a timer for 30 seconds"
-    hours_1:
-      slots: "hours"
-      required: true
-      example: "set a timer for 1 hour"
-    hours_only:
-      slots: "hours"
-      required: true
-      example: "set a timer for 2 hours"
-    minutes_1:
-      slots: "minutes"
-      required: true
-      example: "set a timer for 1 minute"
     minutes_only:
       slots: "minutes"
       required: true
       example: "set a timer for 10 minutes"
+    hours_only:
+      slots: "hours"
+      required: true
+      example: "set a timer for 2 hours"
 
     # Optional
-    minutes_1_half:
-      slots: "minutes"
-      example: "set a timer for 1 and a half minutes"
-    minutes_half:
-      slots: "minutes"
-      example: "set a timer for 10 and a half minutes"
-    hours_1_minutes_1:
-      slots:
-        - "hours"
-        - "minutes"
-      example: "set a timer for 1 hour and 1 minute"
-    hours_1_minutes:
-      slots:
-        - "hours"
-        - "minutes"
-      example: "set a timer for 1 hour and 10 minute"
-    hours_minutes_1:
-      slots:
-        - "hours"
-        - "minutes"
-      example: "set a timer for 2 hours and 1 minute"
     hours_minutes:
       slots:
         - "hours"
         - "minutes"
       example: "set a timer for 1 hour and 10 minutes"
-    hours_1_half:
-      slots:
-        - "hours"
-        - "minutes"
-      example: "set a timer for 1 and a half hours"
+    minutes_half:
+      slots: "minutes"
+      example: "set a timer for 10 and a half minutes"
     hours_half:
       slots:
         - "hours"

@@ -37,6 +37,10 @@ lists:
       from: 10
       to: 100
       step: 5
+  minutes_1:
+    range:
+      from: 1
+      to: 1
   minutes_small:
     range:
       from: 2
@@ -60,6 +64,10 @@ lists:
     values:
       - in: "half"
         out: 30
+  hours_1:
+    range:
+      from: 1
+      to: 1
   hours:
     range:
       from: 2
@@ -189,18 +197,6 @@ intents:
           domain: "cover"
         metadata:
           slot_combination: "name_cover"
-
-  #     - sentences:
-  #         - "turn on [the] {name}"
-  #         - "turn on [the] {name} in [the] {area}"
-  #         - "turn on [the] {name} (on|in) [the] {floor} [floor]"
-  #       requires_context:
-  #         domain:
-  #           - light
-  #           - switch
-  #           - fan
-  #           - media_player
-  #           - input_boolean
 
       - sentences:
           - "turn on [all|the|all of the] {area} lights"
@@ -386,18 +382,6 @@ intents:
         metadata:
           slot_combination: "name_cover"
 
-  #     - sentences:
-  #         - "turn off [the] {name}"
-  #         - "turn off [the] {name} in [the] {area}"
-  #         - "turn off [the] {name} (on|in) [the] {floor} [floor]"
-  #       requires_context:
-  #         domain:
-  #           - light
-  #           - switch
-  #           - fan
-  #           - media_player
-  #           - input_boolean
-
       - sentences:
           - "turn off [all|the|all of the] {area} lights"
           - "turn off [all|the|all of the] lights in [the] {area}"
@@ -469,30 +453,16 @@ intents:
         metadata:
           slot_combination: "seconds_only"
 
-      # minutes
       - sentences:
-          - "<timer_set> [a] timer for 1 minute"
-        slots:
-          minutes: 1
-        metadata:
-          slot_combination: "minutes_1"
-
-      - sentences:
+          - "<timer_set> [a] timer for {minutes_1:minutes} minute"
           - "<timer_set> [a] timer for {minutes_small:minutes} minutes"
           - "<timer_set> [a] timer for {minutes_large:minutes} minutes"
           - "<timer_set> [a] timer for {minutes_extra:minutes} minutes"
         metadata:
           slot_combination: "minutes_only"
 
-      # minutes half
       - sentences:
-          - "<timer_set> [a] timer for 1 and a {minutes_half:seconds} minutes"
-        slots:
-          minutes: 1
-        metadata:
-          slot_combination: "minutes_1_half"
-
-      - sentences:
+          - "<timer_set> [a] timer for {minutes_1:minutes} and a {minutes_half:seconds} minutes"
           - "<timer_set> [a] timer for {minutes_small:minutes} and a {minutes_half:seconds} minutes"
           - "<timer_set> [a] timer for {minutes_large:minutes} and a {minutes_half:seconds} minutes"
           - "<timer_set> [a] timer for {minutes_extra:minutes} and a {minutes_half:seconds} minutes"
@@ -501,56 +471,25 @@ intents:
 
       # hours
       - sentences:
-          - "<timer_set> [a] timer for 1 hour"
-        slots:
-          hours: 1
-        metadata:
-          slot_combination: "hours_1"
-
-      - sentences:
+          - "<timer_set> [a] timer for {hours_1:hours} hour"
           - "<timer_set> [a] timer for {hours} hours"
         metadata:
           slot_combination: "hours_only"
 
       # hours half
       - sentences:
-          - "<timer_set> [a] timer for 1 and a {hours_half:minutes} hours"
-        slots:
-          hours: 1
-        metadata:
-          slot_combination: "hours_1_half"
-
-      - sentences:
+          - "<timer_set> [a] timer for {hours_1:hours} and a {hours_half:minutes} hours"
           - "<timer_set> [a] timer for {hours} and a {hours_half:minutes} hours"
         metadata:
           slot_combination: "hours_half"
 
       # hours + minutes
       - sentences:
-          - "<timer_set> [a] timer for 1 hour and 1 minute"
-        slots:
-          hours: 1
-          minutes: 1
-        metadata:
-          slot_combination: "hours_1_minutes_1"
-
-      - sentences:
-          - "<timer_set> [a] timer for 1 hour and {minutes_small:minutes} minutes"
-          - "<timer_set> [a] timer for 1 hour and {minutes_large:minutes} minutes"
-          - "<timer_set> [a] timer for 1 hour and {minutes_extra:minutes} minutes"
-        slots:
-          hours: 1
-        metadata:
-          slot_combination: "hours_1_minutes"
-
-      - sentences:
-          - "<timer_set> [a] timer for {hours} hours and 1 minute"
-        slots:
-          minutes: 1
-        metadata:
-          slot_combination: "hours_minutes_1"
-
-      - sentences:
+          - "<timer_set> [a] timer for {hours_1:hours} hour and {minutes_1:minutes} minute"
+          - "<timer_set> [a] timer for {hours_1:hours} hour and {minutes_small:minutes} minutes"
+          - "<timer_set> [a] timer for {hours_1:hours} hour and {minutes_large:minutes} minutes"
+          - "<timer_set> [a] timer for {hours_1:hours} hour and {minutes_extra:minutes} minutes"
+          - "<timer_set> [a] timer for {hours} hours and {minutes_1:minutes} minute"
           - "<timer_set> [a] timer for {hours} hours and {minutes_small:minutes} minutes"
           - "<timer_set> [a] timer for {hours} hours and {minutes_large:minutes} minutes"
           - "<timer_set> [a] timer for {hours} hours and {minutes_extra:minutes} minutes"

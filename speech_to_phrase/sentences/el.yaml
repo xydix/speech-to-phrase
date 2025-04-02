@@ -16,7 +16,6 @@ lists:
       - in: "τουρκουάζ"
   brightness:
     range:
-      type: "percentage"
       from: 10
       to: 100
       step: 10

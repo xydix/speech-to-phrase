@@ -13,12 +13,10 @@ from hassil import Intents, recognize_best
 from home_assistant_intents import get_intents
 from pysilero_vad import SileroVoiceActivityDetector
 
-from speech_to_phrase import MODELS, Language, Model, Things, train, transcribe
+from speech_to_phrase import MODELS, Model, Things, train, transcribe
 from speech_to_phrase.audio import wav_audio_stream
 
-from . import SETTINGS, TESTS_DIR, get_test_things, load_test_sentences
-
-LANGUAGES = [Language.ENGLISH.value]
+from . import SETTINGS, TEST_LANGUAGES, TESTS_DIR, get_test_things, load_test_sentences
 
 
 @dataclass
@@ -33,7 +31,7 @@ class Resources:
     vad: SileroVoiceActivityDetector
 
 
-@pytest_asyncio.fixture(params=LANGUAGES, scope="session")
+@pytest_asyncio.fixture(params=TEST_LANGUAGES, scope="session")
 async def lang_resources(request) -> Resources:
     """Load language resources and train STP model."""
     language = request.param
@@ -140,7 +138,7 @@ def gen_test(language: str, text: str, intent_info: Dict[str, Any]) -> None:
 
 def gen_tests() -> None:
     """Generate test functions for all languages."""
-    for language in LANGUAGES:
+    for language in TEST_LANGUAGES:
         test_sentences = load_test_sentences(language)
         for text, intent_info in test_sentences:
             gen_test(language, text, intent_info)

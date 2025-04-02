@@ -1,3 +1,4 @@
+---
 language: es
 
 lists:
@@ -15,7 +16,6 @@ lists:
       - "(rosa|rosado)"
   brightness:
     range:
-      type: "percentage"
       from: 10
       to: 100
       step: 10

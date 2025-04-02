@@ -1,3 +1,4 @@
+---
 language: cs
 
 lists:
@@ -14,7 +15,6 @@ lists:
       - "hněd(á|ou)"
   brightness:
     range:
-      type: "percentage"
       from: 10
       to: 100
       step: 10

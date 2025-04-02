@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Tuple
 
 import yaml
 
-from speech_to_phrase import Settings, Things
+from speech_to_phrase import Language, Settings, Things
 
 TESTS_DIR = Path(__file__).parent
 ROOT_DIR = TESTS_DIR.parent
@@ -21,6 +21,8 @@ SETTINGS = Settings(
     retrain_on_connect=False,
     custom_sentences_dirs=[TESTS_DIR / "custom_sentences"],
 )
+
+TEST_LANGUAGES = [Language.ENGLISH, Language.FRENCH, Language.GERMAN]
 
 
 def get_test_things(language: str) -> Things:
