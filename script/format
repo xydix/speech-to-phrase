@@ -9,8 +9,8 @@ _VENV_DIR = _PROGRAM_DIR / ".venv"
 _MODULE_DIR = _PROGRAM_DIR / "speech_to_phrase"
 _TESTS_DIR = _PROGRAM_DIR / "tests"
 _TEST_FILES = [str(p) for p in _TESTS_DIR.glob("*.py")]
-_SCRIPTS_DIR = _PROGRAM_DIR / "scripts"
-_SCRIPT_FILES = [str(p) for p in _SCRIPTS_DIR.glob("*.py")]
+_SCRIPT_DIR = _PROGRAM_DIR / "script"
+_SCRIPT_FILES = [str(p) for p in _SCRIPT_DIR.glob("*.py")]
 
 context = venv.EnvBuilder().ensure_directories(_VENV_DIR)
 subprocess.check_call(

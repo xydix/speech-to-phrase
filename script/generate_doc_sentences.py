@@ -3,7 +3,7 @@
 import argparse
 import json
 from pathlib import Path
-from typing import Optional, Set
+from typing import Dict, List, Optional, Set, Tuple, Union
 
 import yaml
 
@@ -16,7 +16,7 @@ _DOCS_DIR = _PROGRAM_DIR / "docs"
 _TESTS_DIR = _PROGRAM_DIR / "tests"
 _EXAMPLE_SENTENCES_DIR = _TESTS_DIR / "example_sentences"
 
-INTENT_SLOTS = {
+INTENT_SLOTS: Dict[str, List[Tuple[str, Tuple[Union[str, Tuple[str, ...]], ...]]]] = {
     "Date and Time": [
         ("HassGetCurrentTime", ("default",)),
         ("HassGetCurrentDate", ("default",)),
@@ -109,8 +109,7 @@ def main() -> None:
 
     # Sort by longest sentence first
     example_sentences_dict = {
-        k: example_sentences_dict[k]
-        for k in sorted(example_sentences_dict, key=lambda text: len(text))
+        k: example_sentences_dict[k] for k in sorted(example_sentences_dict, key=len)
     }
 
     # Markdown
