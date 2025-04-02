@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import subprocess
+import sys
+import venv
+from pathlib import Path
+
+_DIR = Path(__file__).parent
+_PROGRAM_DIR = _DIR.parent
+_VENV_DIR = _PROGRAM_DIR / ".venv"
+_TEST_DIR = _PROGRAM_DIR / "tests"
+_CI_TESTS = [
+    _TEST_DIR / f"test_{name}.py"
+    for name in (
+        "hass_api",
+        "hassil_fst",
+        "models",
+        "validate_yaml",
+        "sentences_recognized",
+    )
+]
+
+context = venv.EnvBuilder().ensure_directories(_VENV_DIR)
+subprocess.check_call([context.env_exe, "-m", "pytest"] + _CI_TESTS + sys.argv[1:])
