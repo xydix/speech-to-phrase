@@ -8,7 +8,8 @@ language: en
 # easier.
 #
 # For range lists, the minimum and maximum values of the range are automatically
-# tested.
+# tested. The second value in range (minimum + step) is also tested to ensure
+# that tests break if the step size is changed.
 #
 # Wildcards are not technically supported, so you must declare
 # "test_wildcard_values" for each one in the tests. Users will need to

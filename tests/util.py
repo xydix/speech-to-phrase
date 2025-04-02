@@ -133,10 +133,21 @@ def generate_sentences(
                 **slots,
                 list_ref.slot_name: ValueWithMetadata(range_list.start),
             }
-            yield str(range_list.stop), {
-                **slots,
-                list_ref.slot_name: ValueWithMetadata(range_list.stop),
-            }
+
+            # Also generate second value to test the step size.
+            # If this value is past the end of the range, skip it.
+            second_value = range_list.start + range_list.step
+            if second_value < range_list.stop:
+                yield str(second_value), {
+                    **slots,
+                    list_ref.slot_name: ValueWithMetadata(second_value),
+                }
+
+            if range_list.stop > range_list.start:
+                yield str(range_list.stop), {
+                    **slots,
+                    list_ref.slot_name: ValueWithMetadata(range_list.stop),
+                }
         else:
             raise ValueError(f"Unexpected slot list type: {slot_list}")
     elif isinstance(e, RuleReference):

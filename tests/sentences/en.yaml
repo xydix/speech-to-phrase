@@ -433,6 +433,12 @@ tests:
           brightness: 10
 
       - sentences:
+          - "set brightness to 20 percent"
+        context_area: true
+        slots:
+          brightness: 20
+
+      - sentences:
           - "set brightness to 100 percent"
         context_area: true
         slots:
@@ -445,6 +451,13 @@ tests:
         slots:
           name: "RGB Light"
           brightness: 10
+
+      - sentences:
+          - "set brightness of RGB Light to 20 percent"
+          - "set RGB Light brightness to 20 percent"
+        slots:
+          name: "RGB Light"
+          brightness: 20
 
       - sentences:
           - "set brightness of RGB Light to 100 percent"
@@ -460,6 +473,13 @@ tests:
         slots:
           area: "Office"
           brightness: 10
+
+      - sentences:
+          - "set brightness of Office to 20 percent"
+          - "set Office brightness to 20 percent"
+        slots:
+          area: "Office"
+          brightness: 20
 
       - sentences:
           - "set brightness of Office to 100 percent"
@@ -529,6 +549,12 @@ tests:
           seconds: 10
 
       - sentences:
+          - "{timer_set} timer for 15 seconds"
+        uses_format_values: "timer_set"
+        slots:
+          seconds: 15
+
+      - sentences:
           - "{timer_set} timer for 100 seconds"
         uses_format_values: "timer_set"
         slots:
@@ -546,6 +572,11 @@ tests:
         slots:
           minutes: 2
       - sentences:
+          - "{timer_set} timer for 3 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 3
+      - sentences:
           - "{timer_set} timer for 19 minutes"
         uses_format_values: "timer_set"
         slots:
@@ -555,6 +586,11 @@ tests:
         uses_format_values: "timer_set"
         slots:
           minutes: 20
+      - sentences:
+          - "{timer_set} timer for 30 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 30
       - sentences:
           - "{timer_set} timer for 45 minutes"
           - "{timer_set} timer for forty five minutes"
@@ -581,6 +617,12 @@ tests:
           minutes: 2
           seconds: 30
       - sentences:
+          - "{timer_set} timer for 3 and a half minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 3
+          seconds: 30
+      - sentences:
           - "{timer_set} timer for 19 and a half minutes"
         uses_format_values: "timer_set"
         slots:
@@ -591,6 +633,12 @@ tests:
         uses_format_values: "timer_set"
         slots:
           minutes: 20
+          seconds: 30
+      - sentences:
+          - "{timer_set} timer for 30 and a half minutes"
+        uses_format_values: "timer_set"
+        slots:
+          minutes: 30
           seconds: 30
       - sentences:
           - "{timer_set} timer for 45 and a half minutes"
@@ -618,6 +666,11 @@ tests:
         slots:
           hours: 2
       - sentences:
+          - "{timer_set} timer for 3 hours"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
+      - sentences:
           - "{timer_set} timer for 24 hours"
         uses_format_values: "timer_set"
         slots:
@@ -635,6 +688,12 @@ tests:
         uses_format_values: "timer_set"
         slots:
           hours: 2
+          minutes: 30
+      - sentences:
+          - "{timer_set} timer for 3 and a half hours"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
           minutes: 30
       - sentences:
           - "{timer_set} timer for 24 and a half hours"
@@ -657,6 +716,12 @@ tests:
           hours: 1
           minutes: 2
       - sentences:
+          - "{timer_set} timer for 1 hour and 3 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 3
+      - sentences:
           - "{timer_set} timer for 1 hour and 19 minutes"
         uses_format_values: "timer_set"
         slots:
@@ -668,6 +733,12 @@ tests:
         slots:
           hours: 1
           minutes: 20
+      - sentences:
+          - "{timer_set} timer for 1 hour and 30 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 1
+          minutes: 30
       - sentences:
           - "{timer_set} timer for 1 hour and 45 minutes"
           - "{timer_set} timer for 1 hour and forty five minutes"
@@ -688,6 +759,12 @@ tests:
           hours: 2
           minutes: 1
       - sentences:
+          - "{timer_set} timer for 3 hours and 1 minute"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
+          minutes: 1
+      - sentences:
           - "{timer_set} timer for 24 hours and 1 minute"
         uses_format_values: "timer_set"
         slots:
@@ -700,10 +777,34 @@ tests:
           hours: 2
           minutes: 2
       - sentences:
+          - "{timer_set} timer for 2 hours and 3 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 3
+      - sentences:
+          - "{timer_set} timer for 3 hours and 2 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
+          minutes: 2
+      - sentences:
+          - "{timer_set} timer for 3 hours and 3 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
+          minutes: 3
+      - sentences:
           - "{timer_set} timer for 2 hours and 19 minutes"
         uses_format_values: "timer_set"
         slots:
           hours: 2
+          minutes: 19
+      - sentences:
+          - "{timer_set} timer for 3 hours and 19 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
           minutes: 19
       - sentences:
           - "{timer_set} timer for 2 hours and 20 minutes"
@@ -712,11 +813,36 @@ tests:
           hours: 2
           minutes: 20
       - sentences:
+          - "{timer_set} timer for 3 hours and 20 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
+          minutes: 20
+      - sentences:
+          - "{timer_set} timer for 2 hours and 30 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 2
+          minutes: 30
+      - sentences:
+          - "{timer_set} timer for 3 hours and 30 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
+          minutes: 30
+      - sentences:
           - "{timer_set} timer for 2 hours and 45 minutes"
           - "{timer_set} timer for 2 hours and forty five minutes"
         uses_format_values: "timer_set"
         slots:
           hours: 2
+          minutes: 45
+      - sentences:
+          - "{timer_set} timer for 3 hours and 45 minutes"
+          - "{timer_set} timer for 3 hours and forty five minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
           minutes: 45
       - sentences:
           - "{timer_set} timer for 2 hours and 100 minutes"
@@ -725,11 +851,23 @@ tests:
           hours: 2
           minutes: 100
       - sentences:
+          - "{timer_set} timer for 3 hours and 100 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 3
+          minutes: 100
+      - sentences:
           - "{timer_set} timer for 24 hours and 2 minutes"
         uses_format_values: "timer_set"
         slots:
           hours: 24
           minutes: 2
+      - sentences:
+          - "{timer_set} timer for 24 hours and 3 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 3
       - sentences:
           - "{timer_set} timer for 24 hours and 19 minutes"
         uses_format_values: "timer_set"
@@ -742,6 +880,12 @@ tests:
         slots:
           hours: 24
           minutes: 20
+      - sentences:
+          - "{timer_set} timer for 24 hours and 30 minutes"
+        uses_format_values: "timer_set"
+        slots:
+          hours: 24
+          minutes: 30
       - sentences:
           - "{timer_set} timer for 24 hours and 45 minutes"
           - "{timer_set} timer for 24 hours and forty five minutes"
