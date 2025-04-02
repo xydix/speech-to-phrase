@@ -98,6 +98,7 @@ INTENTS_SCHEMA = vol.Schema(
                     vol.Required("example"): vol.Any(str, [str]),
                     vol.Optional("domain"): vol.Any(str, [str]),
                     vol.Optional("context_area"): bool,
+                    vol.Optional("required"): bool,
                 }
             },
             vol.Optional("slots"): {

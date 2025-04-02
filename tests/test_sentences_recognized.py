@@ -284,7 +284,7 @@ def test_sentences_tested(
                     test_sentence = actual_test_sentences.get(possible_text)
                     assert (
                         test_sentence
-                    ), f"No test for sentence in intent '{intent_name}': {possible_text}"
+                    ), f"No test for sentence in intent '{intent_name}' for slot combination '{slot_combo_name}': {possible_text}"
 
                     test_slots = test_sentence.slots or {}
                     for slot_key, slot_value in possible_slots.items():

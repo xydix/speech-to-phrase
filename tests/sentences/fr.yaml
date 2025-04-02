@@ -13,6 +13,21 @@ entities:
 
 # -----------------------------------------------------------------------------
 
+test_format_values:
+  eteins:
+    - "éteins"
+    - "éteindre"
+    - "désactive"
+    - "désactiver"
+    - "stoppe"
+    - "stopper"
+    - "arrête"
+    - "arrêter"
+    - "coupe"
+    - "couper"
+
+# -----------------------------------------------------------------------------
+
 tests:
   HassNevermind:
     default:
@@ -21,3 +36,40 @@ tests:
       - "chut"
       - "tais toi"
       - "silence"
+
+  HassGetCurrentTime:
+    default:
+      - "quelle heure est-il"
+
+  HassGetCurrentDate:
+    default:
+      - "quel jour sommes-nous"
+
+  HassGetWeather:
+    default:
+      - "quel temps fait-il"
+    name_only:
+      - sentences:
+          - "quel temps fait-il à New York"
+        slots:
+          name: "New York"
+
+  HassTurnOn:
+    domain_light:
+      - sentences:
+          - "allume la lumière"
+          - "allumer la lumière"
+          - "allume les lumières"
+          - "allumer les lumières"
+        slots:
+          domain: "light"
+        context_area: true
+
+  HassTurnOff:
+    domain_light:
+      - sentences:
+          - "{eteins} la lumière"
+          - "{eteins} les lumières"
+        slots:
+          domain: "light"
+        context_area: true

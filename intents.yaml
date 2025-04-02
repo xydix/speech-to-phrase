@@ -10,6 +10,7 @@
 #   slot_combinations:
 #     <slot combination name>:
 #       slots: [], single slot name, or list of slot names that are required.
+#       required: true if slot combination must be covered by sentence templates and tested.
 #       example: "English example of voice command."
 #       context_area: true if the area of the voice satellite is required.
 #       domain: [], single domain name, or list of domain names for entities matching {name}.
@@ -27,6 +28,7 @@ HassGetCurrentTime:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "what time is it"
 
 HassGetCurrentDate:
@@ -34,6 +36,7 @@ HassGetCurrentDate:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "what is the date"
 
 HassGetWeather:
@@ -43,9 +46,11 @@ HassGetWeather:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "what is the weather"
     name_only:
       slots: "name"
+      required: true
       domain: "weather"
       example: "what is the weather in New York"
 
@@ -58,18 +63,17 @@ HassTurnOn:
     domain: "Domain of devices/entities in an area"
     device_class: "Device class of devices/entities in an area"
   slot_combinations:
+
+    # Required
     domain_light:
       slots: "domain"
+      required: true
       context_area: true
       domain: "light"
       example: "turn on the lights in here"
-    domain_fan:
-      slots: "domain"
-      context_area: true
-      domain: "fan"
-      example: "turn on the fans in here"
     name_only:
       slots: "name"
+      required: true
       domain:
         - "light"
         - "switch"
@@ -80,39 +84,15 @@ HassTurnOn:
         - "turn on the overhead light"
     name_cover:
       slots: "name"
+      required: true
       domain: "cover"
       example:
         - "open the sliding door"
-    area_domain_light:
-      slots:
-        - "area"
-        - "domain"
-      domain: "light"
-      example: "turn on the lights in the kitchen"
-    floor_domain_light:
-      slots:
-        - "floor"
-        - "domain"
-      domain: "light"
-      example: "turn on the lights on the first floor"
-    device_class_cover:
-      slots:
-        - "domain"
-        - "device_class"
-      context_area: true
-      domain: "cover"
-      example: "open the windows in here"
-    # TODO: add support in main repo
-    # area_domain_fan:
-    #   slots:
-    #     - "area"
-    #     - "domain"
-    #   domain: "fan"
-    #   example: "turn on the fans in the kitchen"
     name_area:
       slots:
         - "name"
         - "area"
+      required: true
       domain:
         - "light"
         - "switch"
@@ -124,26 +104,43 @@ HassTurnOn:
       slots:
         - "name"
         - "area"
+      required: true
       domain: "cover"
       example: "open the sliding door in the kitchen"
+    area_domain_light:
+      slots:
+        - "area"
+        - "domain"
+      required: true
+      domain: "light"
+      example: "turn on the lights in the kitchen"
     area_device_class_cover:
       slots:
         - "area"
         - "domain"
         - "device_class"
+      required: true
       domain: "cover"
       example: "open the curtains in the living room"
-    floor_device_class_cover:
-      slots:
-        - "floor"
-        - "domain"
-        - "device_class"
-      domain: "cover"
-      example: "open the curtains on the first floor"
     name_lock:
       slots: "name"
+      required: true
       domain: "lock"
       example: "lock front door"
+
+    # Optional
+    domain_fan:
+      slots: "domain"
+      context_area: true
+      domain: "fan"
+      example: "turn on the fans in here"
+    device_class_cover:
+      slots:
+        - "domain"
+        - "device_class"
+      context_area: true
+      domain: "cover"
+      example: "open the windows in here"
     name_script:
       slots: "name"
       domain: "script"
@@ -152,21 +149,25 @@ HassTurnOn:
       slots: "name"
       domain: "scene"
       example: "activate mood lighting scene"
-
-    # TODO: Add support in main repo
-    # - slots:
-    #     - "floor"
-    #     - "domain"
-    #   domain:
-    #     - "light"
-    #     - "fan"
-    #   example: "turn on the upstairs lights"
-    # - slots:
-    #     - "floor"
-    #     - "domain"
-    #     - "device_class"
-    #   domain: "cover"
-    #   example: "open the curtains on the main floor"
+    area_domain_fan:
+      slots:
+        - "area"
+        - "domain"
+      domain: "fan"
+      example: "turn on the fans in the kitchen"
+    floor_domain_light:
+      slots:
+        - "floor"
+        - "domain"
+      domain: "light"
+      example: "turn on the lights on the first floor"
+    floor_device_class_cover:
+      slots:
+        - "floor"
+        - "domain"
+        - "device_class"
+      domain: "cover"
+      example: "open the curtains on the first floor"
 
 HassTurnOff:
   description: "Turns off a device or entity"
@@ -177,18 +178,17 @@ HassTurnOff:
     domain: "Domain of devices/entities in an area"
     device_class: "Device class of devices/entities in an area"
   slot_combinations:
+
+    # Required
     domain_light:
       slots: "domain"
+      required: true
       context_area: true
       domain: "light"
       example: "turn off the lights in here"
-    domain_fan:
-      slots: "domain"
-      context_area: true
-      domain: "fan"
-      example: "turn off the fans in here"
     name_only:
       slots: "name"
+      required: true
       domain:
         - "light"
         - "switch"
@@ -199,46 +199,15 @@ HassTurnOff:
         - "turn off the overhead light"
     name_cover:
       slots: "name"
+      required: true
       domain: "cover"
       example:
         - "close the sliding door"
-    area_domain_light:
-      slots:
-        - "area"
-        - "domain"
-      domain: "light"
-      example: "turn off the lights in the kitchen"
-    floor_domain_light:
-      slots:
-        - "floor"
-        - "domain"
-      domain: "light"
-      example: "turn off the lights on the first floor"
-    device_class_cover:
-      slots:
-        - "domain"
-        - "device_class"
-      context_area: true
-      domain: "cover"
-      example: "close the windows in here"
-    floor_device_class_cover:
-      slots:
-        - "floor"
-        - "domain"
-        - "device_class"
-      domain: "cover"
-      example: "close the curtains on the first floor"
-    # TODO: add support in main repo
-    # area_domain_fan:
-    #   slots:
-    #     - "area"
-    #     - "domain"
-    #   domain: "fan"
-    #   example: "turn off the fans in the kitchen"
     name_area:
       slots:
         - "name"
         - "area"
+      required: true
       domain:
         - "light"
         - "switch"
@@ -250,19 +219,62 @@ HassTurnOff:
       slots:
         - "name"
         - "area"
+      required: true
       domain: "cover"
       example: "close the sliding door in the kitchen"
+    area_domain_light:
+      slots:
+        - "area"
+        - "domain"
+      required: true
+      domain: "light"
+      example: "turn off the lights in the kitchen"
     area_device_class_cover:
       slots:
         - "area"
         - "domain"
         - "device_class"
+      required: true
       domain: "cover"
       example: "open the curtains in the living room"
     name_lock:
       slots: "name"
+      required: true
       domain: "lock"
       example: "unlock front door"
+
+    # Optional
+    domain_fan:
+      slots: "domain"
+      context_area: true
+      domain: "fan"
+      example: "turn off the fans in here"
+    device_class_cover:
+      slots:
+        - "domain"
+        - "device_class"
+      context_area: true
+      domain: "cover"
+      example: "close the windows in here"
+    area_domain_fan:
+      slots:
+        - "area"
+        - "domain"
+      domain: "fan"
+      example: "turn off the fans in the kitchen"
+    floor_domain_light:
+      slots:
+        - "floor"
+        - "domain"
+      domain: "light"
+      example: "turn off the lights on the first floor"
+    floor_device_class_cover:
+      slots:
+        - "floor"
+        - "domain"
+        - "device_class"
+      domain: "cover"
+      example: "close the curtains on the first floor"
 
 # sensors
 HassGetState:
@@ -302,14 +314,14 @@ HassLightSet:
   slot_combinations:
     # brightness
     brightness_only:
-      slots:
-        - "brightness"
+      slots: "brightness"
       context_area: true
       example: "set the brightness in here to 50%"
     name_brightness:
       slots:
         - "name"
         - "brightness"
+      required: true
       domain: "light"
       example: "set the overhead light brightness to 50%"
     area_brightness:
@@ -324,14 +336,14 @@ HassLightSet:
       example: "set the main floor brightness to 50%"
     # color
     color_only:
-      slots:
-        - "color"
+      slots: "color"
       context_area: true
       example: "set the lights in here to red"
     name_color:
       slots:
         - "name"
         - "color"
+      required: true
       domain: "light"
       example: "set the overhead light to red"
     area_color:
@@ -353,28 +365,36 @@ HassStartTimer:
     minutes: "Number of minutes"
     seconds: "Number of seconds"
   slot_combinations:
+
+    # Required
     seconds_only:
       slots: "seconds"
+      required: true
       example: "set a timer for 30 seconds"
+    hours_1:
+      slots: "hours"
+      required: true
+      example: "set a timer for 1 hour"
     hours_only:
       slots: "hours"
-      example: "set a timer for 1 hour"
+      required: true
+      example: "set a timer for 2 hours"
     minutes_1:
       slots: "minutes"
+      required: true
       example: "set a timer for 1 minute"
     minutes_only:
       slots: "minutes"
+      required: true
       example: "set a timer for 10 minutes"
+
+    # Optional
     minutes_1_half:
       slots: "minutes"
       example: "set a timer for 1 and a half minutes"
     minutes_half:
       slots: "minutes"
       example: "set a timer for 10 and a half minutes"
-    hours_1:
-      slots:
-        - "hours"
-      example: "set a timer for 1 hour"
     hours_1_minutes_1:
       slots:
         - "hours"
@@ -411,6 +431,7 @@ HassCancelAllTimers:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "cancel all timers"
 
 HassCancelTimer:
@@ -418,6 +439,7 @@ HassCancelTimer:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "cancel my timer"
 
 HassPauseTimer:
@@ -425,6 +447,7 @@ HassPauseTimer:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "pause my timer"
 
 HassUnpauseTimer:
@@ -432,6 +455,7 @@ HassUnpauseTimer:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "resume my timer"
 
 HassTimerStatus:
@@ -439,6 +463,7 @@ HassTimerStatus:
   slot_combinations:
     default:
       slots: []
+      required: true
       example: "how much time is left on my timer"
 
 # media players
@@ -449,10 +474,12 @@ HassMediaPause:
   slot_combinations:
     default:
       slots: []
+      required: true
       context_area: true
       example: "pause"
     name_only:
       slots: "name"
+      required: true
       example: "pause TV"
     area_only:
       slots: "area"
@@ -465,10 +492,12 @@ HassMediaUnpause:
   slot_combinations:
     default:
       slots: []
+      required: true
       context_area: true
       example: "resume"
     name_only:
       slots: "name"
+      required: true
       example: "resume TV"
     area_only:
       slots: "area"
@@ -481,10 +510,12 @@ HassMediaNext:
   slot_combinations:
     default:
       slots: []
+      required: true
       context_area: true
       example: "next track"
     name_only:
       slots: "name"
+      required: true
       example: "next track on the stereo"
     area_only:
       slots: "area"
@@ -500,10 +531,12 @@ HassClimateGetTemperature:
   slot_combinations:
     default:
       slots: []
+      required: true
       context_area: true
       example: "what is the temperature"
     name_only:
       slots: "name"
+      required: true
       domain: "climate"
       example: "what is the temperature of the EcoBee"
     area_only:
