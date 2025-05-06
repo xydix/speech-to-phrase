@@ -1,0 +1,104 @@
+---
+# English
+
+lists:
+  color:
+    - "white"
+    - "black"
+    - "red"
+    - "orange"
+    - "yellow"
+    - "green"
+    - "blue"
+    - "purple"
+    - "brown"
+    - "pink"
+    - "turquoise"
+
+sentences:
+  # cancel
+  - "never[ ]mind"
+
+  # date and time
+  - "(what's|what is) the [current] time"
+  - "what time is it [[right ]now]"
+  - "(what's|what is) the date [today]"
+  - "(what's|what is) today's date"
+
+  # weather
+  - "(what's|what is) the weather [like]"
+  - "(what's|what is) the {name} weather [like]"
+  - "(what's|what is) the weather [like] in {name}"
+
+  # lights (area)
+  - "turn (on|off) [the] lights [in here]"
+  - "turn [the] lights (on|off) [in here]"
+  - "turn (on|off) [all|the|all of the] {area} lights"
+  - "turn (on|off) [all|the|all of the] lights in [the] {area}"
+  - "set [the] brightness [in here] to {brightness} percent"
+  - "set [the] brightness of [the] {area} to {brightness} percent"
+  - "set [the] {area} brightness to {brightness} percent"
+  - "set [the] lights [in here] to {color}"
+  - "set [[the] color of the] lights [in here] to {color}"
+  - "set [the] [color of [the]] {area} lights to {color}"
+  - "set [the] {area} lights to {color}"
+  - "set lights in [the] {area} to {color}"
+
+  # lights (name)
+  - "set [the] brightness of [the] {name} to {brightness} percent"
+  - "set [the] {name} brightness to {brightness} percent"
+  - "set [the] [color of [the]] {name} to {color}"
+  - "set [the] {name} [color] to {color}"
+
+  # doors and windows
+  - "(open|close) [the] {name}"
+  - "(open|close) [the] {name} in [the] {area}"
+  - "(open|close) [the] (blinds|curtains|windows) in [the] {area}"
+  - "(open|close) [the] {area} (blinds|curtains|windows)"
+  - "(lock|unlock) [the] {name}"
+
+  # generic on/off
+  - "turn (on|off) [the] {name}"
+  - "turn [the] {name} (on|off)"
+  - "turn (on|off) [the] {name} in [the] {area}"
+  - "turn [the] {name} in [the] {area} (on|off)"
+
+  # scripts and scenes
+  - "run [the] {name} [script]"
+  - "activate [the] {name} scene"
+
+  # timers
+  - "(set|start|create) [a] timer for {seconds} seconds"
+  - "(set|start|create) [a] timer for {minutes} minutes"
+  - "(set|start|create) [a] timer for {minutes} minutes and {seconds} seconds"
+  - "(set|start|create) [a] timer for {minutes} and a half minutes"
+  - "(set|start|create) [a] timer for {hours} hours"
+  - "(set|start|create) [a] timer for {hours} and a half hours"
+  - "(set|start|create) [a] timer for {hours} hours and {minutes} minutes"
+
+  - "(cancel|stop) [the|my] timer"
+  - "(cancel|stop) all [[of ](the|my)] timers"
+  - "(pause|resume) [the|my] timer"
+  - "timer status"
+  - "status of [the|my] timer[s]"
+  - "[how much] time [is] left on [the|my] timer[s]"
+
+  # media
+  - "(pause|resume)"
+  - "(pause|resume) [the] {name}"
+  - "next [(track|item)]"
+  - "skip [[this ](track|song)]"
+  - "next [(track|item)] on [the] {name}"
+  - "skip [[the ](track|song)] on [the] {name}"
+
+  # temperature
+  - "(what is|what's) the (temp|temperature)"
+  - "(what is|what's) the {name} (temp|temperature)"
+  - "(what is|what's) the (temp|temperature) of [the] {name}"
+  - "(what is|what's) the (temp|temperature) in [the] {area}"
+  - "(what is|what's) the {area} (temp|temperature)"
+
+  # questions
+  - "is [the] {name} (open|closed)"
+  - "is [the] {name} (locked|unlocked)"
+  - "what is [the [value of [the]]] {name}"
