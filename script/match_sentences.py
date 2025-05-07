@@ -2,7 +2,6 @@
 
 import argparse
 import logging
-import sys
 from pathlib import Path
 from typing import Any, Optional
 
@@ -19,7 +18,6 @@ from ruamel.yaml.scalarstring import DoubleQuotedScalarString
 
 _DIR = Path(__file__).parent
 _REPO_DIR = _DIR.parent
-_GRAPHS_DIR = _REPO_DIR / "graphs"
 _SENTENCES_DIR = _REPO_DIR / "sentences"
 _STP_DIR = _REPO_DIR / "speech_to_phrase"
 _TIMER_INTENTS = {
@@ -61,6 +59,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def main() -> int:
+    """Match sentence templates with intents repo."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--output-dir", default=_STP_DIR / "sentences", help="Path to output directory"
@@ -74,6 +73,7 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     yaml = YAML()
+    yaml.explicit_start = True
     yaml.default_flow_style = False
     yaml.indent(sequence=4, offset=2)
 
@@ -82,10 +82,18 @@ def main() -> int:
         "floor": TextSlotList.from_strings(("{floor}",), allow_template=False),
     }
     intent_context = {"area": "{area}"}
+    wildcard_list_names: set[str] = set()
 
     with open(_STP_DIR / "shared_lists.yaml", "r", encoding="utf-8") as lists_file:
         lists_dict = yaml.load(lists_file)
         for list_name, list_info in lists_dict.items():
+            if list_info.get("wildcard"):
+                wildcard_list_names.add(list_name)
+                slot_lists[list_name] = TextSlotList.from_strings(
+                    (list_name,), allow_template=False
+                )
+                continue
+
             ranges = []
             if list_range := list_info.get("range"):
                 ranges.append(
@@ -169,8 +177,8 @@ def main() -> int:
         }
         lang_stp_data = lang_output_dict["intents"]["SpeechToPhrase"]["data"]
 
-        with open(sentences_path, "r", encoding="utf-8") as f:
-            sentences_dict = yaml.load(f)
+        with open(sentences_path, "r", encoding="utf-8") as sentences_file:
+            sentences_dict = yaml.load(sentences_file)
             sen_slot_lists: Optional[dict[str, Any]] = None
             for list_name, list_values in sentences_dict.get("lists", {}).items():
                 if not list_values:
@@ -189,10 +197,23 @@ def main() -> int:
             lang_output_dict["lists"] = {
                 list_name: {"values": [v.text_in.text for v in slot_list.values]}
                 for list_name, slot_list in sen_slot_lists.items()
-                if list_name not in ("name", "area", "floor")
+                if (list_name not in ("name", "area", "floor"))
+                and (list_name not in wildcard_list_names)
             }
 
-            for sentence_text in sentences_dict["sentences"]:
+            for sentence_info in sentences_dict["sentences"]:
+                required_name_domains: Optional[set[str]] = None
+                if isinstance(sentence_info, str):
+                    # - "sentence template"
+                    sentence_text = sentence_info
+                else:
+                    # - sentence: "sentence template"
+                    #   name_domains:
+                    #     - "domain 1"
+                    sentence_text = sentence_info["sentence"]
+                    if "name_domains" in sentence_info:
+                        required_name_domains = set(sentence_info["name_domains"])
+
                 sentence = parse_sentence(sentence_text, keep_text=True)
                 missing_texts = []
                 name_domains: set[str] = set()
@@ -241,6 +262,11 @@ def main() -> int:
                                 result_name_domains = _GET_STATE_DOMAINS
                             else:
                                 result_name_domains = _DEFAULT_NAME_DOMAINS
+
+                        if required_name_domains and (
+                            not result_name_domains.issubset(required_name_domains)
+                        ):
+                            continue
 
                         name_domains.update(result_name_domains)
 

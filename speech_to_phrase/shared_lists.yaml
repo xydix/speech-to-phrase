@@ -17,7 +17,7 @@ seconds:
 
 minutes:
   multi_range:
-    - from: 1
+    - from: 2
       to: 19
     - from: 20
       to: 100
@@ -27,5 +27,9 @@ minutes:
 
 hours:
   range:
-    from: 1
+    from: 2
     to: 24
+
+# todo
+todo_item:
+  wildcard: true

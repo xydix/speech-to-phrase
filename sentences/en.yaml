@@ -14,6 +14,8 @@ lists:
     - "brown"
     - "pink"
     - "turquoise"
+  todo_item:
+    wildcard: true
 
 sentences:
   # cancel
@@ -64,16 +66,26 @@ sentences:
   - "turn [the] {name} in [the] {area} (on|off)"
 
   # scripts and scenes
-  - "run [the] {name} [script]"
-  - "activate [the] {name} scene"
+  - sentence: "run [the] {name} [script]"
+    name_domains:
+      - "script"
+
+  - sentence: "activate [the] {name} [scene]"
+    name_domains:
+      - "scene"
 
   # timers
   - "(set|start|create) [a] timer for {seconds} seconds"
+  - "(set|start|create) [a] timer for 1 minute"
   - "(set|start|create) [a] timer for {minutes} minutes"
+  - "(set|start|create) [a] timer for 1 minute and {seconds} seconds"
   - "(set|start|create) [a] timer for {minutes} minutes and {seconds} seconds"
   - "(set|start|create) [a] timer for {minutes} and a half minutes"
+  - "(set|start|create) [a] timer for 1 hour"
   - "(set|start|create) [a] timer for {hours} hours"
   - "(set|start|create) [a] timer for {hours} and a half hours"
+  - "(set|start|create) [a] timer for 1 hour and 1 minute"
+  - "(set|start|create) [a] timer for 1 hour and {minutes} minutes"
   - "(set|start|create) [a] timer for {hours} hours and {minutes} minutes"
 
   - "(cancel|stop) [the|my] timer"
@@ -102,3 +114,6 @@ sentences:
   - "is [the] {name} (open|closed)"
   - "is [the] {name} (locked|unlocked)"
   - "what is [the [value of [the]]] {name}"
+
+  # todo
+  - "add {todo_item} to [the|my] {name}"

@@ -1,3 +1,4 @@
+---
 language: "en"
 intents:
   SpeechToPhrase:
@@ -72,8 +73,8 @@ intents:
           - "(open|close) [the] {name}"
         requires_context:
           domain:
-            - "cover"
             - "valve"
+            - "cover"
       - sentences:
           - "(open|close) [the] {name} in [the] {area}"
         requires_context:
@@ -92,65 +93,75 @@ intents:
           - "turn (on|off) [the] {name}"
         requires_context:
           domain:
-            - "light"
-            - "fan"
-            - "switch"
             - "scene"
-            - "media_player"
             - "input_boolean"
+            - "media_player"
+            - "light"
+            - "switch"
+            - "fan"
       - sentences:
           - "turn [the] {name} (on|off)"
         requires_context:
           domain:
-            - "light"
-            - "fan"
-            - "switch"
             - "scene"
-            - "media_player"
             - "input_boolean"
+            - "media_player"
+            - "light"
+            - "switch"
             - "script"
+            - "fan"
       - sentences:
           - "turn (on|off) [the] {name} in [the] {area}"
         requires_context:
           domain:
-            - "light"
-            - "fan"
-            - "switch"
             - "scene"
-            - "media_player"
             - "input_boolean"
+            - "media_player"
+            - "light"
+            - "switch"
+            - "fan"
       - sentences:
           - "turn [the] {name} in [the] {area} (on|off)"
         requires_context:
           domain:
-            - "light"
-            - "fan"
-            - "switch"
             - "scene"
-            - "media_player"
             - "input_boolean"
+            - "media_player"
+            - "light"
+            - "switch"
+            - "fan"
       - sentences:
           - "run [the] {name} [script]"
         requires_context:
           domain:
             - "script"
       - sentences:
-          - "activate [the] {name} scene"
+          - "activate [the] {name} [scene]"
         requires_context:
           domain:
             - "scene"
       - sentences:
           - "(set|start|create) [a] timer for {seconds} seconds"
       - sentences:
+          - "(set|start|create) [a] timer for 1 minute"
+      - sentences:
           - "(set|start|create) [a] timer for {minutes} minutes"
+      - sentences:
+          - "(set|start|create) [a] timer for 1 minute and {seconds} seconds"
       - sentences:
           - "(set|start|create) [a] timer for {minutes} minutes and {seconds} seconds"
       - sentences:
           - "(set|start|create) [a] timer for {minutes} and a half minutes"
       - sentences:
+          - "(set|start|create) [a] timer for 1 hour"
+      - sentences:
           - "(set|start|create) [a] timer for {hours} hours"
       - sentences:
           - "(set|start|create) [a] timer for {hours} and a half hours"
+      - sentences:
+          - "(set|start|create) [a] timer for 1 hour and 1 minute"
+      - sentences:
+          - "(set|start|create) [a] timer for 1 hour and {minutes} minutes"
       - sentences:
           - "(set|start|create) [a] timer for {hours} hours and {minutes} minutes"
       - sentences:
@@ -217,6 +228,11 @@ intents:
         requires_context:
           domain:
             - "sensor"
+      - sentences:
+          - "add {todo_item} to [the|my] {name}"
+        requires_context:
+          domain:
+            - "todo"
 lists:
   brightness:
     values:
@@ -253,7 +269,6 @@ lists:
       - "100"
   minutes:
     values:
-      - "1"
       - "2"
       - "3"
       - "4"
@@ -284,7 +299,6 @@ lists:
       - "45"
   hours:
     values:
-      - "1"
       - "2"
       - "3"
       - "4"
