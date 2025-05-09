@@ -1,7 +1,7 @@
 """Lists and sentences for a language."""
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Any, Optional
 
 from hassil import SlotList, TextChunk, TextSlotList, TextSlotValue
@@ -13,6 +13,50 @@ class SentenceBlock:
 
     sentences: list[str]
     domains: Optional[set[str]] = None
+
+    # Domain-specific features
+    light_supports_color: Optional[bool] = None
+    light_supports_brightness: Optional[bool] = None
+    fan_supports_speed: Optional[bool] = None
+    cover_supports_position: Optional[bool] = None
+    media_player_supports_pause: Optional[bool] = None
+    media_player_supports_volume_set: Optional[bool] = None
+    media_player_supports_next_track: Optional[bool] = None
+
+    @staticmethod
+    def from_dict(block_dict: dict[str, Any]) -> "SentenceBlock":
+        block = SentenceBlock(
+            sentences=block_dict["sentences"], domains=set(block_dict["domains"])
+        )
+
+        for supports_field in fields(block):
+            if "supports" not in supports_field.name:
+                continue
+
+            setattr(block, supports_field.name, block_dict.get(supports_field.name))
+
+        return block
+
+    def to_data(self) -> dict[str, Any]:
+        """Convert to data dict."""
+        data: dict[str, Any] = {"sentences": self.sentences}
+
+        context: dict[str, Any] = {}
+        if self.domains:
+            context["domain"] = list(self.domains)
+
+        for supports_field in fields(self):
+            if "supports" not in supports_field.name:
+                continue
+
+            supports_value = getattr(self, supports_field.name)
+            if supports_value is not None:
+                context[supports_field.name] = supports_value
+
+        if context:
+            data["requires_context"] = context
+
+        return data
 
 
 @dataclass
@@ -70,15 +114,7 @@ class LanguageData:
             },
             "intents": {
                 "SpeechToPhrase": {
-                    "data": [
-                        {
-                            "sentences": block.sentences,
-                            "requires_context": (
-                                {"domain": list(block.domains)} if block.domains else {}
-                            ),
-                        }
-                        for block in self.sentence_blocks
-                    ],
+                    "data": [block.to_data() for block in self.sentence_blocks],
                 }
             },
         }
@@ -93,12 +129,7 @@ class LanguageData:
             if isinstance(sentence_info, str):
                 sentence_blocks.append(SentenceBlock(sentences=[sentence_info]))
             else:
-                sentence_blocks.append(
-                    SentenceBlock(
-                        sentences=sentence_info["sentences"],
-                        domains=set(sentence_info["domains"]),
-                    )
-                )
+                sentence_blocks.append(SentenceBlock.from_dict(sentence_info))
 
         transformations: dict[str, list[Transformation]] = {}
         for tr_name, tr_info in data_dict.get("transformations", {}).items():
