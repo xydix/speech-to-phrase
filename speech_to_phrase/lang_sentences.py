@@ -1,3 +1,5 @@
+"""Lists and sentences for a language."""
+
 import re
 from dataclasses import dataclass
 from typing import Any, Optional
@@ -7,22 +9,29 @@ from hassil import SlotList, TextChunk, TextSlotList, TextSlotValue
 
 @dataclass
 class SentenceBlock:
+    """Block of sentence templates"""
+
     sentences: list[str]
     domains: Optional[set[str]] = None
 
 
 @dataclass
 class Transformation:
+    """Single transformation."""
+
     outputs: list[str]
     match_regex: Optional[re.Pattern] = None
 
 
 @dataclass
 class TransformedList:
+    """Transformations to apply to a list's values."""
+
     source_list_name: str
     transformations: list[Transformation]
 
     def apply(self, value: str) -> list[str]:
+        """Generate output values."""
         for transformation in self.transformations:
             if transformation.match_regex is not None:
                 if not transformation.match_regex.search(value):
@@ -37,6 +46,8 @@ class TransformedList:
 
 @dataclass
 class LanguageData:
+    """Lists and sentences for a language."""
+
     language: str
     sentence_blocks: list[SentenceBlock]
     list_values: dict[str, list[str]]
@@ -44,6 +55,7 @@ class LanguageData:
     transformed_lists: dict[str, TransformedList]
 
     def to_intents_dict(self) -> dict[str, Any]:
+        """Convert to hassil format."""
         return {
             "language": self.language,
             "lists": {
@@ -73,6 +85,7 @@ class LanguageData:
 
     @staticmethod
     def from_dict(data_dict: dict[str, Any]) -> "LanguageData":
+        """Load from a YAML dict."""
         sentence_blocks: list[SentenceBlock] = []
         transformed_lists: dict[str, TransformedList] = {}
 
@@ -95,7 +108,11 @@ class LanguageData:
                 tr_list.append(
                     Transformation(
                         outputs=tr_dict["outputs"],
-                        match_regex=re.compile(match_regex) if match_regex else None,
+                        match_regex=(
+                            re.compile(match_regex, re.IGNORECASE)
+                            if match_regex
+                            else None
+                        ),
                     )
                 )
 
@@ -124,6 +141,7 @@ class LanguageData:
     def get_transformed_lists(
         self, slot_lists: dict[str, SlotList]
     ) -> dict[str, TextSlotList]:
+        """Get transformed versions of slot lists."""
         tr_slot_lists: dict[str, TextSlotList] = {}
 
         for list_name, slot_list in slot_lists.items():

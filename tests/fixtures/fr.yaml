@@ -17,3 +17,6 @@ fixtures:
 
     - name: "Porte d'entrée"
       domain: "lock"
+
+    - name: "Entrée"
+      domain: "lock"
