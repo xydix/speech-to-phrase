@@ -12,6 +12,7 @@ from .const import Settings, TrainingError, WordCasing
 from .g2p import LexiconDatabase
 from .hass_api import Things
 from .hassil_fst import Fst, G2PInfo, intents_to_fst
+from .lang_sentences import LanguageData, load_shared_lists
 from .models import Model, ModelType, download_model
 from .train_coqui_stt import train_coqui_stt
 from .train_kaldi import train_kaldi
@@ -93,10 +94,15 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
     """Create intents from sentences and things from Home Assistant."""
     sentences_path = settings.sentences / f"{model.sentences_language}.yaml"
     with open(sentences_path, "r", encoding="utf-8") as sentences_file:
-        sentences_dict = safe_load(sentences_file)
+        lang_data = LanguageData.from_dict(safe_load(sentences_file))
+        sentences_dict = lang_data.to_intents_dict()
 
     lists_dict = sentences_dict.get("lists", {})
     lists_dict.update(things.to_lists_dict())
+
+    with open(settings.shared_lists_path, "r", encoding="utf-8") as shared_lists_file:
+        shared_lists_dict = load_shared_lists(safe_load(shared_lists_file))
+        lists_dict.update(shared_lists_dict)
 
     sentences_dict["lists"] = lists_dict
 

@@ -24,6 +24,8 @@ RATE = 16000  # hertz
 WIDTH = 2  # bytes
 CHANNELS = 1
 
+_MODULE_DIR = Path(__file__).parent
+
 
 class Language(str, Enum):
     """Available languages."""
@@ -52,6 +54,7 @@ class Settings:
         hass_websocket_uri: str,
         retrain_on_connect: bool,
         sentences_dir: Optional[Union[str, Path]] = None,
+        shared_lists_path: Optional[Path] = None,
         default_language: str = Language.ENGLISH.value,
         volume_multiplier: float = 1.0,
     ) -> None:
@@ -66,7 +69,12 @@ class Settings:
 
         if not sentences_dir:
             # Builtin sentences
-            sentences_dir = Path(__file__).parent / "sentences"
+            sentences_dir = _MODULE_DIR / "sentences"
+
+        if not shared_lists_path:
+            shared_lists_path = _MODULE_DIR / "shared_lists.yaml"
+
+        self.shared_lists_path = shared_lists_path
 
         self.sentences = Path(sentences_dir)
         self.default_language = default_language

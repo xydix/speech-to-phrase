@@ -22,7 +22,7 @@ SETTINGS = Settings(
     custom_sentences_dirs=[TESTS_DIR / "custom_sentences"],
 )
 
-TEST_LANGUAGES = [Language.ENGLISH]
+TEST_LANGUAGES = [Language.ENGLISH.value]
 
 
 def get_test_things(language: str) -> Things:

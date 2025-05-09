@@ -15,7 +15,7 @@ from pysilero_vad import SileroVoiceActivityDetector
 from speech_to_phrase import MODELS, Model, Things, train, transcribe
 from speech_to_phrase.audio import wav_audio_stream
 
-from . import SETTINGS, TESTS_DIR
+from . import SETTINGS, TEST_LANGUAGES, TESTS_DIR
 
 
 @dataclass
@@ -27,9 +27,6 @@ class Resources:
     model: Model
     wav_dir: Path
     vad: SileroVoiceActivityDetector
-
-
-TEST_LANGUAGES = ["en"]
 
 
 @pytest_asyncio.fixture(name="lang_resources", params=TEST_LANGUAGES, scope="session")
@@ -117,6 +114,7 @@ def gen_test(language: str, wav_path: Path, generated: bool) -> None:
 
     if generated:
         gen = "gen_"
+        test_func = pytest.mark.generated(test_func)
     else:
         gen = ""
 

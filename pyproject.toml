@@ -63,3 +63,9 @@ exclude = ["tests"]
 
 [tool.setuptools.package-data]
 "speech_to_phrase" = ["sentences/*.yaml"]
+
+[tool.pytest.ini_options]
+addopts = "-m 'not generated'"
+markers = [
+    "generated: marks tests as using generated audio data (select with '-m \"generated\"')",
+]
