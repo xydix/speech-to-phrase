@@ -1,0 +1,19 @@
+---
+language: "fr"
+
+fixtures:
+  floors:
+    - name: "Premier Étage"
+    - name: "Rez-de-chaussée"
+
+  areas:
+    - name: "Bureau"
+    - name: "Salon"
+    - name: "Chambre"
+
+  entities:
+    - name: "New York"
+      domain: "weather"
+
+    - name: "Porte d'entrée"
+      domain: "lock"

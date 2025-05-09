@@ -109,8 +109,8 @@ def gen_test(language: str, wav_path: Path, generated: bool) -> None:
 
     text = wav_path.stem
     text_sanitized = text.lower()
-    text_sanitized = re.sub(r"\s+", "_", text_sanitized)
-    text_sanitized = re.sub(r"[^a-z0-9_]", "", text_sanitized)
+    text_sanitized = re.sub(r"(?:\s+)|(?:[-]+)", "_", text_sanitized)
+    text_sanitized = re.sub(r"[^a-zàâäéèêëîïôöùûüÿ0-9_]", "", text_sanitized)
 
     if generated:
         gen = "gen_"

@@ -132,16 +132,33 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
             ) as custom_sentences_file:
                 merge_dict(sentences_dict, yaml.load(custom_sentences_file) or {})
 
+    lang_intents = Intents.from_dict(sentences_dict)
+    tr_lists = lang_data.get_transformed_lists(lang_intents.slot_lists)
+    lang_intents.slot_lists.update(tr_lists)
+
     # Write YAML with training sentences (includes HA lists, triggers, etc.)
     training_sentences_path = settings.training_sentences_path(model.id)
     with open(
         training_sentences_path, "w", encoding="utf-8"
     ) as training_sentences_file:
+        # Add transformed lists to debug YAML
+        for tr_list_name, tr_list in tr_lists.items():
+            lists_dict[tr_list_name] = {
+                "values": [
+                    {
+                        "in": value.value_out,
+                        "out": value.value_out,
+                        "context": value.context or {},
+                        "metadata": value.metadata or {},
+                    }
+                    for value in tr_list.values
+                ]
+            }
         yaml_output.dump(quote_strings(sentences_dict), training_sentences_file)
 
     _LOGGER.debug("Wrote debug YAML to %s", training_sentences_path)
 
-    return Intents.from_dict(sentences_dict)
+    return lang_intents
 
 
 def _create_intents_fst(
