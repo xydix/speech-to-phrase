@@ -72,10 +72,7 @@ def main() -> int:
         if args.language and (language != args.language):
             continue
 
-        if language in TTS_LANG:
-            tts_language = TTS_LANG[language]
-        else:
-            tts_language = f"{language}-{language.upper()}"
+        tts_language = TTS_LANG.get(language, f"{language}-{language.upper()}")
 
         lang_wav_dir = output_dir / language
         lang_gen_wav_dir = lang_wav_dir / "generated"
@@ -286,8 +283,7 @@ def generate_sentences(
         list_values = slot_lists.get(list_ref.list_name)
         assert list_values, list_ref
 
-        for list_value in list_values:
-            yield list_value
+        yield from list_values
 
 
 # -----------------------------------------------------------------------------

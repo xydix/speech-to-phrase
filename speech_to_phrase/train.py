@@ -6,7 +6,6 @@ import logging
 from dataclasses import asdict, dataclass
 
 from hassil import Intents, merge_dict
-from yaml import SafeDumper, safe_dump, safe_load
 
 from .const import Settings, TrainingError, WordCasing
 from .g2p import LexiconDatabase
@@ -16,6 +15,7 @@ from .lang_sentences import LanguageData, load_shared_lists
 from .models import Model, ModelType, download_model
 from .train_coqui_stt import train_coqui_stt
 from .train_kaldi import train_kaldi
+from .util import quote_strings, yaml, yaml_output
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -94,14 +94,14 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
     """Create intents from sentences and things from Home Assistant."""
     sentences_path = settings.sentences / f"{model.sentences_language}.yaml"
     with open(sentences_path, "r", encoding="utf-8") as sentences_file:
-        lang_data = LanguageData.from_dict(safe_load(sentences_file))
+        lang_data = LanguageData.from_dict(yaml.load(sentences_file))
         sentences_dict = lang_data.to_intents_dict()
 
     lists_dict = sentences_dict.get("lists", {})
     lists_dict.update(things.to_lists_dict())
 
     with open(settings.shared_lists_path, "r", encoding="utf-8") as shared_lists_file:
-        shared_lists_dict = load_shared_lists(safe_load(shared_lists_file))
+        shared_lists_dict = load_shared_lists(yaml.load(shared_lists_file))
         lists_dict.update(shared_lists_dict)
 
     sentences_dict["lists"] = lists_dict
@@ -130,15 +130,14 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
             with open(
                 custom_sentences_path, "r", encoding="utf-8"
             ) as custom_sentences_file:
-                merge_dict(sentences_dict, safe_load(custom_sentences_file) or {})
+                merge_dict(sentences_dict, yaml.load(custom_sentences_file) or {})
 
     # Write YAML with training sentences (includes HA lists, triggers, etc.)
-    SafeDumper.ignore_aliases = lambda *args: True  # type: ignore[assignment]
     training_sentences_path = settings.training_sentences_path(model.id)
     with open(
         training_sentences_path, "w", encoding="utf-8"
     ) as training_sentences_file:
-        safe_dump(sentences_dict, training_sentences_file, sort_keys=False)
+        yaml_output.dump(quote_strings(sentences_dict), training_sentences_file)
 
     _LOGGER.debug("Wrote debug YAML to %s", training_sentences_path)
 

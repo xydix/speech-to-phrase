@@ -103,7 +103,7 @@ def do_recognize(
             intent_context=intent_context,
         ):
             found_result = True
-            if not domains_to_check:
+            if (not sen_block.domains) or (not domains_to_check):
                 # Only need one result
                 break
 

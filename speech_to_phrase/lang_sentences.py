@@ -66,7 +66,8 @@ class LanguageData:
         )
 
 
-def load_shared_lists(lists_dict: dict[str, list[str]]) -> dict[str, Any]:
+def load_shared_lists(lists_dict: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """Convert shared lists to hassil format."""
     slot_lists: dict[str, Any] = {}
 
     for list_name, list_info in lists_dict.items():

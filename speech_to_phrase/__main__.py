@@ -66,7 +66,9 @@ async def main() -> None:
     parser.add_argument("--volume-multiplier", type=float, default=1.0)
     #
     parser.add_argument(
-        "--log-format", default=logging.BASIC_FORMAT, help="Format for log messages"
+        "--log-format",
+        default="%(asctime)s - %(levelname)s:%(name)s: %(message)s",
+        help="Format for log messages",
     )
     parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("--debug", action="store_true", help="Log DEBUG messages")
