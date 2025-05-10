@@ -9,11 +9,11 @@ from pathlib import Path
 
 import pytest
 import pytest_asyncio
-import yaml
 from pysilero_vad import SileroVoiceActivityDetector
 
 from speech_to_phrase import MODELS, Model, Things, train, transcribe
 from speech_to_phrase.audio import wav_audio_stream
+from speech_to_phrase.util import yaml
 
 from . import SETTINGS, TEST_LANGUAGES, TESTS_DIR
 
@@ -37,7 +37,7 @@ async def lang_resources_fixture(request) -> Resources:
     with open(
         TESTS_DIR / "fixtures" / f"{language}.yaml", "r", encoding="utf-8"
     ) as fixtures_file:
-        fixtures_dict = yaml.safe_load(fixtures_file)
+        fixtures_dict = yaml.load(fixtures_file)
 
     assert fixtures_dict["language"] == language
     test_things = Things.from_dict(fixtures_dict["fixtures"])

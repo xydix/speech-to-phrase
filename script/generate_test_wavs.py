@@ -83,9 +83,9 @@ def main() -> int:
         with open(sentences_path, "r", encoding="utf-8") as sentences_file:
             sentences_dict = yaml.load(sentences_file)
 
-        for list_name, list_info in sentences_dict.get("lists", {}).items():
+        for list_name, list_values in sentences_dict.get("lists", {}).items():
             if list_name not in lang_slot_lists:
-                lang_slot_lists[list_name] = list_info["values"]
+                lang_slot_lists[list_name] = list_values
 
         # Add test fixtures
         fixtures_path = _FIXTURES_DIR / f"{language}.yaml"
@@ -102,8 +102,11 @@ def main() -> int:
             if list_name not in lang_slot_lists:
                 lang_slot_lists[list_name] = list_values
 
-        for sentence_info in sentences_dict["intents"]["SpeechToPhrase"]["data"]:
-            name_domains = sentence_info.get("requires_context", {}).get("domain")
+        for sentence_info in sentences_dict["data"]:
+            if isinstance(sentence_info, str):
+                sentence_info = {"sentences": [sentence_info]}
+
+            name_domains = sentence_info.get("domains", [])
             if name_domains:
                 sen_slot_lists = {
                     **lang_slot_lists,

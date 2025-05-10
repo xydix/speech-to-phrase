@@ -4,7 +4,6 @@ from typing import Any
 
 import pytest
 import voluptuous as vol
-import yaml
 from hassil import (
     Alternative,
     Expression,
@@ -15,14 +14,13 @@ from hassil import (
 )
 from voluptuous.humanize import validate_with_humanized_errors
 
-from speech_to_phrase import Language
+from speech_to_phrase.util import yaml
 
-from . import TEST_LANGUAGES, TESTS_DIR
+from . import SETTINGS, TEST_LANGUAGES, TESTS_DIR
 
 PROGRAM_DIR = TESTS_DIR.parent
 MODULE_DIR = PROGRAM_DIR / "speech_to_phrase"
 SENTENCES_DIR = MODULE_DIR / "sentences"
-TEST_SENTENCES_DIR = TESTS_DIR / "sentences"
 
 
 def _visit_expression(e: Expression, visitor, visitor_arg: Any):
@@ -33,16 +31,10 @@ def _visit_expression(e: Expression, visitor, visitor_arg: Any):
             _visit_expression(item, visitor, result)
 
 
-def no_list_or_rule_references(sentence: str):
-    """Validator that doesn't allow for {list} or <rule> references in a sentence template."""
+def no_rule_references(sentence: str):
+    """Validator that doesn't allow for <rule> references in a sentence template."""
 
     def visitor(e: Expression, arg: Any):
-        if isinstance(e, ListReference):
-            list_ref: ListReference = e
-            raise vol.Invalid(
-                f"List references not allow in expansion rules ({{{list_ref.list_name}}})"
-            )
-
         if isinstance(e, RuleReference):
             rule_ref: RuleReference = e
             raise vol.Invalid(
@@ -86,164 +78,125 @@ def no_alternative_list_references(sentence: str):
     return sentence
 
 
-INTENTS_SCHEMA = vol.Schema(
+SHARED_LISTS_SCHEMA = vol.Schema(
     {
-        # intent name
-        str: {
-            vol.Required("description"): str,
-            vol.Required("slot_combinations"): {
-                # slot combination name
-                str: {
-                    vol.Required("slots"): vol.Any(str, [str]),
-                    vol.Required("example"): vol.Any(str, [str]),
-                    vol.Optional("domain"): vol.Any(str, [str]),
-                    vol.Optional("context_area"): bool,
-                    vol.Optional("required"): bool,
+        # list name
+        str: vol.Any(
+            {
+                vol.Required("range"): {
+                    vol.Required("from"): int,
+                    vol.Required("to"): int,
+                    vol.Optional("step"): int,
                 }
             },
-            vol.Optional("slots"): {
-                # slot name and description
-                str: str
+            {
+                vol.Required("multi_range"): [
+                    {
+                        vol.Required("from"): int,
+                        vol.Required("to"): int,
+                        vol.Optional("step"): int,
+                    }
+                ]
             },
-        }
-    },
+        )
+    }
 )
 
 SENTENCES_SCHEMA = vol.Schema(
     {
         vol.Required("language"): str,
         vol.Optional("lists"): {
-            str: vol.Any(
+            # list name
+            str: [str],
+        },
+        vol.Optional("wildcards"): [str],
+        vol.Optional("transformations"): {
+            # transform name
+            str: [{vol.Required("outputs"): [str], vol.Optional("match"): str}]
+        },
+        vol.Optional("transformed_lists"): {
+            # list name
+            str: {"source": str, "transformations": [str]}
+        },
+        vol.Required("data"): [
+            vol.Any(
                 {
-                    vol.Required("values"): [
-                        vol.Any(
-                            str,
-                            {
-                                vol.Required("in"): str,
-                                vol.Required("out"): vol.Any(str, int),
-                            },
-                        )
-                    ]
+                    vol.Required("sentences"): [
+                        vol.All(str, no_alternative_list_references, no_rule_references)
+                    ],
+                    vol.Optional("domains"): [str],
+                    vol.Optional("light_supports_color"): bool,
+                    vol.Optional("light_supports_brightness"): bool,
+                    vol.Optional("fan_supports_speed"): bool,
+                    vol.Optional("cover_supports_position"): bool,
+                    vol.Optional("media_player_supports_pause"): bool,
+                    vol.Optional("media_player_supports_volume_set"): bool,
+                    vol.Optional("media_player_supports_next_track"): bool,
                 },
-                {
-                    vol.Required("range"): {
-                        vol.Required("from"): int,
-                        vol.Required("to"): int,
-                        vol.Optional("step"): int,
-                    }
-                },
-                {vol.Required("wildcard"): True},
-            )
-        },
-        vol.Optional("expansion_rules"): {
-            str: vol.All(no_list_or_rule_references, not_optional)
-        },
-        vol.Optional("intents"): {
-            str: {
-                vol.Required("data"): [
-                    {
-                        vol.Required("sentences"): [no_alternative_list_references],
-                        vol.Optional("requires_context"): {
-                            vol.Required("domain"): vol.Any(str, [str])
-                        },
-                        vol.Optional("slots"): {
-                            # slot name
-                            str: vol.Any(str, int)
-                        },
-                        vol.Required("metadata"): {
-                            vol.Required("slot_combination"): str,
-                            vol.Optional("context_area"): bool,
-                        },
-                    }
-                ]
-            }
-        },
+                vol.All(str, no_alternative_list_references, no_rule_references),
+            ),
+        ],
     }
 )
 
-TEST_SENTENCES_SCHEMA = vol.Schema(
+FIXTURES_SCHEMA = vol.Schema(
     {
         vol.Required("language"): str,
-        vol.Required("floors"): [{vol.Required("name"): vol.Any(str, [str])}],
-        vol.Required("areas"): [{vol.Required("name"): vol.Any(str, [str])}],
-        vol.Required("entities"): [
-            {
-                vol.Required("name"): vol.Any(str, [str]),
-                vol.Required("domain"): str,
-                vol.Optional("light_supports_brightness"): bool,
-                vol.Optional("light_supports_color"): bool,
-            }
-        ],
-        # Format arguments used in test sentences/slots.
-        # Requires "uses_format_values: <list of keys>" and "{key}" in sentence/slot.
-        vol.Optional("test_format_values"): {
-            # values key
-            str: [vol.Any(str, {vol.Required("in"): str, vol.Required("out"): str})]
-        },
-        # Values for wildcards
-        vol.Optional("test_wildcard_values"): {
-            # wildcard list name
-            str: [str]
-        },
-        vol.Optional("tests"): {
-            # intent name
-            str: {
-                # slot combination name
-                str: [
-                    vol.Any(
-                        str,  # sentence
-                        {
-                            vol.Required("sentences"): vol.Any(str, [str]),
-                            vol.Optional("slots"): {
-                                # slot name
-                                str: vol.Any(str, int)
-                            },
-                            vol.Optional("context_area"): bool,
-                            vol.Optional("uses_format_values"): vol.Any(str, [str]),
-                        },
-                    )
-                ]
-            }
+        "fixtures": {
+            vol.Required("entities"): [
+                {
+                    vol.Required("name"): vol.Any(str, [str]),
+                    vol.Required("domain"): str,
+                    vol.Optional("light_supports_color"): bool,
+                    vol.Optional("light_supports_brightness"): bool,
+                    vol.Optional("fan_supports_speed"): bool,
+                    vol.Optional("cover_supports_position"): bool,
+                    vol.Optional("media_player_supports_pause"): bool,
+                    vol.Optional("media_player_supports_volume_set"): bool,
+                    vol.Optional("media_player_supports_next_track"): bool,
+                }
+            ],
+            vol.Optional("floors"): [{vol.Required("name"): vol.Any(str, [str])}],
+            vol.Optional("areas"): [{vol.Required("name"): vol.Any(str, [str])}],
+            vol.Optional("lists"): {
+                # list name
+                str: [str]
+            },
         },
     }
 )
 
 
-def test_validate_intents() -> None:
-    """Test that the intents YAML file matches expected schema."""
-    intents_path = PROGRAM_DIR / "intents.yaml"
-    with open(intents_path, "r", encoding="utf-8") as intents_file:
-        intents_dict = yaml.safe_load(intents_file)
-        validate_with_humanized_errors(intents_dict, INTENTS_SCHEMA)
+def test_validate_shared_lists() -> None:
+    """Validate shared lists."""
+    with open(SETTINGS.shared_lists_path, "r", encoding="utf-8") as shared_lists_file:
+        shared_lists_dict = yaml.load(shared_lists_file)
+        validate_with_humanized_errors(shared_lists_dict, SHARED_LISTS_SCHEMA)
 
 
 @pytest.mark.parametrize("language", TEST_LANGUAGES)
-def test_validate_sentences(language: Language) -> None:
+def test_validate_sentences(language: str) -> None:
     """Test that sentence YAML files match expected schema."""
-    lang_code = language.value
-
-    lang_sentences_path = SENTENCES_DIR / f"{lang_code}.yaml"
+    lang_sentences_path = SENTENCES_DIR / f"{language}.yaml"
     assert (
         lang_sentences_path.exists()
-    ), f"Missing sentences file for language '{lang_code}' at '{lang_sentences_path}'"
+    ), f"Missing sentences file for language '{language}' at '{lang_sentences_path}'"
 
     with open(lang_sentences_path, "r", encoding="utf-8") as lang_sentences_file:
-        lang_sentences_dict = yaml.safe_load(lang_sentences_file)
+        lang_sentences_dict = yaml.load(lang_sentences_file)
         validate_with_humanized_errors(lang_sentences_dict, SENTENCES_SCHEMA)
 
 
 @pytest.mark.parametrize("language", TEST_LANGUAGES)
-def test_validate_tests(language: Language) -> None:
-    """Test that test YAML files match expected schema."""
-    lang_code = language.value
-
-    lang_test_sentences_path = TEST_SENTENCES_DIR / f"{lang_code}.yaml"
+def test_validate_fixtures(language: str) -> None:
+    """Test that fixture YAML files match expected schema."""
+    lang_test_fixtures_path = TESTS_DIR / "fixtures" / f"{language}.yaml"
     assert (
-        lang_test_sentences_path.exists()
-    ), f"Missing test sentences file for language '{lang_code}' at '{lang_test_sentences_path}'"
+        lang_test_fixtures_path.exists()
+    ), f"Missing test fixtures file for language '{language}' at '{lang_test_fixtures_path}'"
 
     with open(
-        lang_test_sentences_path, "r", encoding="utf-8"
-    ) as lang_test_sentences_file:
-        lang_test_sentences_dict = yaml.safe_load(lang_test_sentences_file)
-        validate_with_humanized_errors(lang_test_sentences_dict, TEST_SENTENCES_SCHEMA)
+        lang_test_fixtures_path, "r", encoding="utf-8"
+    ) as lang_test_fixtures_file:
+        lang_test_fixtures_dict = yaml.load(lang_test_fixtures_file)
+        validate_with_humanized_errors(lang_test_fixtures_dict, FIXTURES_SCHEMA)
