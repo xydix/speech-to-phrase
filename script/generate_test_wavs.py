@@ -129,7 +129,6 @@ def main() -> int:
                     sentence.expression, sen_slot_lists
                 ):
                     example_text = example_text.strip()
-                    # print(example_text)
                     wav_path = lang_wav_dir / f"{example_text}.wav"
                     gen_wav_path = lang_gen_wav_dir / f"{example_text}.wav"
                     generated_wav_names.add(example_text)

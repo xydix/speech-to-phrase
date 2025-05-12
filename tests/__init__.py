@@ -23,4 +23,5 @@ TEST_LANGUAGES = [
     Language.FRENCH.value,
     Language.GERMAN.value,
     Language.SPANISH.value,
+    Language.DUTCH.value,
 ]

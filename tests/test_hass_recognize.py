@@ -93,9 +93,9 @@ def do_recognize(
         sen_slot_lists = lang_resources.intents.slot_lists
 
     domains_to_check: set[str] = set(sen_block.domains or [])
-    found_result = False
 
     for example_text in sample_expression(sentence.expression, sen_slot_lists):
+        found_result = False
         for result in recognize_all(
             example_text,
             lang_resources.intents,
@@ -114,7 +114,10 @@ def do_recognize(
             assert name_domain in sen_block.domains
             domains_to_check.discard(name_domain)
 
-    assert found_result, f"Sentence was not recognized: {error_info}"
+        assert (
+            found_result
+        ), f"Sentence was not recognized: '{example_text}', {error_info}"
+
     assert (
         not domains_to_check
     ), f"Domains were not checked: domains={domains_to_check}, {error_info}"
