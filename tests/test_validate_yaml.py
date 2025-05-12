@@ -10,6 +10,7 @@ from hassil import (
     Group,
     ListReference,
     RuleReference,
+    Sentence,
     parse_sentence,
 )
 from voluptuous.humanize import validate_with_humanized_errors
@@ -76,6 +77,19 @@ def no_alternative_list_references(sentence: str):
 
     _visit_expression(parse_sentence(sentence).expression, visitor, False)
     return sentence
+
+
+def get_slots(sentence: Sentence) -> set[str]:
+    """Get the used list/slot names in a sentence."""
+    slot_names: set[str] = set()
+
+    def visitor(e: Expression, arg: Any):
+        if isinstance(e, ListReference):
+            list_ref: ListReference = e
+            slot_names.add(list_ref.slot_name)
+
+    _visit_expression(sentence.expression, visitor, None)
+    return slot_names
 
 
 SHARED_LISTS_SCHEMA = vol.Schema(
@@ -186,7 +200,56 @@ def test_validate_sentences(language: str) -> None:
         lang_sentences_dict = yaml.load(lang_sentences_file)
         validate_with_humanized_errors(lang_sentences_dict, SENTENCES_SCHEMA)
 
-    assert lang_sentences_dict.get("language") == language
+    assert lang_sentences_dict["language"] == language
+
+    # Check list transformations
+    tr_names = set(lang_sentences_dict.get("transformations", {}).keys())
+
+    name_lists: set[str] = {"name"}
+    for tr_list_name, tr_list_info in lang_sentences_dict.get(
+        "transformed_lists", {}
+    ).items():
+        list_source = tr_list_info["source"]
+        assert list_source in ("name", "area", "floor"), (
+            "Transformed list source must be name/area/floor: "
+            f"file={lang_sentences_path}"
+        )
+
+        if list_source == "name":
+            name_lists.add(tr_list_name)
+
+        trs = tr_list_info["transformations"]
+        unknown_trs = set(trs) - tr_names
+        assert not unknown_trs, (
+            f"Undefined list transformation: {unknown_trs} ,"
+            f"file={lang_sentences_path}"
+        )
+
+    # Check that {name} is used appropriately
+    for sentence_info in lang_sentences_dict["data"]:
+        if isinstance(sentence_info, str):
+            # Sentence template
+            sentence = parse_sentence(sentence_info)
+            assert name_lists.isdisjoint(get_slots(sentence)), (
+                "Sentence templates with {name} must be in a block with domains: "
+                f"sentence={sentence_info}, "
+                f"file={lang_sentences_path}"
+            )
+            continue
+
+        assert sentence_info["domains"], (
+            "At least one domain is required in a sentence block: "
+            f"block={sentence_info}, "
+            f"file={lang_sentences_path}"
+        )
+
+        for sentence_text in sentence_info["sentences"]:
+            sentence = parse_sentence(sentence_text)
+            assert not name_lists.isdisjoint(get_slots(sentence)), (
+                "Sentences in a block must contain {name}: "
+                f"sentence={sentence_text}, "
+                f"file={lang_sentences_path}"
+            )
 
 
 @pytest.mark.parametrize("language", TEST_LANGUAGES)
