@@ -130,11 +130,11 @@ def gen_test(
 
     text = sentence_text
     text_sanitized = text.lower()
-    text_sanitized = re.sub(r"\s+", "_", text_sanitized)
-    text_sanitized = re.sub(r"\|", "_", text_sanitized)
-    text_sanitized = re.sub(r"[^a-z0-9_]", "", text_sanitized)
+    text_sanitized = re.sub(r"(?:\s+)|(?:[-|]+)", "_", text_sanitized)
+    text_sanitized = re.sub(r"[_]+", "_", text_sanitized)
+    text_sanitized = re.sub(r"[^a-zàâäéèêëîïôöùûüÿ0-9_]", "", text_sanitized)
 
-    test_func.__name__ = f"test_transcribe_{language}_{text_sanitized}"
+    test_func.__name__ = f"test_transcribe_{text_sanitized}"
     setattr(sys.modules[__name__], test_func.__name__, test_func)
 
 

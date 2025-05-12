@@ -49,6 +49,9 @@ def main() -> int:
         "--output-dir", default=_TESTS_DIR / "wav", help="Path to output directory"
     )
     parser.add_argument("--language", help="Only generate WAV files for language")
+    parser.add_argument(
+        "--delete", action="store_true", help="Delete unneeded WAV files"
+    )
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)
@@ -102,6 +105,7 @@ def main() -> int:
             if list_name not in lang_slot_lists:
                 lang_slot_lists[list_name] = list_values
 
+        generated_wav_names: set[str] = set()
         for sentence_info in sentences_dict["data"]:
             if isinstance(sentence_info, str):
                 sentence_info = {"sentences": [sentence_info]}
@@ -128,6 +132,7 @@ def main() -> int:
                     # print(example_text)
                     wav_path = lang_wav_dir / f"{example_text}.wav"
                     gen_wav_path = lang_gen_wav_dir / f"{example_text}.wav"
+                    generated_wav_names.add(example_text)
 
                     if wav_path.exists() or gen_wav_path.exists():
                         continue
@@ -141,6 +146,14 @@ def main() -> int:
                         gen_wav_path,
                     )
                     print(wav_path)
+
+        if args.delete:
+            for gen_wav_path in lang_gen_wav_dir.glob("*.wav"):
+                if gen_wav_path.stem in generated_wav_names:
+                    continue
+
+                gen_wav_path.unlink()
+                print("DELETED:", gen_wav_path)
 
     return 0
 

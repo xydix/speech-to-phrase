@@ -77,10 +77,16 @@ data:
   # - sentences:
   #     - "set [the] brightness of [the] {name} to {brightness} percent"
   #     - "set [the] {name} brightness to {brightness} percent"
+  #   domains:
+  #     - "light"
+  #   light_supports_brightness: true
+
+  # - sentences:
   #     - "set [the] [color of [the]] {name} to {color}"
   #     - "set [the] {name} [color] to {color}"
   #   domains:
   #     - "light"
+  #   light_supports_color: true
 
   # # doors and windows
   # - "(open|close) [the] (blinds|curtains|windows) in [the] {area}"

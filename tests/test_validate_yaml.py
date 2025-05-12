@@ -186,6 +186,8 @@ def test_validate_sentences(language: str) -> None:
         lang_sentences_dict = yaml.load(lang_sentences_file)
         validate_with_humanized_errors(lang_sentences_dict, SENTENCES_SCHEMA)
 
+    assert lang_sentences_dict.get("language") == language
+
 
 @pytest.mark.parametrize("language", TEST_LANGUAGES)
 def test_validate_fixtures(language: str) -> None:
@@ -200,3 +202,5 @@ def test_validate_fixtures(language: str) -> None:
     ) as lang_test_fixtures_file:
         lang_test_fixtures_dict = yaml.load(lang_test_fixtures_file)
         validate_with_humanized_errors(lang_test_fixtures_dict, FIXTURES_SCHEMA)
+
+    assert lang_test_fixtures_dict.get("language") == language

@@ -3,7 +3,6 @@
 import re
 import shutil
 import sys
-import warnings
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -63,40 +62,30 @@ async def do_transcribe_recognize(
     lang_resources: Resources, wav_path: Path, generated: bool
 ) -> None:
     """Test transcribing expected sentences."""
-    if wav_path.name.startswith("oov_"):
-        expected_texts = {""}
-    else:
-        text_path = wav_path.with_suffix(".txt")
-        if text_path.exists():
-            expected_texts = set(
-                filter(
-                    None,
-                    text_path.read_text(encoding="utf-8").splitlines(keepends=False),
-                )
-            )
-        else:
-            expected_texts = {wav_path.stem}
-
     actual_text = await transcribe(
         lang_resources.model,
         SETTINGS,
         wav_audio_stream(wav_path, lang_resources.vad),
     )
 
-    if generated:
-        if actual_text not in expected_texts:
-            warnings.warn(
-                UserWarning(
-                    "Got unexpected transcript: "
-                    f"actual={actual_text}, "
-                    f"expected={expected_texts}, "
-                    f"file={wav_path}"
-                )
+    if wav_path.name.startswith("oov_"):
+        # Out of vocabulary should produce empty transcript
+        assert not actual_text, f"Expected no transcript for OOV: {wav_path}"
+        return
+
+    assert actual_text, f"Got empty transcript for: {wav_path}"
+    text_path = wav_path.with_suffix(".txt")
+    if text_path.exists():
+        expected_texts = set(
+            filter(
+                None,
+                text_path.read_text(encoding="utf-8").splitlines(keepends=False),
             )
+        )
     else:
-        assert (
-            actual_text in expected_texts
-        ), f"Got unexpected transcript for: {wav_path}"
+        expected_texts = {wav_path.stem}
+
+    assert actual_text in expected_texts, f"Got unexpected transcript for: {wav_path}"
 
 
 def gen_test(language: str, wav_path: Path, generated: bool) -> None:
@@ -118,7 +107,7 @@ def gen_test(language: str, wav_path: Path, generated: bool) -> None:
     else:
         gen = ""
 
-    test_func.__name__ = f"test_transcribe_{language}_{gen}{text_sanitized}"
+    test_func.__name__ = f"test_transcribe_{gen}{text_sanitized}"
     setattr(sys.modules[__name__], test_func.__name__, test_func)
 
 

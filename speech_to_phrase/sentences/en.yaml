@@ -59,8 +59,6 @@ data:
     light_supports_brightness: true
 
   - sentences:
-      - "set [the] brightness of [the] {name} to {brightness} percent"
-      - "set [the] {name} brightness to {brightness} percent"
       - "set [the] [color of [the]] {name} to {color}"
       - "set [the] {name} [color] to {color}"
     domains:
