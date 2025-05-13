@@ -26,6 +26,7 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - Português (Portuguese, Portugal)
 - Polski (Polish)
 - हिन्दी (Hindi)
+- Euskara (Basque)
 
 [Supported voice commands](SENTENCES.md) vary by language.
 

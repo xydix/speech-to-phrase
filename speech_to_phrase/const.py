@@ -44,6 +44,7 @@ class Language(str, Enum):
     PORTUGUESE_PORTUGAL = "pt_PT"
     POLISH = "pl"
     HINDI = "hi"
+    BASQUE = "eu"
 
 
 class Settings:

@@ -231,6 +231,19 @@ MODELS: Dict[str, Model] = {
         sentences_language="hi",
         number_language="hi",
     ),
+    Language.BASQUE.value: Model(
+        id="eu_ES-coqui",
+        type=ModelType.COQUI_STT,
+        language="eu_ES",
+        language_family="eu",
+        description="Basque Coqui STT model",
+        version="0.1.1",
+        author="Francis Tyers",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="eu",
+        number_language="eu",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]

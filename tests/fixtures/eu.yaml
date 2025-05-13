@@ -1,0 +1,7 @@
+---
+language: "eu"
+
+fixtures:
+  entities:
+    - name: "Logelako lanpara"
+      domain: "light"
