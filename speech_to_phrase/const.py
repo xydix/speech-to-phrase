@@ -49,6 +49,7 @@ class Language(str, Enum):
     FINNISH = "fi"
     MONGOLIAN = "mn"
     SLOVENIAN = "sl"
+    SWAHILI = "sw"
 
 
 class Settings:

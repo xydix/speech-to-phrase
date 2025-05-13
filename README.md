@@ -30,6 +30,7 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - Suomi (Finnish)
 - монгол хэл (Mongolian)
 - Slovenščina (Slovenian)
+- Kiswahili (Swahili)
 
 [Supported voice commands](SENTENCES.md) vary by language.
 
