@@ -41,6 +41,7 @@ class Language(str, Enum):
     CZECH = "cs"
     CATALAN = "ca"
     ROMANIAN = "ro"
+    PORTUGUESE_PORTUGAL = "pt_PT"
 
 
 class Settings:

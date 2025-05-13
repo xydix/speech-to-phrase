@@ -14,7 +14,7 @@ from pysilero_vad import SileroVoiceActivityDetector
 
 from speech_to_phrase import MODELS, Model, Things, train, transcribe
 from speech_to_phrase.audio import wav_audio_stream
-from speech_to_phrase.util import yaml
+from speech_to_phrase.util import get_language_family, yaml
 
 from . import SETTINGS, TEST_LANGUAGES, TESTS_DIR
 
@@ -36,6 +36,9 @@ async def lang_resources_fixture(request) -> Resources:
     """Load language resources and train STP model."""
     language = request.param
     lang_intents_dict = get_intents(language)
+    if not lang_intents_dict:
+        lang_intents_dict = get_intents(get_language_family(language))
+
     assert lang_intents_dict, f"No intents for language: {language}"
 
     with open(

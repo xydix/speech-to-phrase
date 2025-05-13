@@ -17,7 +17,7 @@ from hassil import (
 from home_assistant_intents import get_intents
 
 from speech_to_phrase.lang_sentences import LanguageData, SentenceBlock
-from speech_to_phrase.util import yaml
+from speech_to_phrase.util import get_language_family, yaml
 
 from . import SETTINGS, TEST_LANGUAGES
 
@@ -34,6 +34,9 @@ class Resources:
 def lang_resources_fixture(request) -> Resources:
     language = request.param
     lang_intents_dict = get_intents(language)
+    if not lang_intents_dict:
+        lang_intents_dict = get_intents(get_language_family(language))
+
     assert lang_intents_dict, f"No intents for language: {language}"
 
     lang_lists = lang_intents_dict.setdefault("lists", {})

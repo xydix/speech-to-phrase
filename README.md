@@ -23,6 +23,7 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - Català (Catalan)
 - Greek (Ελληνικά)
 - Română (Romanian)
+- Português (Portuguese, Portugal)
 
 [Supported voice commands](SENTENCES.md) vary by language.
 
