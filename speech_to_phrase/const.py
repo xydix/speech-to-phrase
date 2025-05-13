@@ -46,6 +46,7 @@ class Language(str, Enum):
     HINDI = "hi"
     BASQUE = "eu"
     PERSIAN = "fa"
+    FINNISH = "fi"
 
 
 class Settings:

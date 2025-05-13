@@ -257,6 +257,19 @@ MODELS: Dict[str, Model] = {
         sentences_language="fa",
         number_language="fa",
     ),
+    Language.FINNISH.value: Model(
+        id="fi_FI-coqui",
+        type=ModelType.COQUI_STT,
+        language="fi_FI",
+        language_family="fi",
+        description="Finnish Coqui STT model",
+        version="0.1.1",
+        author="Francis Tyers",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="fi",
+        number_language="fi",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]

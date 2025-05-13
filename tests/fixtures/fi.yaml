@@ -1,0 +1,7 @@
+---
+language: "fi"
+
+fixtures:
+  entities:
+    - name: "Eteisen Lamppu"
+      domain: "light"
