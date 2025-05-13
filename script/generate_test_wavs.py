@@ -25,6 +25,8 @@ from hassil import (
 )
 from ruamel.yaml import YAML
 
+from speech_to_phrase.lang_sentences import LanguageData
+
 _DIR = Path(__file__).parent
 _REPO_DIR = _DIR.parent
 _STP_DIR = _REPO_DIR / "speech_to_phrase"
@@ -86,7 +88,8 @@ def main() -> int:
         with open(sentences_path, "r", encoding="utf-8") as sentences_file:
             sentences_dict = yaml.load(sentences_file)
 
-        for list_name, list_values in sentences_dict.get("lists", {}).items():
+        lang_data = LanguageData.from_dict(sentences_dict)
+        for list_name, list_values in lang_data.list_values.items():
             if list_name not in lang_slot_lists:
                 lang_slot_lists[list_name] = list_values
 
@@ -121,7 +124,9 @@ def main() -> int:
                     ],
                 }
             else:
-                sen_slot_lists = lang_slot_lists
+                sen_slot_lists = dict(lang_slot_lists)
+
+            lang_data.add_transformed_lists(sen_slot_lists)
 
             for template_text in sentence_info["sentences"]:
                 sentence = parse_sentence(template_text)

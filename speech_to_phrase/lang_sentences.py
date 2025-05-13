@@ -1,5 +1,6 @@
 """Lists and sentences for a language."""
 
+import itertools
 import re
 from dataclasses import dataclass, fields
 from typing import Any, Optional
@@ -169,10 +170,32 @@ class LanguageData:
             transformed_lists=transformed_lists,
         )
 
-    def get_transformed_lists(
+    def add_transformed_lists(
+        self, list_values: dict[str, list[str]]
+    ) -> dict[str, list[str]]:
+        """Add transformed versions of list values."""
+        tr_list_values: dict[str, list[str]] = {}
+        for src_list_name, src_list_values in itertools.chain(
+            self.list_values.items(), list_values.items()
+        ):
+            for tr_list_name, tr_list in self.transformed_lists.items():
+                if tr_list.source_list_name != src_list_name:
+                    continue
+
+                tr_list_values[tr_list_name] = [
+                    output_value
+                    for value in src_list_values
+                    for output_value in tr_list.apply(value)
+                ]
+
+        list_values.update(tr_list_values)
+
+        return tr_list_values
+
+    def add_transformed_slot_lists(
         self, slot_lists: dict[str, SlotList]
     ) -> dict[str, TextSlotList]:
-        """Get transformed versions of slot lists."""
+        """Add transformed versions of slot lists."""
         tr_slot_lists: dict[str, TextSlotList] = {}
 
         for list_name, slot_list in slot_lists.items():
@@ -196,6 +219,8 @@ class LanguageData:
                         for output_value in tr_list.apply(value.text_in.text)
                     ],
                 )
+
+        slot_lists.update(tr_slot_lists)
 
         return tr_slot_lists
 

@@ -15,6 +15,60 @@ lists:
     - "rosa"
     - "turchese"
 
+transformations:
+  de:
+    # If the regular expression matches...
+    - match: "^[aeiouàèéìòóù]"
+      # ...output these strings with the matching value:
+      outputs:
+        - "dell'{value}"
+        - "{value}"
+    # If no matches, output these strings with the value:
+    - outputs:
+        - "del {value}"
+        - "della {value}"
+        - "degli {value}"
+        - "delle {value}"
+        - "{value}"
+  le:
+    - match: "^[aeiouàèéìòóù]"
+      outputs:
+        - "l'{value}"
+        - "{value}"
+    - outputs:
+        - "lo {value}"
+        - "la {value}"
+        - "gli {value}"
+        - "le {value}"
+        - "{value}"
+
+# Apply transformations to different source lists to produce new lists.
+transformed_lists:
+  de_name:
+    source: "name"
+    transformations:
+      - "de"
+  de_area:
+    source: "area"
+    transformations:
+      - "de"
+  de_floor:
+    source: "floor"
+    transformations:
+      - "de"
+  le_name:
+    source: "name"
+    transformations:
+      - "le"
+  le_area:
+    source: "area"
+    transformations:
+      - "le"
+  le_floor:
+    source: "floor"
+    transformations:
+      - "le"
+
 data:
   # cancel
   - "lascia (stare|perdere)"
@@ -41,13 +95,13 @@ data:
 
   # lights (name)
   - sentences:
-      - "imposta la luminosità [del |della |degli |delle |dell']{name} al {brightness} percento"
+      - "imposta la luminosità {de_name} al {brightness} percento"
     domains:
       - "light"
     light_supports_brightness: true
 
   - sentences:
-      - "imposta [il |la |gli |le |l']{name} su {color}"
+      - "imposta {le_name} su {color}"
     domains:
       - "light"
     light_supports_color: true
@@ -56,8 +110,8 @@ data:
   # - "(open|close) [the] (blinds|curtains|windows) in [the] {area}"
   # - "(open|close) [the] {area} (blinds|curtains|windows)"
   - sentences:
-      - "(apri|chiudi) [il |la |gli |le |l']{name}"
-      - "[il |la |gli |le |l']{name} è (apert|chius)(o|a|e|i)"
+      - "(apri|chiudi) {le_name}"
+      - "{le_name} è (apert|chius)(o|a|e|i)"
     domains:
       - "cover"
 
@@ -70,7 +124,7 @@ data:
 
   # generic on/off
   - sentences:
-      - "(accendi|spegni) [il |la |gli |le |l']{name}"
+      - "(accendi|spegni) {le_name}"
     domains:
       - "light"
       - "switch"

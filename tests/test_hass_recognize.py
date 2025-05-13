@@ -90,7 +90,9 @@ def do_recognize(
             ),
         }
     else:
-        sen_slot_lists = lang_resources.intents.slot_lists
+        sen_slot_lists = dict(lang_resources.intents.slot_lists)
+
+    lang_data.add_transformed_slot_lists(lang_resources.intents.slot_lists)
 
     domains_to_check: set[str] = set(sen_block.domains or [])
 

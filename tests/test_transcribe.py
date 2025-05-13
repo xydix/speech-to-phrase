@@ -8,6 +8,8 @@ from pathlib import Path
 
 import pytest
 import pytest_asyncio
+from hassil import Intents, recognize_best
+from home_assistant_intents import get_intents
 from pysilero_vad import SileroVoiceActivityDetector
 
 from speech_to_phrase import MODELS, Model, Things, train, transcribe
@@ -22,6 +24,7 @@ class Resources:
     """Resources for a language."""
 
     language: str
+    intents: Intents
     test_things: Things
     model: Model
     wav_dir: Path
@@ -32,6 +35,8 @@ class Resources:
 async def lang_resources_fixture(request) -> Resources:
     """Load language resources and train STP model."""
     language = request.param
+    lang_intents_dict = get_intents(language)
+    assert lang_intents_dict, f"No intents for language: {language}"
 
     with open(
         TESTS_DIR / "fixtures" / f"{language}.yaml", "r", encoding="utf-8"
@@ -40,6 +45,9 @@ async def lang_resources_fixture(request) -> Resources:
 
     assert fixtures_dict["language"] == language
     test_things = Things.from_dict(fixtures_dict["fixtures"])
+
+    lang_lists = lang_intents_dict.setdefault("lists", {})
+    lang_lists.update(test_things.to_lists_dict())
 
     # Train STP model
     model = MODELS[language]
@@ -51,6 +59,7 @@ async def lang_resources_fixture(request) -> Resources:
 
     return Resources(
         language=language,
+        intents=Intents.from_dict(lang_intents_dict),
         test_things=test_things,
         model=model,
         wav_dir=TESTS_DIR / "wav" / language,
@@ -74,18 +83,25 @@ async def do_transcribe_recognize(
         return
 
     assert actual_text, f"Got empty transcript for: {wav_path}"
-    text_path = wav_path.with_suffix(".txt")
-    if text_path.exists():
-        expected_texts = set(
-            filter(
-                None,
-                text_path.read_text(encoding="utf-8").splitlines(keepends=False),
-            )
-        )
-    else:
-        expected_texts = {wav_path.stem}
+    expected_text = wav_path.stem
 
-    assert actual_text in expected_texts, f"Got unexpected transcript for: {wav_path}"
+    if actual_text != expected_text:
+        # Check that the result would be the same in Home Assistant
+        error_info = (
+            f"expected_text='{expected_text}'"
+            f"actual_text='{actual_text}', "
+            f"file={wav_path}"
+        )
+        actual_result = recognize_best(
+            actual_text, lang_resources.intents, best_slot_name="name"
+        )
+        expected_result = recognize_best(
+            expected_text, lang_resources.intents, best_slot_name="name"
+        )
+
+        assert (actual_result.intent.name == expected_result.intent.name) and (
+            actual_result.entities == expected_result.entities
+        ), f"Transcript does not match: {error_info}"
 
 
 def gen_test(language: str, wav_path: Path, generated: bool) -> None:

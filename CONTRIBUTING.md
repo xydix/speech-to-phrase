@@ -84,7 +84,13 @@ When writing sentences for light brightness and timers, the following shared lis
 * `{minutes}` - mintues from 2-20, then 20-100 in steps of 10, plus 45
 * `{hours}` - hours from 2-24
 
-These lists strike a balance between covering what users will likely use and keeping the number of possible sentences small. Note that `{seconds}`, `{minutes}`, and `{hours}` do not include the value 1. Since this is almost always handled differently grammatically (1 minute vs. 2 minutes), you need to add timer sentences specific for values of 1.
+These lists strike a balance between covering what users will likely use and keeping the number of possible sentences small. Note that `{seconds}`, `{minutes}`, and `{hours}` do not include the value 1. Since this is almost always handled differently grammatically (1 minute vs. 2 minutes), you need to add timer sentences specifically for values of 1.
+
+### Tests
+
+Sentence templates are tested to ensure that every possible sentence can be recognized by Home Assistant. This can be slow if there are many possible sentences, which is another reason to keep things as small as possible.
+
+
 
 <!-- Links -->
 [entities]: https://www.home-assistant.io/docs/configuration/entities_domains/

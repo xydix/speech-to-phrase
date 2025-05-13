@@ -133,8 +133,7 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
                 merge_dict(sentences_dict, yaml.load(custom_sentences_file) or {})
 
     lang_intents = Intents.from_dict(sentences_dict)
-    tr_lists = lang_data.get_transformed_lists(lang_intents.slot_lists)
-    lang_intents.slot_lists.update(tr_lists)
+    tr_lists = lang_data.add_transformed_slot_lists(lang_intents.slot_lists)
 
     # Write YAML with training sentences (includes HA lists, triggers, etc.)
     training_sentences_path = settings.training_sentences_path(model.id)
