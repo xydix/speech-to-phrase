@@ -47,6 +47,7 @@ dev = [
     "tox==4.23.2",
     "build==1.2.2",
     "home-assistant-intents==2025.3.28",
+    "regex==2024.11.6",
 ]
 
 [project.urls]

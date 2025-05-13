@@ -1,0 +1,10 @@
+---
+language: "cs"
+
+fixtures:
+  entities:
+    - name: "předsíň"
+      domain: "light"
+
+    - name: "Kuchyňský vypínač"
+      domain: "switch"

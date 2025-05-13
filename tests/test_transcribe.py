@@ -1,6 +1,5 @@
 """Test transcribing and recognition for each language."""
 
-import re
 import shutil
 import sys
 from dataclasses import dataclass
@@ -8,6 +7,7 @@ from pathlib import Path
 
 import pytest
 import pytest_asyncio
+import regex as re
 from hassil import Intents, recognize_best
 from home_assistant_intents import get_intents
 from pysilero_vad import SileroVoiceActivityDetector
@@ -115,7 +115,7 @@ def gen_test(language: str, wav_path: Path, generated: bool) -> None:
     text = wav_path.stem
     text_sanitized = text.lower()
     text_sanitized = re.sub(r"(?:\s+)|(?:[-]+)", "_", text_sanitized)
-    text_sanitized = re.sub(r"[^a-zàâäéèêëîïôöùúûüÿ0-9_]", "", text_sanitized)
+    text_sanitized = re.sub(r"[^\p{L}0-9_]", "", text_sanitized)
 
     if generated:
         gen = "gen_"

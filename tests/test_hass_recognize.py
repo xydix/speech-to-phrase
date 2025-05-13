@@ -1,11 +1,11 @@
 """Test that Speech-to-Phrase sentences will be recognized by Home Assistant."""
 
 import itertools
-import re
 import sys
 from dataclasses import dataclass
 
 import pytest
+import regex as re
 from hassil import (
     Intents,
     SlotList,
@@ -137,7 +137,7 @@ def gen_test(
     text_sanitized = text.lower()
     text_sanitized = re.sub(r"(?:\s+)|(?:[-|]+)", "_", text_sanitized)
     text_sanitized = re.sub(r"[_]+", "_", text_sanitized)
-    text_sanitized = re.sub(r"[^a-zàâäéèêëîïôöùúûüÿ0-9_]", "", text_sanitized)
+    text_sanitized = re.sub(r"[^\p{L}0-9_]", "", text_sanitized)
 
     test_func.__name__ = f"test_transcribe_{text_sanitized}"
     setattr(sys.modules[__name__], test_func.__name__, test_func)

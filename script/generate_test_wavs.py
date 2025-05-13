@@ -10,6 +10,7 @@ import tempfile
 from collections.abc import Iterable
 from functools import partial
 from pathlib import Path
+from typing import Union
 from urllib.request import Request, urlopen
 
 from hassil import (
@@ -37,9 +38,7 @@ _BACKGROUND_NOISE_WAV = _TESTS_DIR / "wav" / "background_noise.wav"
 
 _LOGGER = logging.getLogger(__name__)
 
-TTS_LANG = {
-    "en": "en-US",
-}
+TTS_LANG = {"en": "en-US", "el": "el-GR", "cs": "cs-CZ"}
 
 
 def main() -> int:
@@ -99,10 +98,14 @@ def main() -> int:
             fixtures_dict = yaml.load(fixtures_file)["fixtures"]
 
         if "areas" in fixtures_dict:
-            lang_slot_lists["area"] = [a["name"] for a in fixtures_dict["areas"]]
+            lang_slot_lists["area"] = [
+                name for a in fixtures_dict["areas"] for name in coerce_list(a["name"])
+            ]
 
         if "floors" in fixtures_dict:
-            lang_slot_lists["floor"] = [a["name"] for a in fixtures_dict["floors"]]
+            lang_slot_lists["floor"] = [
+                name for a in fixtures_dict["floors"] for name in coerce_list(a["name"])
+            ]
 
         for list_name, list_values in fixtures_dict.get("lists", {}).items():
             if list_name not in lang_slot_lists:
@@ -118,8 +121,9 @@ def main() -> int:
                 sen_slot_lists = {
                     **lang_slot_lists,
                     "name": [
-                        e["name"]
+                        name
                         for e in fixtures_dict["entities"]
+                        for name in coerce_list(e["name"])
                         if e["domain"] in name_domains
                     ],
                 }
@@ -160,6 +164,13 @@ def main() -> int:
                 print("DELETED:", gen_wav_path)
 
     return 0
+
+
+def coerce_list(str_or_list: Union[str, list[str]]) -> list[str]:
+    if isinstance(str_or_list, str):
+        return [str_or_list]
+
+    return str_or_list
 
 
 # -----------------------------------------------------------------------------
