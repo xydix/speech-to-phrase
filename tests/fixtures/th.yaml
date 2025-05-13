@@ -1,0 +1,7 @@
+---
+language: "th"
+
+fixtures:
+  entities:
+    - name: "ไฟห้องน้ำ"
+      domain: "light"

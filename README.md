@@ -31,6 +31,8 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - монгол хэл (Mongolian)
 - Slovenščina (Slovenian)
 - Kiswahili (Swahili)
+- ภาษาไทย (Thai)
+- Türkçe (Turkish)
 
 [Supported voice commands](SENTENCES.md) vary by language.
 
