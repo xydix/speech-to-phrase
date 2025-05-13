@@ -172,6 +172,17 @@ class Things:
                         "light_supports_brightness"
                     ),
                     light_supports_color=entity_dict.get("light_supports_color"),
+                    fan_supports_speed=entity_dict.get("fan_supports_speed"),
+                    cover_supports_position=entity_dict.get("cover_supports_position"),
+                    media_player_supports_pause=entity_dict.get(
+                        "media_player_supports_pause"
+                    ),
+                    media_player_supports_volume_set=entity_dict.get(
+                        "media_player_supports_volume_set"
+                    ),
+                    media_player_supports_next_track=entity_dict.get(
+                        "media_player_supports_next_track"
+                    ),
                 )
                 for entity_dict in things_dict.get("entities", [])
             ],

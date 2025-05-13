@@ -176,9 +176,3 @@ data:
   #     - "what is [the [value of [the]]] {name}"
   #   domains:
   #     - "sensor"
-
-  # # todo
-  # - sentences:
-  #     - "add {todo_item} to [the|my] {name}"
-  #   domains:
-  #     - "todo"
