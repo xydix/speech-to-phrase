@@ -38,7 +38,7 @@ _BACKGROUND_NOISE_WAV = _TESTS_DIR / "wav" / "background_noise.wav"
 
 _LOGGER = logging.getLogger(__name__)
 
-TTS_LANG = {"en": "en-US", "el": "el-GR", "cs": "cs-CZ"}
+TTS_LANG = {"en": "en-US", "el": "el-GR", "cs": "cs-CZ", "ca": "ca-ES"}
 
 
 def main() -> int:

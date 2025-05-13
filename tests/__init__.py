@@ -18,13 +18,4 @@ SETTINGS = Settings(
     custom_sentences_dirs=[TESTS_DIR / "custom_sentences"],
 )
 
-TEST_LANGUAGES = [
-    Language.ENGLISH.value,
-    Language.FRENCH.value,
-    Language.GERMAN.value,
-    Language.SPANISH.value,
-    Language.DUTCH.value,
-    Language.ITALIAN.value,
-    Language.RUSSIAN.value,
-    Language.CZECH.value,
-]
+TEST_LANGUAGES = [lang.value for lang in Language]

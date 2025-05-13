@@ -95,9 +95,11 @@ async def do_transcribe_recognize(
         actual_result = recognize_best(
             actual_text, lang_resources.intents, best_slot_name="name"
         )
+        assert actual_result is not None, f"Transcript does not match: {error_info}"
         expected_result = recognize_best(
             expected_text, lang_resources.intents, best_slot_name="name"
         )
+        assert expected_result is not None, f"Transcript does not match: {error_info}"
 
         assert (actual_result.intent.name == expected_result.intent.name) and (
             actual_result.entities == expected_result.entities

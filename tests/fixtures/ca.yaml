@@ -1,0 +1,7 @@
+---
+language: "ca"
+
+fixtures:
+  entities:
+    - name: "Llum Dormitori"
+      domain: "light"

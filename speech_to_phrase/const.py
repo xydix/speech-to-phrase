@@ -39,6 +39,7 @@ class Language(str, Enum):
     GREEK = "el"
     RUSSIAN = "ru"
     CZECH = "cs"
+    CATALAN = "ca"
 
 
 class Settings:

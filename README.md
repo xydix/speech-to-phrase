@@ -12,12 +12,17 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 
 ## Supported languages
 
-- [English](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/english.md)
-- [Français (French)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/french.md)
-- [Deutsch (German)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/german.md)
-- [Nederlands (Dutch)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/dutch.md)
-- [Spanish (Español)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/spanish.md)
-- [Italian (Italiano)](https://github.com/OHF-Voice/speech-to-phrase/blob/main/docs/italian.md)
+- English
+- Français (French)
+- Deutsch (German)
+- Nederlands (Dutch)
+- Spanish (Español)
+- Italian (Italiano)
+- Русский (Russian)
+- Čeština (Czech)
+- Català (Catalan)
+
+See [supported voice commands](SENTENCES.md).
 
 ## Custom sentences
 
