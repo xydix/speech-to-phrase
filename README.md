@@ -29,6 +29,7 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - Euskara (Basque)
 - Suomi (Finnish)
 - монгол хэл (Mongolian)
+- Slovenščina (Slovenian)
 
 [Supported voice commands](SENTENCES.md) vary by language.
 

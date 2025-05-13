@@ -283,6 +283,19 @@ MODELS: Dict[str, Model] = {
         sentences_language="mn",
         number_language="mn",
     ),
+    Language.SLOVENIAN.value: Model(
+        id="sl_SL-coqui",
+        type=ModelType.COQUI_STT,
+        language="sl_SL",
+        language_family="sl",
+        description="Slovenian Coqui STT model",
+        version="0.1.1",
+        author="Francis Tyers",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="sl",
+        number_language="sl",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]
