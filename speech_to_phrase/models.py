@@ -270,6 +270,19 @@ MODELS: Dict[str, Model] = {
         sentences_language="fi",
         number_language="fi",
     ),
+    Language.MONGOLIAN.value: Model(
+        id="mn_MN-coqui",
+        type=ModelType.COQUI_STT,
+        language="mn_MN",
+        language_family="mn",
+        description="Mongolian Coqui STT model",
+        version="0.1.1",
+        author="Francis Tyers",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="mn",
+        number_language="mn",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]

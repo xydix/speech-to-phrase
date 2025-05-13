@@ -47,6 +47,7 @@ class Language(str, Enum):
     BASQUE = "eu"
     PERSIAN = "fa"
     FINNISH = "fi"
+    MONGOLIAN = "mn"
 
 
 class Settings:

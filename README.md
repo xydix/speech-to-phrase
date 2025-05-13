@@ -27,6 +27,8 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - Polski (Polish)
 - हिन्दी (Hindi)
 - Euskara (Basque)
+- Suomi (Finnish)
+- монгол хэл (Mongolian)
 
 [Supported voice commands](SENTENCES.md) vary by language.
 
