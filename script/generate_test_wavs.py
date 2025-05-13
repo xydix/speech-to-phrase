@@ -44,6 +44,7 @@ TTS_LANG = {
     "cs": "cs-CZ",
     "ca": "ca-ES",
     "pt_PT": "pt-PT",
+    "hi": "hi-IN",
 }
 
 

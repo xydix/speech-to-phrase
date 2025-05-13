@@ -91,7 +91,7 @@ async def do_transcribe_recognize(
     if actual_text != expected_text:
         # Check that the result would be the same in Home Assistant
         error_info = (
-            f"expected_text='{expected_text}'"
+            f"expected_text='{expected_text}', "
             f"actual_text='{actual_text}', "
             f"file={wav_path}"
         )

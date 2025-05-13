@@ -24,6 +24,8 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - Greek (Ελληνικά)
 - Română (Romanian)
 - Português (Portuguese, Portugal)
+- Polski (Polish)
+- हिन्दी (Hindi)
 
 [Supported voice commands](SENTENCES.md) vary by language.
 

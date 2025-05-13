@@ -205,6 +205,32 @@ MODELS: Dict[str, Model] = {
         sentences_language="pt_PT",
         number_language="pt_PT",
     ),
+    Language.POLISH.value: Model(
+        id="pl_PL-coqui",
+        type=ModelType.COQUI_STT,
+        language="pl_PL",
+        language_family="pl",
+        description="Polish Coqui STT model",
+        version="0.0.1",
+        author="DANBER",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="pl",
+        number_language="pl",
+    ),
+    Language.HINDI.value: Model(
+        id="hi_IN-coqui",
+        type=ModelType.COQUI_STT,
+        language="hi_IN",
+        language_family="hi",
+        description="Hindi Coqui STT model",
+        version="0.8.99",
+        author="Bülent Özden",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="hi",
+        number_language="hi",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]

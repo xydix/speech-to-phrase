@@ -1,0 +1,7 @@
+---
+language: "hi"
+
+fixtures:
+  entities:
+    - name: "शयनकक्ष का दीपक"
+      domain: "light"
