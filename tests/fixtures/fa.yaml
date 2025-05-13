@@ -1,0 +1,7 @@
+---
+language: "fa"
+
+fixtures:
+  entities:
+    - name: "چراغ اتاق خواب"
+      domain: "light"

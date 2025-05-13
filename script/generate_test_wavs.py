@@ -46,6 +46,7 @@ TTS_LANG = {
     "pt_PT": "pt-PT",
     "hi": "hi-IN",
     "eu": "eu-ES",
+    "fa": "fa-IR",
 }
 
 

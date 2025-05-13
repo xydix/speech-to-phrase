@@ -244,6 +244,19 @@ MODELS: Dict[str, Model] = {
         sentences_language="eu",
         number_language="eu",
     ),
+    Language.PERSIAN.value: Model(
+        id="fa_IR-coqui",
+        type=ModelType.COQUI_STT,
+        language="fa_IR",
+        language_family="fa",
+        description="Persian Coqui STT model",
+        version="0.1.0",
+        author="oct4pie",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="fa",
+        number_language="fa",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]
