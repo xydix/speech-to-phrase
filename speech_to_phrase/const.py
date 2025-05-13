@@ -40,6 +40,7 @@ class Language(str, Enum):
     RUSSIAN = "ru"
     CZECH = "cs"
     CATALAN = "ca"
+    ROMANIAN = "ro"
 
 
 class Settings:

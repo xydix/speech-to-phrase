@@ -21,8 +21,10 @@ This is accomplished by combining [pre-defined sentence templates](speech_to_phr
 - Русский (Russian)
 - Čeština (Czech)
 - Català (Catalan)
+- Greek (Ελληνικά)
+- Română (Romanian)
 
-See [supported voice commands](SENTENCES.md).
+[Supported voice commands](SENTENCES.md) vary by language.
 
 ## Custom sentences
 

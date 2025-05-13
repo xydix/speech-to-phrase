@@ -179,6 +179,19 @@ MODELS: Dict[str, Model] = {
         sentences_language="ca",
         number_language="ca",
     ),
+    Language.ROMANIAN.value: Model(
+        id="ro_RO-coqui",
+        type=ModelType.COQUI_STT,
+        language="ro_RO",
+        language_family="ro",
+        description="Romanian Coqui STT model",
+        version="0.1.1",
+        author="Francis Tyers",
+        url="https://github.com/coqui-ai/STT-models",
+        casing=WordCasing.LOWER,
+        sentences_language="ro",
+        number_language="ro",
+    ),
 }
 
 DEFAULT_MODEL = MODELS[Language.ENGLISH]
