@@ -17,7 +17,7 @@ lists:
 transformations:
   le:
     # If the regular expression matches...
-    - match: "^[hàâäéèêëîïôöùûüÿaeiou]"
+    - match: "^[aàâäæeéèêëiîïoôöœuùûüyÿh]"
       # ...output these strings with the matching value:
       outputs:
         - "l'{value}"
@@ -27,6 +27,32 @@ transformations:
         - "le {value}"
         - "la {value}"
         - "les {value}"
+        - "{value}"
+  de_le:
+    # If the regular expression matches...
+    - match: "^[aàâäæeéèêëiîïoôöœuùûüyÿh]"
+      # ...output these strings with the matching value:
+      outputs:
+        - "de l'{value}"
+        - "{value}"
+    # If no matches, output these strings with the value:
+    - outputs:
+        - "du {value}"
+        - "de la {value}"
+        - "des {value}"
+        - "{value}"
+  dans_le:
+    # If the regular expression matches...
+    - match: "^[aàâäæeéèêëiîïoôöœuùûüyÿh]"
+      # ...output these strings with the matching value:
+      outputs:
+        - "dans l'{value}"
+        - "{value}"
+    # If no matches, output these strings with the value:
+    - outputs:
+        - "dans le {value}"
+        - "dans la {value}"
+        - "dans les {value}"
         - "{value}"
 
 # Apply transformations to different source lists to produce new lists.
@@ -43,10 +69,37 @@ transformed_lists:
     source: "floor"
     transformations:
       - "le"
+  de_le_name:
+    source: "name"
+    transformations:
+      - "de_le"
+  de_le_area:
+    source: "area"
+    transformations:
+      - "de_le"
+  de_le_floor:
+    source: "floor"
+    transformations:
+      - "de_le"
+  dans_le_name:
+    source: "name"
+    transformations:
+      - "dans_le"
+  dans_le_area:
+    source: "area"
+    transformations:
+      - "dans_le"
+  dans_le_floor:
+    source: "floor"
+    transformations:
+      - "dans_le"
 
 data:
-  # cancel
+  # Nevermind
+  - "oublie[s]"
   - "annuler"
+  - "chut"
+  - "tais toi"
   - "silence"
 
   # date and time
@@ -60,12 +113,21 @@ data:
     domains:
       - "weather"
 
-  # lights (area)
-  - "(allume|éteins) la lumière"
-  - "(allume|éteins) [toutes] les lumières"
-  - "(allume|éteins) [toutes] les lumières (dans|du|de|des|à|au|aux|sur) {le_area}"
-  - "(allume|éteins) [toutes] les lumières (dans|du|de|des|à|au|aux|sur) {le_floor}"
-  - "allume les lumières en {color}"
+  # Turning on lights per area
+  - "allume[r] [les|la] lumière[s] {de_le_area}"
+  - "allume[r] [les|la] lumière[s] {dans_le_area}"
+  - "allume[r] {le_area}"
+
+  # Turning on lights per area (context awareness)
+  - "allume[r] [les|la] lumière[s]
+
+  # Turning on lights per floor
+  - "allume[r] [les|la] lumière[s] {de_le_floor}"
+  - "allume[r] [les|la] lumière[s] {dans_le_floor}"
+  - "allume[r] {le_floor}"
+
+
+
   # - "set [the] brightness [in here] to {brightness} percent"
   # - "set [the] brightness of [the] {area} to {brightness} percent"
   # - "set [the] {area} brightness to {brightness} percent"
