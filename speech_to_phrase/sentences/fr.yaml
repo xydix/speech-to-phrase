@@ -41,19 +41,6 @@ transformations:
         - "de la {value}"
         - "des {value}"
         - "{value}"
-  dans_le:
-    # If the regular expression matches...
-    - match: "^[aàâäæeéèêëiîïoôöœuùûüyÿh]"
-      # ...output these strings with the matching value:
-      outputs:
-        - "dans l'{value}"
-        - "{value}"
-    # If no matches, output these strings with the value:
-    - outputs:
-        - "dans le {value}"
-        - "dans la {value}"
-        - "dans les {value}"
-        - "{value}"
 
 # Apply transformations to different source lists to produce new lists.
 transformed_lists:
@@ -81,18 +68,6 @@ transformed_lists:
     source: "floor"
     transformations:
       - "de_le"
-  dans_le_name:
-    source: "name"
-    transformations:
-      - "dans_le"
-  dans_le_area:
-    source: "area"
-    transformations:
-      - "dans_le"
-  dans_le_floor:
-    source: "floor"
-    transformations:
-      - "dans_le"
 
 data:
   # Nevermind
@@ -115,7 +90,7 @@ data:
 
   # Turning on lights per area
   - "allume[r] [les|la] lumière[s] {de_le_area}"
-  - "allume[r] [les|la] lumière[s] {dans_le_area}"
+  - "allume[r] [les|la] lumière[s] dans {le_area}"
   - "allume[r] {le_area}"
 
   # Turning on lights per area (context awareness)
@@ -123,12 +98,12 @@ data:
 
   # Turning on lights per floor
   - "éteins|éteindre [les|la] lumière[s] {de_le_floor}"
-  - "éteins|éteindre [les|la] lumière[s] {dans_le_floor}"
+  - "éteins|éteindre [les|la] lumière[s] dans {le_floor}"
   - "éteins|éteindre {le_floor}"
 
   # Turning off lights per area
   - "éteins|éteindre [les|la] lumière[s] {de_le_area}"
-  - "éteins|éteindre [les|la] lumière[s] {dans_le_area}"
+  - "éteins|éteindre [les|la] lumière[s] dans {le_area}"
   - "éteins|éteindre {le_area}"
 
   # Turning off lights per area (context awareness)
@@ -136,12 +111,12 @@ data:
 
   # Turning off lights per floor
   - "éteins|éteindre [les|la] lumière[s] {de_le_floor}"
-  - "éteins|éteindre [les|la] lumière[s] {dans_le_floor}"
+  - "éteins|éteindre [les|la] lumière[s] dans {le_floor}"
   - "éteins|éteindre {le_floor}"
 
   # Setting brightness per area
   - "règle|régler la luminosité {de_le_area} à {brightness} pourcent"
-  - "règle|régler la luminosité {dans_le_area} à {brightness} pourcent"
+  - "règle|régler la luminosité dans {le_area} à {brightness} pourcent"
   - "règle|régler {le_area} à {brightness} pourcent"
   - "allume[r] {le_area} à {brightness} pourcent"
   
@@ -150,16 +125,16 @@ data:
 
   # Setting brightness per floor
   - "règle|régler la luminosité {de_le_floor} à {brightness} pourcent"
-  - "règle|régler la luminosité {dans_le_floor} à {brightness} pourcent"
+  - "règle|régler la luminosité dans {le_floor} à {brightness} pourcent"
   - "règle|régler {le_floor} à {brightness} pourcent"
   - "allume[r] {le_floor} à {brightness} pourcent"
 
   # Setting color per area
   - "allume[r] [les|la] lumière[s] {de_le_area} en {color}"
-  - "allume[r] [les|la] lumière[s] {dans_le_area} en {color}"
+  - "allume[r] [les|la] lumière[s] dans {le_area} en {color}"
   - "allume[r] {le_area} en {color}"
   - "règle|régler [les|la] lumière[s] {de_le_area} en {color}"
-  - "règle|régler [les|la] lumière[s] {dans_le_area} en {color}"
+  - "règle|régler [les|la] lumière[s] dans {le_area} en {color}"
   - "règle|régler {le_area} en {color}"
   
   # Setting color per (context awareness)
@@ -168,10 +143,10 @@ data:
 
   # Setting color per floor
   - "allume[r] [les|la] lumière[s] {de_le_floor} en {color}"
-  - "allume[r] [les|la] lumière[s] {dans_le_floor} en {color}"
+  - "allume[r] [les|la] lumière[s] dans {le_floor} en {color}"
   - "allume[r] {le_floor} en {color}"
   - "règle|régler [les|la] lumière[s] {de_le_floor} en {color}"
-  - "règle|régler [les|la] lumière[s] {dans_le_floor} en {color}"
+  - "règle|régler [les|la] lumière[s] dans {le_floor} en {color}"
   - "règle|régler {le_floor} en {color}"
 
   # # lights (name)
