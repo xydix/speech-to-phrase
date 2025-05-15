@@ -119,21 +119,60 @@ data:
   - "allume[r] {le_area}"
 
   # Turning on lights per area (context awareness)
-  - "allume[r] [les|la] lumière[s]
+  - "allume[r] [les|la] lumière[s]"
 
   # Turning on lights per floor
-  - "allume[r] [les|la] lumière[s] {de_le_floor}"
-  - "allume[r] [les|la] lumière[s] {dans_le_floor}"
-  - "allume[r] {le_floor}"
+  - "éteins|éteindre [les|la] lumière[s] {de_le_floor}"
+  - "éteins|éteindre [les|la] lumière[s] {dans_le_floor}"
+  - "éteins|éteindre {le_floor}"
 
+  # Turning off lights per area
+  - "éteins|éteindre [les|la] lumière[s] {de_le_area}"
+  - "éteins|éteindre [les|la] lumière[s] {dans_le_area}"
+  - "éteins|éteindre {le_area}"
 
+  # Turning off lights per area (context awareness)
+  - "éteins|éteindre [les|la] lumière[s]"
 
-  # - "set [the] brightness [in here] to {brightness} percent"
-  # - "set [the] brightness of [the] {area} to {brightness} percent"
-  # - "set [the] {area} brightness to {brightness} percent"
-  # - "set [the] [color of [the]] {area} lights to {color}"
-  # - "set [the] {area} lights to {color}"
-  # - "set lights in [the] {area} to {color}"
+  # Turning off lights per floor
+  - "éteins|éteindre [les|la] lumière[s] {de_le_floor}"
+  - "éteins|éteindre [les|la] lumière[s] {dans_le_floor}"
+  - "éteins|éteindre {le_floor}"
+
+  # Setting brightness per area
+  - "règle|régler la luminosité {de_le_area} à {brightness} pourcent"
+  - "règle|régler la luminosité {dans_le_area} à {brightness} pourcent"
+  - "règle|régler {le_area} à {brightness} pourcent"
+  - "allume[r] {le_area} à {brightness} pourcent"
+  
+  # Setting brightness per (context awareness)
+  - "règle|régler la luminosité à {brightness} pourcent"
+
+  # Setting brightness per floor
+  - "règle|régler la luminosité {de_le_floor} à {brightness} pourcent"
+  - "règle|régler la luminosité {dans_le_floor} à {brightness} pourcent"
+  - "règle|régler {le_floor} à {brightness} pourcent"
+  - "allume[r] {le_floor} à {brightness} pourcent"
+
+  # Setting color per area
+  - "allume[r] [les|la] lumière[s] {de_le_area} en {color}"
+  - "allume[r] [les|la] lumière[s] {dans_le_area} en {color}"
+  - "allume[r] {le_area} en {color}"
+  - "règle|régler [les|la] lumière[s] {de_le_area} en {color}"
+  - "règle|régler [les|la] lumière[s] {dans_le_area} en {color}"
+  - "règle|régler {le_area} en {color}"
+  
+  # Setting color per (context awareness)
+  - "allume[r] [les|la] lumière[s] en {color}"
+  - "règle|régler [les|la] lumière[s] en {color}"
+
+  # Setting color per floor
+  - "allume[r] [les|la] lumière[s] {de_le_floor} en {color}"
+  - "allume[r] [les|la] lumière[s] {dans_le_floor} en {color}"
+  - "allume[r] {le_floor} en {color}"
+  - "règle|régler [les|la] lumière[s] {de_le_floor} en {color}"
+  - "règle|régler [les|la] lumière[s] {dans_le_floor} en {color}"
+  - "règle|régler {le_floor} en {color}"
 
   # # lights (name)
   # - sentences:
