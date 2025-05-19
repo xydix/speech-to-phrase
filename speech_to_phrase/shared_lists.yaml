@@ -8,6 +8,13 @@ brightness:
     to: 100
     step: 10
 
+# covers
+position:
+  range:
+    from: 10
+    to: 100
+    step: 10
+
 # timers
 seconds:
   range:
