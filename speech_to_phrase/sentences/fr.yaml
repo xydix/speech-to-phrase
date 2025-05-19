@@ -63,7 +63,6 @@ lists:
    - "radio précédente"
    - "média précédent"
 
-
 transformations:
   le:
     # Stating with a vowel (or h) ...
@@ -122,7 +121,7 @@ transformed_lists:
 data:
   # Nevermind
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/homeassistant_HassNevermind.yaml
-  - "oublie[s]"
+  - "oublie[r]"
   - "annuler"
   - "chut"
   - "tais toi"
@@ -146,7 +145,7 @@ data:
 
   # Turning on lights per area 
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  - "allume[r] (les|la) lumière {de_le_area}" #We do not need lumières as it's prononced the same way as lumière
+  - "allume[r] (les|la) lumière {de_le_area}" # We do not need lumières as it's prononced the same way as lumière
   - "allume[r] (les|la) lumière dans {le_area}"
   - "allume[r] {le_area}"
 
@@ -156,9 +155,9 @@ data:
 
   # Turning on lights per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  - "éteins|éteindre (les|la) lumière {de_le_floor}"
-  - "éteins|éteindre (les|la) lumière dans {le_floor}"
-  - "éteins|éteindre {le_floor}"
+  - "allume[r] (les|la) lumière {de_le_floor}"
+  - "allume[r] (les|la) lumière dans {le_floor}"
+  - "allume[r] {le_floor}"
 
   # Turning off lights per area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
@@ -180,7 +179,6 @@ data:
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
   - sentences:
     - "règle|régler la luminosité {de_le_name} à {brightness} pourcent"
-    - "règle|régler la luminosité dans {le_name} à {brightness} pourcent"
     - "règle|régler {le_name} à {brightness} pourcent"
     - "allume[r] {le_name} à {brightness} pourcent"
     domains:
@@ -308,7 +306,7 @@ data:
   # Setting position of covers per name
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassSetPosition.yaml
   - sentences:
-    - "ouvre|ouvrir {le_name} à {position} pourcent"
+    - "ouvre|ouvrir|ferme[r] {le_name} à {position} pourcent"
     - "règle|régler {le_name} à {position} pourcent"
     domains:
       - "cover"
@@ -316,10 +314,10 @@ data:
 
   # Setting position of covers per device class and area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassSetPosition.yaml
-  - "ouvre|ouvrir {le_cover_class} dans {le_area} à {position} pourcent"
-  - "ouvre|ouvrir [tous|toutes] {les_cover_classes} dans {le_area} à {position} pourcent"
-  - "ouvre|ouvrir {le_cover_class} {de_le_area} à {position} pourcent"
-  - "ouvre|ouvrir [tous|toutes] {les_cover_classes} {de_le_area} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] {le_cover_class} dans {le_area} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] [tous|toutes] {les_cover_classes} dans {le_area} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] {le_cover_class} {de_le_area} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] [tous|toutes] {les_cover_classes} {de_le_area} à {position} pourcent"
   - "règle|régler {le_cover_class} dans {le_area} à {position} pourcent"
   - "règle|régler [tous|toutes] {les_cover_classes} dans {le_area} à {position} pourcent"
   - "règle|régler {le_cover_class} {de_le_area} à {position} pourcent"
@@ -328,25 +326,27 @@ data:
   # Setting position of covers per name and area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassSetPosition.yaml
   - sentences:
-    - "ouvre|ouvrir {le_name} dans {le_area} à {position} pourcent"
-    - "ouvre|ouvrir {le_name} {de_le_area} à {position} pourcent"
+    - "ouvre|ouvrir|ferme[r] {le_name} dans {le_area} à {position} pourcent"
+    - "ouvre|ouvrir|ferme[r] {le_name} {de_le_area} à {position} pourcent"
+    - "règle|régler {le_name} dans {le_area} à {position} pourcent"
+    - "règle|régler {le_name} {de_le_area} à {position} pourcent"
     domains:
       - "cover"
     cover_set_position: true
 
   # Setting position of covers per device class and area (context awareness)
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassSetPosition.yaml
-  - "ouvre|ouvrir {le_cover_class} à {position} pourcent"
-  - "ouvre|ouvrir {les_cover_classes} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] {le_cover_class} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] {les_cover_classes} à {position} pourcent"
   - "règle|régler {le_cover_class} à {position} pourcent"
   - "règle|régler {les_cover_classes} à {position} pourcent"
 
   # Setting position of covers per device class and floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassSetPosition.yaml
-  - "ouvre|ouvrir {le_cover_class} dans {le_floor} à {position} pourcent"
-  - "ouvre|ouvrir [tous|toutes] {les_cover_classes} dans {le_floor} à {position} pourcent"
-  - "ouvre|ouvrir {le_cover_class} {de_le_floor} à {position} pourcent"
-  - "ouvre|ouvrir [tous|toutes] {les_cover_classes} {de_le_floor} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] {le_cover_class} dans {le_floor} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] [tous|toutes] {les_cover_classes} dans {le_floor} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] {le_cover_class} {de_le_floor} à {position} pourcent"
+  - "ouvre|ouvrir|ferme[r] [tous|toutes] {les_cover_classes} {de_le_floor} à {position} pourcent"
   - "règle|régler {le_cover_class} dans {le_floor} à {position} pourcent"
   - "règle|régler [tous|toutes] {les_cover_classes} dans {le_floor} à {position} pourcent"
   - "règle|régler {le_cover_class} {de_le_floor} à {position} pourcent"
@@ -535,6 +535,8 @@ data:
   - "minuteur {hours} heures"
   - "minuteur 1 heure 30"
   - "minuteur {hours} heures 30"
+  - "minuteur 1 heure et demie"
+  - "minuteur {hours} heures et demie"
   - "minuteur 1 heure et {minutes} minutes"
   - "minuteur {hours} heures et {minutes} minutes"
 
