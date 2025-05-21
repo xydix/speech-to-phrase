@@ -110,10 +110,10 @@ The following features are available:
 * `light_supports_brightness` - light entity supports setting brightness level
 * `light_supports_color` - light entity supports setting color
 * `fan_supports_speed` - fan entity supports setting speed
-* `cover_set_position` - cover entity supports setting position
-* `media_player_pause` - media player entity can be paused
-* `media_player_next_track` - media player entity can skip to next track
-* `media_player_volume_set` - media player entity volume can be set
+* `cover_supports_position` - cover entity supports setting position
+* `media_player_supports_pause` - media player entity can be paused
+* `media_player_supports_next_track` - media player entity can skip to next track
+* `media_player_supports_volume_set` - media player entity volume can be set
 
 ### List Transformations
 

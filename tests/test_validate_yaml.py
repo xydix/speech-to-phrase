@@ -180,6 +180,13 @@ FIXTURES_SCHEMA = vol.Schema(
     }
 )
 
+TEST_SENTENCES_SCHEMA = vol.Schema(
+    {
+        vol.Required("language"): str,
+        "sentences": [str],
+    }
+)
+
 
 def test_validate_shared_lists() -> None:
     """Validate shared lists."""
@@ -267,3 +274,20 @@ def test_validate_fixtures(language: str) -> None:
         validate_with_humanized_errors(lang_test_fixtures_dict, FIXTURES_SCHEMA)
 
     assert lang_test_fixtures_dict.get("language") == language
+
+
+@pytest.mark.parametrize("language", TEST_LANGUAGES)
+def test_validate_test_sentences(language: str) -> None:
+    """Test that test sentences YAML files match expected schema."""
+    lang_test_sentences_path = TESTS_DIR / "sentences" / f"{language}.yaml"
+    assert (
+        lang_test_sentences_path.exists()
+    ), f"Missing test sentences file for language '{language}' at '{lang_test_sentences_path}'"
+
+    with open(
+        lang_test_sentences_path, "r", encoding="utf-8"
+    ) as lang_test_sentences_file:
+        lang_test_sentences_dict = yaml.load(lang_test_sentences_file)
+        validate_with_humanized_errors(lang_test_sentences_dict, TEST_SENTENCES_SCHEMA)
+
+    assert lang_test_sentences_dict.get("language") == language

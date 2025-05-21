@@ -4,9 +4,9 @@
 # lights
 brightness:
   range:
-    from: 10
+    from: 5
     to: 100
-    step: 10
+    step: 5
 
 # covers
 position:
@@ -19,7 +19,7 @@ position:
 seconds:
   range:
     from: 10
-    to: 100
+    to: 60
     step: 5
 
 minutes:
@@ -27,10 +27,8 @@ minutes:
     - from: 2
       to: 19
     - from: 20
-      to: 100
-      step: 10
-    - from: 45
-      to: 45
+      to: 60
+      step: 5
 
 hours:
   range:

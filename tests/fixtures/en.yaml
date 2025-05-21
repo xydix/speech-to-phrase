@@ -26,6 +26,9 @@ fixtures:
     - name: "Garage Door"
       domain: "cover"
 
+    - name: "Sliding Door"
+      domain: "cover"
+
     - name: "Front Door"
       domain: "lock"
 
