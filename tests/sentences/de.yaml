@@ -1,0 +1,35 @@
+---
+language: "de"
+
+sentences:
+  # cancel
+  - "vergiss es"
+
+  # date and time
+  - "wie spät ist es"
+  - "wie viel uhr ist es"
+  - "welchen tag haben wir heute"
+  - "welches datum ist heute"
+
+  # weather
+  - "wie ist das Wetter"
+  - "wie ist das Wetter in New York"
+  - "was für Wetter hat es in New York"
+
+  # doors and windows
+  - "öffne das Garagentor"
+  - "schließ das Garagentor"
+
+  # generic on/off
+  - "schalte die Lampe an"
+  - "mach die Lampe aus"
+
+  # scripts and scenes
+  - "aktiviere Batteriewarnung Skript"
+  - "aktiviere Partymodus Szene"
+
+  # media
+  - "pause"
+  - "Weiter"
+  - "nächster Titel"
+  - "nächster Song"

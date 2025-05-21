@@ -5,3 +5,5 @@ fixtures:
   entities:
     - name: "Logelako lanpara"
       domain: "light"
+      light_supports_brightness: true
+      light_supports_color: true

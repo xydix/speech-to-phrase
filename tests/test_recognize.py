@@ -52,7 +52,8 @@ def lang_resources_fixture(request, shared_lists: dict[str, Any]) -> Resources:
     for list_name, list_values in sentences_dict.get("lists", {}).items():
         hass_lists[list_name] = {"values": list_values}
 
-    stp_intents_dict = LanguageData.from_dict(sentences_dict).to_intents_dict()
+    lang_data = LanguageData.from_dict(sentences_dict)
+    stp_intents_dict = lang_data.to_intents_dict()
     stp_lists = stp_intents_dict.setdefault("lists", {})
     stp_lists.update(shared_lists)
 
@@ -69,6 +70,7 @@ def lang_resources_fixture(request, shared_lists: dict[str, Any]) -> Resources:
 
     hass_intents = Intents.from_dict(hass_intents_dict)
     stp_intents = Intents.from_dict(stp_intents_dict)
+    lang_data.add_transformed_slot_lists(stp_intents.slot_lists)
 
     with open(
         TESTS_DIR / "sentences" / f"{language}.yaml", "r", encoding="utf-8"

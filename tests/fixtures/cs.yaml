@@ -5,6 +5,8 @@ fixtures:
   entities:
     - name: "předsíň"
       domain: "light"
+      light_supports_brightness: true
+      light_supports_color: true
 
     - name: "Kuchyňský vypínač"
       domain: "switch"
