@@ -208,7 +208,7 @@ async def _create_arpa(
     train_dir: Path,
     tools: SpeechTools,
     order: int = 3,
-    method: str = "witten_bell",
+    method: str = "katz",
 ) -> None:
     """Create n-gram language model from intents."""
     data_dir = train_dir / "data"

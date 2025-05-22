@@ -120,16 +120,19 @@ data:
       - "scene"
 
   # timers
-  - "(zet|maak) [een] timer voor {seconds} secondes"
+  - "(zet|maak) [een] timer voor {seconds} seconden"
   - "(zet|maak) [een] timer voor 1 minuut"
   - "(zet|maak) [een] timer voor {minutes} minuten"
   - "(zet|maak) [een] timer voor anderhalve minuut"
+  - "(zet|maak) [een] timer voor 1 en een halve minuut"
   - "(zet|maak) [een] timer voor {minutes} en een halve minuut"
   - "(zet|maak) [een] timer voor 1 uur"
   - "(zet|maak) [een] timer voor {hours} uur"
   - "(zet|maak) [een] timer voor een half uur"
+  - "(zet|maak) [een] timer voor 1 en een half uur"
   - "(zet|maak) [een] timer voor {hours} en een half uur"
   - "(zet|maak) [een] timer voor 1 uur en 1 minuut"
+  - "(zet|maak) [een] timer voor 1 uur en {minutes} minuten"
   - "(zet|maak) [een] timer voor {hours} uur en {minutes} minuten"
 
   - "(annuleer|stop) [de|mijn|m'n] timer"

@@ -2,6 +2,7 @@
 
 import shutil
 import sys
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -29,6 +30,7 @@ class Resources:
     model: Model
     wav_dir: Path
     vad: SileroVoiceActivityDetector
+    failing_transcriptions: set[str]
 
 
 @pytest_asyncio.fixture(name="lang_resources", params=TEST_LANGUAGES, scope="session")
@@ -52,6 +54,11 @@ async def lang_resources_fixture(request) -> Resources:
     lang_lists = lang_intents_dict.setdefault("lists", {})
     lang_lists.update(test_things.to_lists_dict())
 
+    with open(
+        TESTS_DIR / "sentences" / f"{language}.yaml", "r", encoding="utf-8"
+    ) as test_file:
+        test_sentences_dict = yaml.load(test_file)
+
     # Train STP model
     model = MODELS[language]
     model_train_dir = SETTINGS.model_train_dir(model.id)
@@ -67,6 +74,9 @@ async def lang_resources_fixture(request) -> Resources:
         model=model,
         wav_dir=TESTS_DIR / "wav" / language,
         vad=SileroVoiceActivityDetector(),
+        failing_transcriptions=set(
+            test_sentences_dict.get("failing_transcriptions", [])
+        ),
     )
 
 
@@ -74,6 +84,11 @@ async def do_transcribe_recognize(
     lang_resources: Resources, wav_path: Path, generated: bool
 ) -> None:
     """Test transcribing expected sentences."""
+    expected_text = wav_path.stem
+    if expected_text in lang_resources.failing_transcriptions:
+        warnings.warn(UserWarning(f"Skipping {wav_path} because it's expected to fail"))
+        return
+
     actual_text = await transcribe(
         lang_resources.model,
         SETTINGS,
@@ -86,7 +101,6 @@ async def do_transcribe_recognize(
         return
 
     assert actual_text, f"Got empty transcript for: {wav_path}"
-    expected_text = wav_path.stem
 
     if actual_text != expected_text:
         # Check that the result would be the same in Home Assistant

@@ -30,6 +30,9 @@ fixtures:
     - name: "TV"
       domain: "media_player"
 
+    - name: "Slaapkamerschakelaar"
+      domain: "switch"
+
     - name: "Stealthmodus"
       domain: "script"
 
