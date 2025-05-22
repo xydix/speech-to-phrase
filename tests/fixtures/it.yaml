@@ -24,6 +24,9 @@ fixtures:
     - name: "Porta Principale"
       domain: "lock"
 
+    - name: "Interruttore Cucina"
+      domain: "switch"
+
     - name: "TV"
       domain: "media_player"
 
