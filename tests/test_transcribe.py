@@ -19,6 +19,9 @@ from speech_to_phrase.util import get_language_family, yaml
 
 from . import SETTINGS, TEST_LANGUAGES, TESTS_DIR
 
+CONTEXT_AREA = "<context area>"
+INTENT_CONTEXT = {"area": CONTEXT_AREA}
+
 
 @dataclass
 class Resources:
@@ -110,17 +113,44 @@ async def do_transcribe_recognize(
             f"file={wav_path}"
         )
         actual_result = recognize_best(
-            actual_text, lang_resources.intents, best_slot_name="name"
+            actual_text,
+            lang_resources.intents,
+            intent_context=INTENT_CONTEXT,
+            best_slot_name="name",
         )
         assert actual_result is not None, f"Transcript does not match: {error_info}"
+
+        # Remove context area
+        if ("area" in actual_result.entities) and (
+            actual_result.entities["area"].value == CONTEXT_AREA
+        ):
+            actual_result.entities.pop("area")
+
         expected_result = recognize_best(
-            expected_text, lang_resources.intents, best_slot_name="name"
+            expected_text,
+            lang_resources.intents,
+            intent_context=INTENT_CONTEXT,
+            best_slot_name="name",
         )
         assert expected_result is not None, f"Transcript does not match: {error_info}"
 
-        assert (actual_result.intent.name == expected_result.intent.name) and (
-            actual_result.entities == expected_result.entities
-        ), f"Transcript does not match: {error_info}"
+        # Remove context area
+        if ("area" in expected_result.entities) and (
+            expected_result.entities["area"].value == CONTEXT_AREA
+        ):
+            expected_result.entities.pop("area")
+
+        assert (
+            actual_result.intent.name == expected_result.intent.name
+        ), f"Recognized intents do not match between Speech-to-Phrase and Home Assistant: {error_info}"
+
+        # Only check entity names, not values. This is because some values are
+        # normalized by the Home Assistant intents, such as "rideau" ->
+        # "rideaux" in French. In the futurue, these normalizations should be
+        # codified here so values can be checked too.
+        assert (
+            actual_result.entities.keys() == expected_result.entities.keys()
+        ), f"Recognized entities do not match between Speech-to-Phrase and Home Assistant: {error_info}"
 
 
 def gen_test(language: str, wav_path: Path, generated: bool) -> None:

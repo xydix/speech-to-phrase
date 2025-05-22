@@ -5,13 +5,13 @@ lists:
   color:
     - "blanc"
     - "blanche"
-    - "noir" # We do not need noire as it's pronounce the same way as noir
+    - "noir"  # We do not need noire as it's pronounce the same way as noir
     - "rouge"
     - "orange"
     - "jaune"
     - "vert"
     - "verte"
-    - "bleu" # We do not need bleue as it's pronounce the same way as bleu
+    - "bleu"  # We do not need bleue as it's pronounce the same way as bleu
     - "violet"
     - "violette"
     - "marron"
@@ -145,7 +145,7 @@ data:
 
   # Turning on lights per area 
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  # - "allume[r] (les lumières|la lumière) {de_le_area}" # We do not need lumières as it's pronounced the same way as lumière
+  - "allume[r] (les lumières|la lumière) {de_le_area}" # We do not need lumières as it's pronounced the same way as lumière
   - "allume[r] (les lumières|la lumière) dans {le_area}"
   - "allume[r] {le_area}"
 
@@ -155,13 +155,13 @@ data:
 
   # Turning on lights per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  # - "allume[r] (les lumières|la lumière) {de_le_floor}"
+  - "allume[r] (les lumières|la lumière) {de_le_floor}"
   - "allume[r] (les lumières|la lumière) dans {le_floor}"
   - "allume[r] {le_floor}"
 
   # Turning off lights per area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
-  # - "(éteins|éteindre) (les lumières|la lumière) {de_le_area}"
+  - "(éteins|éteindre) (les lumières|la lumière) {de_le_area}"
   - "(éteins|éteindre) (les lumières|la lumière) dans {le_area}"
   - "(éteins|éteindre) {le_area}"
 
@@ -171,14 +171,14 @@ data:
 
   # Turning off lights per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
-  # - "(éteins|éteindre) (les lumières|la lumière) {de_le_floor}"
+  - "(éteins|éteindre) (les lumières|la lumière) {de_le_floor}"
   - "(éteins|éteindre) (les lumières|la lumière) dans {le_floor}"
   - "(éteins|éteindre) {le_floor}"
 
   # Setting brightness per name
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
   - sentences:
-      # - "(règle|régler) la luminosité {de_le_name} à {brightness} pourcent"
+      - "(règle|régler) la luminosité {de_le_name} à {brightness} pourcent"
       - "(règle|régler) {le_name} à {brightness} pourcent"
       - "allume[r] {le_name} à {brightness} pourcent"
     domains:
@@ -187,7 +187,7 @@ data:
 
   # Setting brightness per area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
-  # - "(règle|régler) la luminosité {de_le_area} à {brightness} pourcent"
+  - "(règle|régler) la luminosité {de_le_area} à {brightness} pourcent"
   - "(règle|régler) la luminosité dans {le_area} à {brightness} pourcent"
   - "(règle|régler) {le_area} à {brightness} pourcent"
   - "allume[r] {le_area} à {brightness} pourcent"
@@ -198,7 +198,7 @@ data:
 
   # Setting brightness per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
-  # - "(règle|régler) la luminosité {de_le_floor} à {brightness} pourcent"
+  - "(règle|régler) la luminosité {de_le_floor} à {brightness} pourcent"
   - "(règle|régler) la luminosité dans {le_floor} à {brightness} pourcent"
   - "(règle|régler) {le_floor} à {brightness} pourcent"
   - "allume[r] {le_floor} à {brightness} pourcent"
@@ -214,7 +214,7 @@ data:
 
   # Setting color per area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
-  # - "allume[r] (les lumières|la lumière) {de_le_area} en {color}"
+  - "allume[r] (les lumières|la lumière) {de_le_area} en {color}"
   # - "allume[r] (les lumières|la lumière) dans {le_area} en {color}"
   - "allume[r] {le_area} en {color}"
   - "(règle|régler) (les lumières|la lumière) {de_le_area} en {color}"
@@ -228,10 +228,10 @@ data:
 
   # Setting color per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
-  # - "allume[r] (les lumières|la lumière) {de_le_floor} en {color}"
+  - "allume[r] (les lumières|la lumière) {de_le_floor} en {color}"
   # - "allume[r] (les lumières|la lumière) dans {le_floor} en {color}"
   - "allume[r] {le_floor} en {color}"
-  # - "(règle|régler) (les lumières|la lumière) {de_le_floor} en {color}"
+  - "(règle|régler) (les lumières|la lumière) {de_le_floor} en {color}"
   # - "(règle|régler) (les lumières|la lumière) dans {le_floor} en {color}"
   - "(règle|régler) {le_floor} en {color}"
 
@@ -246,28 +246,28 @@ data:
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOn.yaml
   - "(ouvre|ouvrir) {le_cover_class} dans {le_area}"
   - "(ouvre|ouvrir) [tous|toutes] {les_cover_classes} dans {le_area}"
-  # - "(ouvre|ouvrir) {le_cover_class} {de_le_area}"
-  # - "(ouvre|ouvrir) [tous|toutes] {les_cover_classes} {de_le_area}"
+  - "(ouvre|ouvrir) {le_cover_class} {de_le_area}"
+  - "(ouvre|ouvrir) [tous|toutes] {les_cover_classes} {de_le_area}"
   
   # Opening Covers per name and area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOn.yaml
   - sentences:
       - "(ouvre|ouvrir) {le_name} dans {le_area}"
-      # - "(ouvre|ouvrir) {le_name} {de_le_area}"
+      - "(ouvre|ouvrir) {le_name} {de_le_area}"
     domains:
       - "cover"
 
   # Opening Covers per device class and area (context awareness)
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOn.yaml
   - "(ouvre|ouvrir) {le_cover_class}"
-  - "(ouvre|ouvrir) {les_cover_classes}"
+  - "(ouvre|ouvrir) [tous|toutes] {les_cover_classes}"
 
   # Opening Covers per device class and floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOn.yaml
-  # - "(ouvre|ouvrir) {le_cover_class} dans {le_floor}"
-  # - "(ouvre|ouvrir) [tous|toutes] {les_cover_classes} dans {le_floor}"
-  # - "(ouvre|ouvrir) {le_cover_class} {de_le_floor}"
-  # - "(ouvre|ouvrir) [tous|toutes] {les_cover_classes} {de_le_floor}"
+  - "(ouvre|ouvrir) {le_cover_class} dans {le_floor}"
+  - "(ouvre|ouvrir) [tous|toutes] {les_cover_classes} dans {le_floor}"
+  - "(ouvre|ouvrir) {le_cover_class} {de_le_floor}"
+  - "(ouvre|ouvrir) [tous|toutes] {les_cover_classes} {de_le_floor}"
 
   # Closing Covers per name
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOff.yaml
@@ -280,28 +280,28 @@ data:
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOff.yaml
   - "ferme[r] {le_cover_class} dans {le_area}"
   - "ferme[r] [tous|toutes] {les_cover_classes} dans {le_area}"
-  # - "ferme[r] {le_cover_class} {de_le_area}"
-  # - "ferme[r] [tous|toutes] {les_cover_classes} {de_le_area}"
+  - "ferme[r] {le_cover_class} {de_le_area}"
+  - "ferme[r] [tous|toutes] {les_cover_classes} {de_le_area}"
   
   # Closing Covers per name and area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOff.yaml
   - sentences:
       - "ferme[r] {le_name} dans {le_area}"
-      # - "ferme[r] {le_name} {de_le_area}"
+      - "ferme[r] {le_name} {de_le_area}"
     domains:
       - "cover"
 
   # Closing Covers per device class and area (context awareness)
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOff.yaml
   - "ferme[r] {le_cover_class}"
-  - "ferme[r] {les_cover_classes}"
+  - "ferme[r] [tous|toutes] {les_cover_classes}"
 
   # Closing Covers per device class and floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassTurnOff.yaml
-  # - "ferme[r] {le_cover_class} dans {le_floor}"
-  # - "ferme[r] [tous|toutes] {les_cover_classes} dans {le_floor}"
-  # - "ferme[r] {le_cover_class} {de_le_floor}"
-  # - "ferme[r] [tous|toutes] {les_cover_classes} {de_le_floor}"
+  - "ferme[r] {le_cover_class} dans {le_floor}"
+  - "ferme[r] [tous|toutes] {les_cover_classes} dans {le_floor}"
+  - "ferme[r] {le_cover_class} {de_le_floor}"
+  - "ferme[r] [tous|toutes] {les_cover_classes} {de_le_floor}"
 
   # Setting position of covers per name
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/cover_HassSetPosition.yaml

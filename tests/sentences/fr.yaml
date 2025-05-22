@@ -21,6 +21,7 @@ sentences:
   - "quel temps fait-il à New York"
 
   # Turning on lights per area
+  - "allume la lumière du Bureau"
   - "allume les lumières dans le Bureau"
   - "allumer le Bureau"
 
@@ -29,10 +30,12 @@ sentences:
   - "allumer la lumière"
 
   # Turning on lights per floor
+  - "allume la lumière du Premier Étage"
   - "allume les lumières dans Premier Étage"
   - "allumer Premier Étage"
 
   # Turning off lights per area
+  - "éteins la lumière du Salon"
   - "éteins les lumières dans le Salon"
   - "éteindre la lumière dans le Salon"
   - "éteins le Salon"
@@ -43,15 +46,18 @@ sentences:
   - "éteindre la lumière"
 
   # Turning off lights per floor
+  - "éteins la lumière du Rez-de-chaussée"
   - "éteins les lumières dans Rez-de-chaussée"
   - "éteindre le Rez-de-chaussée"
 
   # Setting brightness per name
+  - "règle la luminosité de la Lumière du plafond à 50 pourcent"
   - "règle la Lumière du plafond à 50 pourcent"
   - "régler la Lumière du plafond à 25 pourcent"
   - "allume la Lumière du plafond à 100 pourcent"
 
   # Setting brightness per area
+  - "règle la luminosité du Salon à 10 pourcent"
   - "règle la luminosité dans la Chambre à 10 pourcent"
   - "régler la Chambre à 45 pourcent"
   - "allumer le Bureau à 75 pourcent"
@@ -61,6 +67,7 @@ sentences:
   - "régler la luminosité à 95 pourcent"
 
   # Setting brightness per floor
+  - "règle la luminosité de la Premier Étage à 35 pourcent"
   - "règle la luminosité dans le Premier Étage à 35 pourcent"
   - "régler le Premier Étage à 5 pourcent"
   - "allume Rez-de-chaussée à 55 pourcent"
@@ -71,6 +78,8 @@ sentences:
   - "régler la Lumière du plafond en violet"
 
   # Setting color per area
+  - "allume la lumière du Bureau en orange"
+  # - "allume les lumières dans le Bureau en orange"
   - "allume le Bureau en orange"
   - "règle les lumières du Salon en blanc"
   - "régler le Salon en jaune"
@@ -81,9 +90,11 @@ sentences:
   - "régler la lumière en bleu"
 
   # Setting color per floor
+  - "allume les lumières du Premier Étage en rose"
   - "allumer le Premier Étage en rose"
   - "règle le Premier Étage en noir"
   - "régler le Premier Étage en noir"
+  - "règle les lumières du Premier Étage en rose"
 
   # Opening Covers per name
   - "ouvre le Rideau gauche"
@@ -108,10 +119,37 @@ sentences:
   - "ouvrir toutes les fenêtres dans la Chambre"
   - "ouvrir toutes les volets dans la Chambre"
   - "ouvrir toutes les portails dans la Chambre"
+  #
+  - "ouvrir la fenêtre du Bureau"
+  - "ouvrir toutes les fenêtres du Bureau"
+
+  # Opening Covers per device class and floor
+  - "ouvre le store dans le Premier Étage"
+  - "ouvre la banne dans le Premier Étage"
+  - "ouvre l'auvent dans le Premier Étage"
+  - "ouvre le rideau dans le Premier Étage"
+  - "ouvre la porte dans le Premier Étage"
+  # - "ouvrir la porte de garage dans le Premier Étage"
+  - "ouvrir la fenêtre dans le Premier Étage"
+  - "ouvrir le volet dans le Premier Étage"
+  - "ouvrir le portail dans le Premier Étage"
+  - "ouvre les stores dans le Rez-de-chaussée"
+  - "ouvre les bannes dans le Rez-de-chaussée"
+  - "ouvre les auvents dans le Rez-de-chaussée"
+  - "ouvre les rideaux dans le Rez-de-chaussée"
+  - "ouvrir toutes les portes dans le Rez-de-chaussée"
+  - "ouvrir toutes les portes de garage dans le Rez-de-chaussée"
+  - "ouvrir toutes les fenêtres dans le Rez-de-chaussée"
+  - "ouvrir toutes les volets dans le Rez-de-chaussée"
+  - "ouvrir toutes les portails dans le Rez-de-chaussée"
+  #
+  - "ouvrir la fenêtre du Premier Étage"
+  - "ouvrir toutes les fenêtres du Premier Étage"
 
   # Opening Covers per name and area
   - "ouvre la Rideau gauche dans le Salon"
   - "ouvrir la Rideau gauche dans le Salon"
+  - "ouvrir la Rideau gauche du Salon"
 
   # Opening Covers per device class and area (context awareness)
   - "ouvre le store"
@@ -155,9 +193,36 @@ sentences:
   - "fermer toutes les fenêtres dans la Chambre"
   - "fermer toutes les volets dans la Chambre"
   - "fermer toutes les portails dans la Chambre"
+  #
+  - "fermer la fenêtre du Bureau"
+  - "fermer toutes les fenêtres de la Chambre"
+
+  # Closing Covers per device class and floor
+  - "ferme le store dans le Premier Étage"
+  - "ferme la banne dans le Premier Étage"
+  - "ferme l'auvent dans le Premier Étage"
+  - "ferme le rideau dans le Premier Étage"
+  - "ferme la porte dans le Premier Étage"
+  # - "fermer la porte de garage dans le Premier Étage"
+  - "fermer la fenêtre dans le Premier Étage"
+  - "fermer le volet dans le Premier Étage"
+  - "fermer le portail dans le Premier Étage"
+  - "ferme tous les stores dans le Rez-de-chaussée"
+  - "ferme tous les bannes dans le Rez-de-chaussée"
+  - "ferme tous les auvents dans le Rez-de-chaussée"
+  - "ferme les rideaux dans le Rez-de-chaussée"
+  - "ferme les portes dans le Rez-de-chaussée"
+  # - "fermer les portes de garage dans le Rez-de-chaussée"
+  - "fermer toutes les fenêtres dans le Rez-de-chaussée"
+  - "fermer toutes les volets dans le Rez-de-chaussée"
+  - "fermer toutes les portails dans le Rez-de-chaussée"
+  #
+  - "fermer la fenêtre du Premier Étage"
+  - "fermer toutes les fenêtres du Rez-de-chaussée"
 
   # Closing Covers per name and area
   - "ferme la Rideau gauche dans le Bureau"
+  - "ferme la Rideau gauche du Bureau"
 
   # Closing Covers per device class and area (context awareness)
   - "ferme le store"
