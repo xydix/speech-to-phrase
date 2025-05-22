@@ -50,7 +50,7 @@ class Language(str, Enum):
     MONGOLIAN = "mn"
     SLOVENIAN = "sl"
     SWAHILI = "sw"
-    THAI = "th"
+    # THAI = "th"  bad model
     TURKISH = "tr"
 
 

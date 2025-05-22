@@ -138,7 +138,7 @@ def gen_test(language: str, wav_path: Path, generated: bool) -> None:
 
     if generated:
         gen = "gen_"
-        test_func = pytest.mark.generated(test_func)
+        # test_func = pytest.mark.generated(test_func)
     else:
         gen = ""
 

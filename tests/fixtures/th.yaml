@@ -3,5 +3,5 @@ language: "th"
 
 fixtures:
   entities:
-    - name: "ไฟห้องน้ำ"
+    - name: "ไฟห้องนอน"
       domain: "light"
