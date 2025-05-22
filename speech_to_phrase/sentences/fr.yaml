@@ -145,34 +145,34 @@ data:
 
   # Turning on lights per area 
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  # - "allume[r] (les|la) lumière {de_le_area}" # We do not need lumières as it's pronounced the same way as lumière
-  - "allume[r] (les|la) lumière dans {le_area}"
+  # - "allume[r] (les lumières|la lumière) {de_le_area}" # We do not need lumières as it's pronounced the same way as lumière
+  - "allume[r] (les lumières|la lumière) dans {le_area}"
   - "allume[r] {le_area}"
 
   # Turning on lights per area (context awareness) 
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  - "allume[r] (les|la) lumière"
+  - "allume[r] (les lumières|la lumière)"
 
   # Turning on lights per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  # - "allume[r] (les|la) lumière {de_le_floor}"
-  - "allume[r] (les|la) lumière dans {le_floor}"
+  # - "allume[r] (les lumières|la lumière) {de_le_floor}"
+  - "allume[r] (les lumières|la lumière) dans {le_floor}"
   - "allume[r] {le_floor}"
 
   # Turning off lights per area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
-  # - "(éteins|éteindre) (les|la) lumière {de_le_area}"
-  - "(éteins|éteindre) (les|la) lumière dans {le_area}"
+  # - "(éteins|éteindre) (les lumières|la lumière) {de_le_area}"
+  - "(éteins|éteindre) (les lumières|la lumière) dans {le_area}"
   - "(éteins|éteindre) {le_area}"
 
   # Turning off lights per area (context awareness)
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
-  - "(éteins|éteindre) (les|la) lumière"
+  - "(éteins|éteindre) (les lumières|la lumière)"
 
   # Turning off lights per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
-  # - "(éteins|éteindre) (les|la) lumière {de_le_floor}"
-  - "(éteins|éteindre) (les|la) lumière dans {le_floor}"
+  # - "(éteins|éteindre) (les lumières|la lumière) {de_le_floor}"
+  - "(éteins|éteindre) (les lumières|la lumière) dans {le_floor}"
   - "(éteins|éteindre) {le_floor}"
 
   # Setting brightness per name
@@ -214,25 +214,25 @@ data:
 
   # Setting color per area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
-  # - "allume[r] (les|la) lumière {de_le_area} en {color}"
-  # - "allume[r] (les|la) lumière dans {le_area} en {color}"
+  # - "allume[r] (les lumières|la lumière) {de_le_area} en {color}"
+  # - "allume[r] (les lumières|la lumière) dans {le_area} en {color}"
   - "allume[r] {le_area} en {color}"
-  - "(règle|régler) (les|la) lumière {de_le_area} en {color}"
-  # - "(règle|régler) (les|la) lumière dans {le_area} en {color}"
+  - "(règle|régler) (les lumières|la lumière) {de_le_area} en {color}"
+  # - "(règle|régler) (les lumières|la lumière) dans {le_area} en {color}"
   - "(règle|régler) {le_area} en {color}"
   
   # Setting color per (context awareness)
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
-  - "allume[r] (les|la) lumière en {color}"
-  - "(règle|régler) (les|la) lumière en {color}"
+  - "allume[r] (les lumières|la lumière) en {color}"
+  - "(règle|régler) (les lumières|la lumière) en {color}"
 
   # Setting color per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
-  # - "allume[r] (les|la) lumière {de_le_floor} en {color}"
-  # - "allume[r] (les|la) lumière dans {le_floor} en {color}"
+  # - "allume[r] (les lumières|la lumière) {de_le_floor} en {color}"
+  # - "allume[r] (les lumières|la lumière) dans {le_floor} en {color}"
   - "allume[r] {le_floor} en {color}"
-  # - "(règle|régler) (les|la) lumière {de_le_floor} en {color}"
-  # - "(règle|régler) (les|la) lumière dans {le_floor} en {color}"
+  # - "(règle|régler) (les lumières|la lumière) {de_le_floor} en {color}"
+  # - "(règle|régler) (les lumières|la lumière) dans {le_floor} en {color}"
   - "(règle|régler) {le_floor} en {color}"
 
   # Opening Covers per name
@@ -443,7 +443,7 @@ data:
       - "media_player"
       - "input_boolean"
 
-  # Running scrips
+  # Running scripts
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/script_HassTurnOn.yaml
   - sentences:
       - "active[r] [le script] {le_name}"
