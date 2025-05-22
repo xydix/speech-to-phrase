@@ -183,7 +183,8 @@ FIXTURES_SCHEMA = vol.Schema(
 TEST_SENTENCES_SCHEMA = vol.Schema(
     {
         vol.Required("language"): str,
-        "sentences": [str],
+        vol.Required("sentences"): [str],
+        vol.Optional("failing_transcriptions"): [str],
     }
 )
 
