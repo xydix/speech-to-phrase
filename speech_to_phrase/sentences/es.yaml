@@ -153,7 +153,7 @@ data:
 
   # temperature
   - "cuál es la temperatura"
-  # - "cuál es la temperatura en [en el |en la |del |de la ]{area}"
+  - "cuál es la temperatura en [en el |en la |del |de la ]{area}"
   - sentences:
       - "cuál es la temperatura de[l] [el |la |los |las ]{name}"
     domains:

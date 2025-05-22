@@ -1,5 +1,6 @@
 """Test that Speech-to-Phrase sentences will be recognized by Home Assistant."""
 
+import itertools
 from dataclasses import dataclass
 from typing import Any
 
@@ -122,4 +123,33 @@ def test_recognize(lang_resources: Resources) -> None:
         "Speech-to-Phrase sentence templates were not tested: "
         f"language={lang_resources.language}, "
         f"templates={stp_sentences_to_check}"
+    )
+
+
+def test_recognize_wav(lang_resources: Resources) -> None:
+    """Test that WAV file transcripts would be recognized."""
+    wav_dir = TESTS_DIR / "wav" / f"{lang_resources.language}"
+    gen_wav_dir = wav_dir / "generated"
+
+    unrecognized_sentences: list[str] = []
+    for wav_path in itertools.chain(wav_dir.glob("*.wav"), gen_wav_dir.glob("*.wav")):
+        if wav_path.name.startswith("oov_"):
+            # Out of vocabulary
+            continue
+
+        sentence = wav_path.stem
+
+        result = next(
+            recognize_all(
+                sentence, lang_resources.stp_intents, intent_context=INTENT_CONTEXT
+            ),
+            None,
+        )
+        if result is None:
+            unrecognized_sentences.append(sentence)
+
+    assert not unrecognized_sentences, (
+        "Sentences will not be recognized by Speech-to-Phrase: "
+        f"language={lang_resources.language}, "
+        f"sentences={unrecognized_sentences}"
     )
