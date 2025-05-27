@@ -736,7 +736,12 @@ def get_count(
             return max(
                 1,
                 sum(
-                    get_count(v.text_in, intents, intent_data) for v in text_list.values
+                    (
+                        1
+                        if isinstance(v.text_in, TextChunk)
+                        else get_count(v.text_in, intents, intent_data)
+                    )
+                    for v in text_list.values
                 ),
             )
 
@@ -780,6 +785,7 @@ def intents_to_fst(
     exclude_intents: Optional[Set[str]] = None,
     include_intents: Optional[Set[str]] = None,
     g2p_info: Optional[G2PInfo] = None,
+    normalize_probabilities: bool = True,
 ) -> Fst:
     num_to_words: Optional[NumToWords] = None
     if number_language:
@@ -809,6 +815,15 @@ def intents_to_fst(
 
         filtered_intents.append(intent)
 
+    total_sentences_lcm = lcm(*sentence_counts.values())
+    intent_probs: Dict[str, float] = {
+        intent_name: total_sentences_lcm // sentence_count
+        for intent_name, sentence_count in sentence_counts.items()
+    }
+    intent_prob_sum = max(sum(intent_probs.values()), 1)
+    for intent_name in intent_probs:
+        intent_probs[intent_name] /= intent_prob_sum
+
     _LOGGER.debug("Total sentences: %s", total_sentences)
     _LOGGER.debug("Sentence count by intent: %s", sentence_counts)
 
@@ -816,6 +831,17 @@ def intents_to_fst(
     final = fst_with_spaces.next_state()
 
     for intent in filtered_intents:
+        intent_logprob: Optional[float] = None
+
+        if normalize_probabilities:
+            intent_prob = intent_probs[intent.name]
+            if intent_prob < 1:
+                intent_logprob = math.log(intent_prob)
+
+        intent_start = fst_with_spaces.next_edge(
+            fst_with_spaces.start, log_prob=intent_logprob
+        )
+
         for data in intent.data:
             sentence_output: Optional[str] = None
             if data.metadata is not None:
@@ -823,7 +849,8 @@ def intents_to_fst(
 
             for sentence in data.sentences:
                 sentence_state = fst_with_spaces.next_edge(
-                    fst_with_spaces.start,
+                    # fst_with_spaces.start,
+                    intent_start,
                     SPACE,
                     SPACE,
                 )

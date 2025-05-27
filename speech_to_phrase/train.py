@@ -6,15 +6,16 @@ import logging
 from dataclasses import asdict, dataclass
 
 from hassil import Intents, merge_dict
-from yaml import SafeDumper, safe_dump, safe_load
 
 from .const import Settings, TrainingError, WordCasing
 from .g2p import LexiconDatabase
 from .hass_api import Things
 from .hassil_fst import Fst, G2PInfo, intents_to_fst
+from .lang_sentences import LanguageData, load_shared_lists
 from .models import Model, ModelType, download_model
 from .train_coqui_stt import train_coqui_stt
 from .train_kaldi import train_kaldi
+from .util import quote_strings, yaml, yaml_output
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -93,10 +94,15 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
     """Create intents from sentences and things from Home Assistant."""
     sentences_path = settings.sentences / f"{model.sentences_language}.yaml"
     with open(sentences_path, "r", encoding="utf-8") as sentences_file:
-        sentences_dict = safe_load(sentences_file)
+        lang_data = LanguageData.from_dict(yaml.load(sentences_file))
+        sentences_dict = lang_data.to_intents_dict()
 
     lists_dict = sentences_dict.get("lists", {})
     lists_dict.update(things.to_lists_dict())
+
+    with open(settings.shared_lists_path, "r", encoding="utf-8") as shared_lists_file:
+        shared_lists_dict = load_shared_lists(yaml.load(shared_lists_file))
+        lists_dict.update(shared_lists_dict)
 
     sentences_dict["lists"] = lists_dict
 
@@ -124,19 +130,39 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
             with open(
                 custom_sentences_path, "r", encoding="utf-8"
             ) as custom_sentences_file:
-                merge_dict(sentences_dict, safe_load(custom_sentences_file) or {})
+                merge_dict(sentences_dict, yaml.load(custom_sentences_file) or {})
+
+    # Clean up lists that were wildcards but now have values
+    for list_info in lists_dict.values():
+        if "values" in list_info:
+            list_info.pop("wildcard", None)
+
+    lang_intents = Intents.from_dict(sentences_dict)
+    tr_lists = lang_data.add_transformed_slot_lists(lang_intents.slot_lists)
 
     # Write YAML with training sentences (includes HA lists, triggers, etc.)
-    SafeDumper.ignore_aliases = lambda *args: True  # type: ignore[assignment]
     training_sentences_path = settings.training_sentences_path(model.id)
     with open(
         training_sentences_path, "w", encoding="utf-8"
     ) as training_sentences_file:
-        safe_dump(sentences_dict, training_sentences_file, sort_keys=False)
+        # Add transformed lists to debug YAML
+        for tr_list_name, tr_list in tr_lists.items():
+            lists_dict[tr_list_name] = {
+                "values": [
+                    {
+                        "in": value.value_out,
+                        "out": value.value_out,
+                        "context": value.context or {},
+                        "metadata": value.metadata or {},
+                    }
+                    for value in tr_list.values
+                ]
+            }
+        yaml_output.dump(quote_strings(sentences_dict), training_sentences_file)
 
     _LOGGER.debug("Wrote debug YAML to %s", training_sentences_path)
 
-    return Intents.from_dict(sentences_dict)
+    return lang_intents
 
 
 def _create_intents_fst(

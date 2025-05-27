@@ -1,10 +1,17 @@
 import io
+import re
+import shlex
+import tempfile
+from pathlib import Path
 
+import pytest
 from hassil import Intents
 
 from speech_to_phrase.const import WordCasing
 from speech_to_phrase.g2p import LexiconDatabase
 from speech_to_phrase.hassil_fst import SPACE, G2PInfo, intents_to_fst
+
+from . import SETTINGS
 
 INTENTS_YAML = """
 language: en
@@ -318,3 +325,120 @@ def test_permutations() -> None:
         "in the kitchen is there smoke",
         "in the living room is there smoke",
     }
+
+
+@pytest.mark.asyncio
+async def test_list_value_probabilities() -> None:
+    """Test that normalizing intent level probabilities boost the probabilities
+    of intents with fewer sentences."""
+    intents_str = """
+language: en
+intents:
+  GetTime:
+    data:
+      - sentences:
+          - "what time is it"
+  SetColor:
+    data:
+      - sentences:
+          - "set color to {color}"
+
+lists:
+  color:
+    values:
+      - red
+      - green
+      - blue
+    """
+
+    with io.StringIO(intents_str) as intents_file:
+        intents = Intents.from_yaml(intents_file)
+
+    fst = intents_to_fst(intents, number_language="en").remove_spaces()
+    tools = SETTINGS.tools
+
+    with tempfile.TemporaryDirectory() as temp_dir_str:
+        temp_dir = Path(temp_dir_str)
+
+        text_fst_path = temp_dir / "test.fst.txt"
+        fst_path = temp_dir / "test.fst"
+        ngram_fst_path = temp_dir / "test_ngram.fst"
+        words_path = temp_dir / "words.txt"
+
+        with open(text_fst_path, "w", encoding="utf-8") as text_fst_file, open(
+            words_path, "w", encoding="utf-8"
+        ) as words_file:
+            fst.write(text_fst_file, words_file)
+
+        await tools.async_run(
+            "fstcompile",
+            [
+                shlex.quote(f"--isymbols={words_path}"),
+                shlex.quote(f"--osymbols={words_path}"),
+                "--keep_isymbols=true",
+                "--keep_osymbols=true",
+                shlex.quote(str(text_fst_path)),
+                shlex.quote(str(fst_path)),
+            ],
+        )
+        await tools.async_run_pipeline(
+            ["ngramcount", "--order=3", shlex.quote(str(fst_path)), "-"],
+            ["ngrammake", "--method=katz", "-", shlex.quote(str(ngram_fst_path))],
+        )
+
+        test_sentences = [
+            "what time is it",
+            "set color to red",
+            "set color to green",
+            "set color to blue",
+        ]
+
+        perplexities = {}
+        for sentence in test_sentences:
+            test_sentences_path = temp_dir / "test_sentences.txt"
+            test_sentences_path.write_text(sentence, encoding="utf-8")
+            test_archive_path = temp_dir / "test_sentences.far"
+
+            await tools.async_run(
+                "farcompilestrings",
+                [
+                    "--entry_type=file",
+                    shlex.quote(f"--symbols={words_path}"),
+                    shlex.quote(str(test_sentences_path)),
+                    shlex.quote(str(test_archive_path)),
+                ],
+            )
+
+            output = (
+                await tools.async_run(
+                    "ngramperplexity",
+                    [
+                        shlex.quote(str(ngram_fst_path)),
+                        shlex.quote(str(test_archive_path)),
+                    ],
+                )
+            ).decode("utf-8")
+            perplexity_match = re.search(r"perplexity = ([0-9]+\.[0-9]+)", output)
+            assert perplexity_match is not None
+            perplexities[sentence] = float(perplexity_match.group(1))
+
+        time_perplexity = perplexities["what time is it"]
+        color_perlexities = {
+            perplexities[s] for s in test_sentences if s.startswith("set color")
+        }
+
+        # set color sentences should all have equal perplexity
+        assert len(color_perlexities) == 1
+        color_perplexity = next(iter(color_perlexities))
+
+        # Normalizing probabilities will reduce the ratio from about 1.9 to
+        # about 1.39.
+        #
+        # This means that "what time is it" will not be considered so much rarer
+        # than "set color to..." just because there are many colors.
+        #
+        # The perplexities are not identical though because all "set color"
+        # sentences still share common subsequences. Even with no smoothing,
+        # they will still not be identical because order=3.
+        perplexity_ratio = time_perplexity / color_perplexity
+        assert perplexity_ratio < 1.5, perplexity_ratio

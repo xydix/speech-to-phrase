@@ -1,240 +1,153 @@
-language: el
+---
+language: "el"
 
 lists:
   color:
-    values:
-      - in: "λευκό"
-      - in: "μαύρο"
-      - in: "κόκκινο"
-      - in: "πορτοκαλί"
-      - in: "κίτρινο"
-      - in: "πράσινο"
-      - in: "μπλε"
-      - in: "μωβ"
-      - in: "καφέ"
-      - in: "ροζ"
-      - in: "τουρκουάζ"
-  brightness:
-    range:
-      from: 10
-      to: 100
-      step: 10
-  seconds:
-    range:
-      from: 10
-      to: 100
-      step: 5
-  minutes_small:
-    range:
-      from: 2
-      to: 9
-  minutes_large:
-    range:
-      from: 10
-      to: 100
-      step: 10
-  minutes_extra:
-    values:
-      - in: "δεκαπέντε"
-        out: 15
-      - in: "σαράντα πέντε"
-        out: 45
-  hours:
-    range:
-      from: 2
-      to: 24
+    - "λευκό"
+    - "μαύρο"
+    - "κόκκινο"
+    - "πορτοκαλί"
+    - "κίτρινο"
+    - "πράσινο"
+    - "μπλε"
+    - "μωβ"
+    - "καφέ"
+    - "ροζ"
+    - "τουρκουάζ"
 
-expansion_rules:
-  of: "του|της|των"
-  to: "στον|στην|στο"
-  the: "ο|η|το"
+data:
+  # cancel
+  - "άστο"
+  - "ξέχνα το"
+  - "άκυρο"
+  - "ξέχνατο"
 
-intents:
-  # nevermind
-  HassNevermind:
-    data:
-      - sentences:
-          - "άστο"
-          - "ξέχνα το"
-          - "άκυρο"
-          - "ξέχνατο"
-          - "άσε το"
+  # date and time
+  # - "τι ώρα είναι"
+  # - "τι μέρα είναι σήμερα"
 
-  # date, time, weather
-  HassGetCurrentTime:
-    data:
-      - sentences:
-          - "τι ώρα είναι"
+  # weather
+  - "τι καιρό κάνει"
+  - "πώς είναι ο καιρός"
+  - sentences:
+      - "τι καιρό κάνει στο {name}"
+      - "πώς είναι ο καιρός στο {name}"
+    domains:
+      - "weather"
 
-  HassGetCurrentDate:
-    data:
-      - sentences:
-          - "τι μέρα είναι σήμερα"
+  # # lights (area)
+  # - "turn (on|off) [the] lights [in here]"
+  # - "turn [the] lights (on|off) [in here]"
+  # - "turn (on|off) [all|the|all of the] {area} lights"
+  # - "turn (on|off) [all|the|all of the] lights in [the] {area}"
+  # - "set [the] brightness [in here] to {brightness} percent"
+  # - "set [the] brightness of [the] {area} to {brightness} percent"
+  # - "set [the] {area} brightness to {brightness} percent"
+  # - "set [the] lights [in here] to {color}"
+  # - "set [[the] color of the] lights [in here] to {color}"
+  # - "set [the] [color of [the]] {area} lights to {color}"
+  # - "set [the] {area} lights to {color}"
+  # - "set lights in [the] {area} to {color}"
 
-  HassGetWeather:
-    data:
-      - sentences:
-          - "τι καιρό κάνει"
-          - "πώς είναι ο καιρός"
-      - sentences:
-          - "τι καιρό κάνει στο {name}"
-          - "πώς είναι ο καιρός στο {name}"
-        requires_context:
-          domain: weather
+  # # lights (name)
+  # - sentences:
+  #     - "set [the] brightness of [the] {name} to {brightness} percent"
+  #     - "set [the] {name} brightness to {brightness} percent"
+  #   domains:
+  #     - "light"
+  #   light_supports_brightness: true
 
-  # turn on/off
-  HassTurnOn:
-    data:
-      # turn on
-      - sentences:
-          - "άναψε τα φώτα"
-      - sentences:
-          - "άναψε <the> {name}"
-        requires_context:
-          domain:
-            - light
-            - switch
-            - fan
-            - media_player
-            - input_boolean
-      - sentences:
-          - "άναψε τα φώτα στο {area}"
-      # open (covers/valves)
-      - sentences:
-          - "άνοιξε <the> {name}"
-        requires_context:
-          domain:
-            - cover
-            - valve
+  # - sentences:
+  #     - "set [the] [color of [the]] {name} to {color}"
+  #     - "set [the] {name} [color] to {color}"
+  #   domains:
+  #     - "light"
+  #   light_supports_color: true
 
-  HassTurnOff:
-    data:
-      # turn off
-      - sentences:
-          - "σβήσε τα φώτα"
-      - sentences:
-          - "σβήσε <the> {name}"
-        requires_context:
-          domain:
-            - light
-            - switch
-            - fan
-            - media_player
-            - input_boolean
-      - sentences:
-          - "σβήσε τα φώτα στο {area}"
-      # close (covers/valves)
-      - sentences:
-          - "κλείσε <the> {name}"
-        requires_context:
-          domain:
-            - cover
-            - valve
+  # # doors and windows
+  # - "(open|close) [the] (blinds|curtains|windows) in [the] {area}"
+  # - "(open|close) [the] {area} (blinds|curtains|windows)"
+  # - sentences:
+  #     - "(open|close) [the] {name}"
+  #     - "(open|close) [the] {name} in [the] {area}"
+  #     - "is [the] {name} (open|closed)"
+  #   domains:
+  #     - "cover"
 
-  # light brightness/color
-  HassLightSet:
-    data:
-      # brightness
-      - sentences:
-          - "ρύθμισε τη φωτεινότητα <of> {name} στο {brightness} τοις εκατό"
-        requires_context:
-          domain: light
-      - sentences:
-          - "ρύθμισε τη φωτεινότητα στο {area} στο {brightness} τοις εκατό"
-      # color
-      - sentences:
-          - "ρύθμισε <the> {name} σε {color}"
-        requires_context:
-          domain: light
-      - sentences:
-          - "ρύθμισε τα φώτα στο {area} σε {color}"
+  # # locks
+  # - sentences:
+  #     - "(lock|unlock) [the] {name}"
+  #     - "is [the] {name} (locked|unlocked)"
+  #   domains:
+  #     - "lock"
 
-  # timers
-  HassStartTimer:
-    data:
-      # seconds
-      - sentences:
-          - "ρύθμισε χρονόμετρο για {seconds} δευτερόλεπτα"
-      # minutes
-      - sentences:
-          - "ρύθμισε χρονόμετρο για 1 λεπτό"
-          - "ρύθμισε χρονόμετρο για {minutes_small} λεπτά"
-          - "ρύθμισε χρονόμετρο για {minutes_large} λεπτά"
-          - "ρύθμισε χρονόμετρο για {minutes_extra} λεπτά"
-      # hours
-      - sentences:
-          - "ρύθμισε χρονόμετρο για 1 ώρα"
-          - "ρύθμισε χρονόμετρο για {hours} ώρες"
-      # hours + minutes
-      - sentences:
-          - "ρύθμισε χρονόμετρο για 1 ώρα και 1 λεπτό"
-          - "ρύθμισε χρονόμετρο για 1 ώρα και {minutes_small} λεπτά"
-          - "ρύθμισε χρονόμετρο για 1 ώρα και {minutes_large} λεπτά"
-          - "ρύθμισε χρονόμετρο για 1 ώρα και {minutes_extra} λεπτά"
-          - "ρύθμισε χρονόμετρο για {hours} ώρες και {minutes_small} λεπτά"
-          - "ρύθμισε χρονόμετρο για {hours} ώρες και {minutes_large} λεπτά"
-          - "ρύθμισε χρονόμετρο για {hours} ώρες και {minutes_extra} λεπτά"
+  # generic on/off
+  - sentences:
+      - "(άναψε|σβήσε) (ο|η|το) {name}"
+      # - "turn (on|off) [the] {name} in [the] {area}"
+      # - "turn [the] {name} in [the] {area} (on|off)"
+    domains:
+      - "light"
+      - "switch"
+      - "fan"
+      - "media_player"
+      - "input_boolean"
 
-  HassCancelTimer:
-    data:
-      - sentences:
-          - "(ακύρωσε|διέκοψε) [το|το μου] χρονόμετρο"
+  # # scripts and scenes
+  # - sentences:
+  #     - "run [the] {name} [script]"
+  #   domains:
+  #     - "script"
 
-  HassCancelAllTimers:
-    data:
-      - sentences:
-          - "(ακύρωσε|διέκοψε) όλα [τα|τα μου] χρονόμετρα"
+  # - sentences:
+  #     - "activate [the] {name} [scene]"
+  #   domains:
+  #     - "scene"
 
-  HassPauseTimer:
-    data:
-      - sentences:
-          - "πάυσε [το|το μου] χρονόμετρο"
+  # # timers
+  # - "(set|start|create) [a] timer for {seconds} seconds"
+  # - "(set|start|create) [a] timer for 1 minute"
+  # - "(set|start|create) [a] timer for {minutes} minutes"
+  # - "(set|start|create) [a] timer for 1 minute and {seconds} seconds"
+  # - "(set|start|create) [a] timer for {minutes} minutes and {seconds} seconds"
+  # - "(set|start|create) [a] timer for {minutes} and a half minutes"
+  # - "(set|start|create) [a] timer for 1 hour"
+  # - "(set|start|create) [a] timer for {hours} hours"
+  # - "(set|start|create) [a] timer for {hours} and a half hours"
+  # - "(set|start|create) [a] timer for 1 hour and 1 minute"
+  # - "(set|start|create) [a] timer for 1 hour and {minutes} minutes"
+  # - "(set|start|create) [a] timer for {hours} hours and {minutes} minutes"
 
-  HassUnpauseTimer:
-    data:
-      - sentences:
-          - "(σύνεχισε|ξαναξεκίνησε) [το|το μου] χρονόμετρο"
+  # - "(cancel|stop) [the|my] timer"
+  # - "(cancel|stop) all [[of ](the|my)] timers"
+  # - "(pause|resume) [the|my] timer"
+  # - "timer status"
+  # - "status of [the|my] timer[s]"
+  # - "[how much] time [is] left on [the|my] timer[s]"
 
-  HassTimerStatus:
-    data:
-      - sentences:
-          - "κατάσταση χρονόμετρου"
-          - "κατάσταση [του|του μου] χρονόμετρου"
-          - "[πόσο] χρόνος [απομένει|λείπει] [στο|στα] χρονόμετρα"
+  # # media
+  # - "(pause|resume)"
+  # - "next [(track|item)]"
+  # - "skip [[this ](track|song)]"
+  # - sentences:
+  #     - "(pause|resume) [the] {name}"
+  #     - "next [(track|item)] on [the] {name}"
+  #     - "skip [[the ](track|song)] on [the] {name}"
+  #   domains:
+  #     - "media_player"
 
-  # media players
-  HassMediaPause:
-    data:
-      - sentences:
-          - "παύσε"
-  HassMediaUnpause:
-    data:
-      - sentences:
-          - "συνέχισε"
-  HassMediaNext:
-    data:
-      - sentences:
-          - "επόμενο"
+  # # temperature
+  # - "(what is|what's) the (temp|temperature)"
+  # - "(what is|what's) the (temp|temperature) in [the] {area}"
+  # - "(what is|what's) the {area} (temp|temperature)"
+  # - sentences:
+  #     - "(what is|what's) the {name} (temp|temperature)"
+  #     - "(what is|what's) the (temp|temperature) of [the] {name}"
+  #   domains:
+  #     - "climate"
 
-  # temperature
-  HassGetTemperature:
-    data:
-      - sentences:
-          - "ποια είναι η θερμοκρασία"
-      - sentences:
-          - "ποια είναι η θερμοκρασία στο {area}"
-
-  # questions
-  HassGetState:
-    data:
-      - sentences:
-          - "<the> {name} είναι {state}"
-        requires_context:
-          domain:
-            - cover
-            - valve
-        lists:
-          state:
-            values:
-              - "ανοιχτ(ό|ή|ς)"
-              - "κλειστ(ό|ή|ς)"
+  # # sensors
+  # - sentences:
+  #     - "what is [the [value of [the]]] {name}"
+  #   domains:
+  #     - "sensor"

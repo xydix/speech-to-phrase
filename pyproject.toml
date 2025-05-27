@@ -46,7 +46,8 @@ dev = [
     "pytest-asyncio==0.25.2",
     "tox==4.23.2",
     "build==1.2.2",
-    "home-assistant-intents==2025.3.28",
+    "home-assistant-intents==2025.5.7",
+    "regex==2024.11.6",
 ]
 
 [project.urls]
@@ -63,3 +64,9 @@ exclude = ["tests"]
 
 [tool.setuptools.package-data]
 "speech_to_phrase" = ["sentences/*.yaml"]
+
+# [tool.pytest.ini_options]
+# addopts = "-m 'not generated'"
+# markers = [
+#     "generated: marks tests as using generated audio data (select with '-m \"generated\"')",
+# ]

@@ -8,3 +8,5 @@ pytest-asyncio==0.25.2
 tox==4.23.2
 build==1.2.2
 voluptuous==0.15.2
+networkx==3.4.2
+ruamel.yaml==0.2.12

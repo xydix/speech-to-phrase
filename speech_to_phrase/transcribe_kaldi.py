@@ -179,6 +179,8 @@ async def _get_fuzzy_text(
             input=input_fst_file.getvalue().encode("utf-8"),
         )
 
+        # _LOGGER.debug("Fuzzy output: %s", stdout.decode("utf-8"))
+
         words: List[str] = []
         word_cost: float = 0
         for line in stdout.decode("utf-8").splitlines():

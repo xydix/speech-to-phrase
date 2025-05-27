@@ -1,351 +1,166 @@
 ---
-language: es
+language: "es"
 
 lists:
   color:
-    values:
-      - "blanco"
-      - "negro"
-      - "rojo"
-      - "(naranja|anaranjado)"
-      - "amarillo"
-      - "verde"
-      - "azul"
-      - "(lila|morado|púrpura)"
-      - "marrón"
-      - "(rosa|rosado)"
-  brightness:
-    range:
-      from: 10
-      to: 100
-      step: 10
-  seconds:
-    range:
-      from: 10
-      to: 100
-      step: 10
-  minutes_small:
-    range:
-      from: 2
-      to: 9
-  minutes_large:
-    range:
-      from: 10
-      to: 100
-      step: 10
-  minutes_extra:
-    values:
-      - in: "quince"
-        out: 15
-      - in: "cuarenta y cinco"
-        out: 45
-  minutes_half:
-    values:
-      - in: "y medio"
-        out: 30
-  hours_half:
-    values:
-      - in: "y media"
-        out: 30
-  hours:
-    range:
-      from: 1
-      to: 24
+    - "blanco"
+    - "negro"
+    - "rojo"
+    - "naranja"
+    - "anaranjado"
+    - "amarillo"
+    - "verde"
+    - "azul"
+    - "lila"
+    - "morado"
+    - "púrpura"
+    - "marrón"
+    - "rosa"
+    - "rosado"
+
   cover_classes:
-    values:
-      - in: "toldo[s]"
-      - in: "persiana[s]"
-      - in: "cortina[s]"
-      - in: "puerta[s]"
-      - in: "(puerta[s]|cancela[s]|portón|portones) de garaje"
-      - in: "verja[s]|cancela[s]|portón|portones"
-      - in: "estor[es]"
-      - in: "(contraventana[s]|veneciana[s])"
-      - in: "ventana[s]"
+    - "toldo"
+    - "toldos"
+    - "persiana"
+    - "persianas"
+    - "cortina"
+    - "cortinas"
+    - "puerta"
+    - "puertas"
+    - "puerta de garaje"
+    - "puertas de garaje"
+    - "cancela de garaje"
+    - "cancelas de garaje"
+    - "portón de garaje"
+    - "portones de garaje"
+    - "verja"
+    - "verjas"
+    - "cancela"
+    - "cancelas"
+    - "portón"
+    - "portones"
+    - "estor"
+    - "estores"
+    - "contraventana"
+    - "contraventanas"
+    - "veneciana"
+    - "venecianas"
+    - "ventana"
+    - "ventanas"
 
-expansion_rules:
-  name: "[el |la |los |las ]{name}"
-  area: "[en el |en la |del |de la ]{area}"
-  floor: "[en el |en la |del |de la ]{floor}"
-  area_floor: "(<area>|<floor>)"
+data:
+  # cancel
+  - "no importa"
 
-intents:
-  # nevermind
-  HassNevermind:
-    data:
-      - sentences:
-          - "no importa"
+  # date and time
+  - "qué hora es"
+  - "qué día es"
 
-  # date, time, weather
-  HassGetCurrentTime:
-    data:
-      - sentences:
-          - "qué hora es"
+  # weather
+  - "qué tiempo hace"
+  - sentences:
+      - "qué tiempo hace en {name}"
+    domains:
+      - "weather"
 
-  HassGetCurrentDate:
-    data:
-      - sentences:
-          - "qué día es"
+  # lights (area)
+  - "(enciende|prende|apaga) las luces"
+  - "(enciende|prende|apaga) las luces [en el |en la |del |de la ]{area}"
+  - "ajusta [el] brillo [en el |en la |del |de la ]{area} al {brightness} [por ciento]"
+  - "ajusta [el] color de las luces [en el |en la |del |de la ]{area} a {color}"
 
-  HassGetWeather:
-    data:
-      - sentences:
-          - "qué tiempo hace"
-      - sentences:
-          - "qué tiempo hace en <name>"
-        requires_context:
-          domain: weather
+  # lights (name)
+  - sentences:
+      - "ajusta [el] brillo de [el |la |los |las ]{name} al {brightness} [por ciento]"
+    domains:
+      - "light"
+    light_supports_brightness: true
 
-  # turn on/off
-  # open/close
-  # lock/unlock
-  HassTurnOn:
-    data:
-      # turn on
-      - sentences:
-          - "(enciende|prend(e|é)) las luces"
+  - sentences:
+      - "ajusta [el] color de [el |la |los |las ]{name} a {color}"
+    domains:
+      - "light"
+    light_supports_color: true
 
-      - sentences:
-          - "(enciende|prend(e|é)) <name>"
-        requires_context:
-          domain:
-            - light
-            - switch
-            - fan
-            - media_player
-            - input_boolean
+  # doors and windows
+  - "(abre|cierra|cerrá) [el |la |los |las ]{cover_classes} [en el |en la |del |de la ]{area}"
+  - sentences:
+      - "abre [el |la |los |las ]{name}"
+      - "(cierra|cerrá) [el |la |los |las ]{name}"
+      - "está [el |la |los |las ]{name} (abiert|cerrad)(a|o)"
+    domains:
+      - "cover"
 
-      - sentences:
-          - "(enciende|prend(e|é)) las luces <area_floor>"
+  # locks
+  - sentences:
+      - "(cierra|cerrá) con llave [el |la |los |las ]{name}"
+      - "abre [el |la |los |las ]{name}"
+      - "está cerrad(a|o) con llave [el |la |los |las ]{name}"
+      - "está abiert(a|o) [el |la |los |las ]{name}"
+    domains:
+      - "lock"
 
-      # open
-      - sentences:
-          - "abre <name>"
-        requires_context:
-          domain:
-            - cover
-            - valve
+  # generic on/off
+  - sentences:
+      - "(enciende|prende|apaga) [el |la |los |las ]{name}"
+    domains:
+      - "light"
+      - "switch"
+      - "fan"
+      - "media_player"
+      - "input_boolean"
 
-      - sentences:
-          - "abr(e|í) [el|la|los|las] {cover_classes:device_class} <area_floor>"
+  # scripts and scenes
+  - sentences:
+      - "ejecuta [el |la |los |las ]{name}"
+    domains:
+      - "script"
 
-      # lock
-      - sentences:
-          - "(cierra|cerrá) con llave <name>"
-        requires_context:
-          domain: lock
-
-      # script
-      - sentences:
-          - "ejecuta <name>"
-        requires_context:
-          domain: script
-
-      # scene
-      - sentences:
-          - "activa <name>"
-        requires_context:
-          domain: scene
-
-  HassTurnOff:
-    data:
-      # turn off
-      - sentences:
-          - "apaga las luces"
-
-      - sentences:
-          - "apaga <name>"
-        requires_context:
-          domain:
-            - light
-            - switch
-            - fan
-            - media_player
-            - input_boolean
-
-      - sentences:
-          - "apaga las luces <area_floor>"
-
-      # close
-      - sentences:
-          - "(cierra|cerrá) <name>"
-        requires_context:
-          domain:
-            - cover
-            - valve
-
-      - sentences:
-          - "(cierra|cerrá) [el|la|los|las] {cover_classes:device_class} <area_floor>"
-
-      # unlock
-      - sentences:
-          - "abr(e|í) <name>"
-        requires_context:
-          domain: lock
-
-  # light brightness/color
-  HassLightSet:
-    data:
-      # brightness
-      - sentences:
-          - "ajusta [el] brillo de <name> al {brightness} por ciento"
-        requires_context:
-          domain: light
-
-      - sentences:
-          - "ajusta [el] brillo de las luces <area> al {brightness} por ciento"
-
-      # color
-      - sentences:
-          - "ajusta [el] color de <name> a {color}"
-          - "ajusta [el] color de las luces <area> de <name> a {color}"
-        requires_context:
-          domain: light
-
-      - sentences:
-          - "ajusta [el] color de las luces <area> a {color}"
+  - sentences:
+      - "activa [el |la |los |las ]{name}"
+    domains:
+      - "scene"
 
   # timers
-  HassStartTimer:
-    data:
-      # seconds
-      - sentences:
-          - "inicia [un] temporizador de {seconds} segundos"
+  - "inicia [un] temporizador de {seconds} segundos"
+  - "inicia [un] temporizador de 1 minuto"
+  - "inicia [un] temporizador de {minutes} minutos"
+  - "inicia [un] temporizador de 1 minuto y medio"
+  - "inicia [un] temporizador de {minutes} minutos {seconds} segundos"
+  - "inicia [un] temporizador de 1 hora"
+  - "inicia [un] temporizador de {hours} horas"
+  - "inicia [un] temporizador de 1 hora y media"
+  - "inicia [un] temporizador de 1 hora y 1 minuto"
+  - "inicia [un] temporizador de 1 hora y {minutes} minutos"
+  - "inicia [un] temporizador de {hours} horas y {minutes} minutos"
+  - "inicia [un] temporizador de {hours} horas y media"
 
-      # minutes
-      - sentences:
-          - "inicia [un] temporizador de 1 minuto"
-          - "inicia [un] temporizador de {minutes_small} minutos"
-          - "inicia [un] temporizador de {minutes_large} minutos"
-          - "inicia [un] temporizador de {minutes_extra} minutos"
+  - "cancela el temporizador"
+  - "cancela todos los temporizadores"
+  - "(pausa|continúa) el temporizador"
+  - "estado de temporizador"
+  - "estado de[l] [mi[s]] temporizador[es]"
+  - "cuánto falta para [el|los|mi[s]] temporizador[es]"
 
-      # minutes half
-      - sentences:
-          - "inicia [un] temporizador de 1 minuto {minutes_half:seconds}"
-          - "inicia [un] temporizador de {minutes_small} minutos {minutes_half:seconds}"
-          - "inicia [un] temporizador de {minutes_large} minutos {minutes_half:seconds}"
-          - "inicia [un] temporizador de {minutes_extra} minutos {minutes_half:seconds}"
-
-      # hours
-      - sentences:
-          - "inicia [un] temporizador de 1 hora"
-          - "inicia [un] temporizador de {hours} horas"
-
-      # hours half
-      - sentences:
-          - "inicia [un] temporizador de 1 hora {hours_half:minutes}"
-
-      # hours + minutes
-      - sentences:
-          - "inicia [un] temporizador de 1 hora y 1 minuto"
-          - "inicia [un] temporizador de {hours} horas y {minutes_small} minutos"
-          - "inicia [un] temporizador de {hours} horas y {minutes_large} minutos"
-          - "inicia [un] temporizador de {hours} horas y {minutes_extra} minutos"
-
-  HassCancelTimer:
-    data:
-      - sentences:
-          - "cancela el temporizador"
-
-  HassCancelAllTimers:
-    data:
-      - sentences:
-          - "cancela todos los temporizadores"
-
-  HassPauseTimer:
-    data:
-      - sentences:
-          - "pausa el temporizador"
-
-  HassUnpauseTimer:
-    data:
-      - sentences:
-          - "continúa el temporizador"
-
-  HassTimerStatus:
-    data:
-      - sentences:
-          - "estado de temporizador"
-          - "estado de[l] [mi[s]] temporizador[es]"
-          - "cuánto falta para [el|los|mi[s]] temporizador[es]"
-
-  # media players
-  HassMediaPause:
-    data:
-      - sentences:
-          - "pausa [la música]"
-
-      - sentences:
-          - "pausa <name>"
-        requires_context:
-          domain: media_player
-
-  HassMediaUnpause:
-    data:
-      - sentences:
-          - "continúa [la música]"
-
-      - sentences:
-          - "continúa <name>"
-        requires_context:
-          domain: media_player
-
-  HassMediaNext:
-    data:
-      - sentences:
-          - "siguiente canción"
-
-      - sentences:
-          - "siguiente canción en <name>"
-        requires_context:
-          domain: media_player
+  # media
+  - "(pausa|continúa)"
+  - "siguiente canción"
+  - sentences:
+      - "(pausa|continúa) [el |la |los |las ]{name}"
+      - "siguiente canción en [el |la |los |las ]{name}"
+    domains:
+      - "media_player"
 
   # temperature
-  HassGetTemperature:
-    data:
-      - sentences:
-          - "cuál es la temperatura"
+  - "cuál es la temperatura"
+  - "cuál es la temperatura en [en el |en la |del |de la ]{area}"
+  - sentences:
+      - "cuál es la temperatura de[l] [el |la |los |las ]{name}"
+    domains:
+      - "climate"
 
-      - sentences:
-          - "cuál es la temperatura de[l] <name>"
-        requires_context:
-          domain: climate
-
-      - sentences:
-          - "cuál es la temperatura en <area_floor>"
-
-  # questions
-  HassGetState:
-    data:
-
-      # doors, etc.
-      - sentences:
-          - "está <name> {state}"
-        requires_context:
-          domain:
-            - cover
-            - valve
-        lists:
-          state:
-            values:
-              - "abiert(a|o)"
-              - "cerrad(a|o)"
-
-      # locks
-      - sentences:
-          - "está {state} <name>"
-        requires_context:
-          domain: lock
-        lists:
-          state:
-            values:
-              - "cerrad(a|o) con llave"
-              - "abiert(a|o)"
-
-      # sensors, etc.
-      - sentences:
-          - "cuál es <name>"
-        requires_context:
-          domain:
-            - sensor
-            - binary_sensor
+  # sensors
+  - sentences:
+      - "cuál es [el |la |los |las ]{name}"
+    domains:
+      - "sensor"

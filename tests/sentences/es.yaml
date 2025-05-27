@@ -1,0 +1,84 @@
+---
+language: "es"
+
+sentences:
+  # cancel
+  - "no importa"
+
+  # date and time
+  - "qué hora es"
+  - "qué día es"
+
+  # weather
+  - "qué tiempo hace"
+  - "qué tiempo hace en New York"
+
+  # lights (area)
+  - "enciende las luces"
+  - "prende las luces Cocina"
+  - "ajusta el brillo de la Cocina al 50 por ciento"
+  - "ajusta el color de las luces de la Oficina a rojo"
+
+  # lights (name)
+  - "ajusta el brillo de Lámpara al 100 por ciento"
+  - "ajusta el color de Lámpara a verde"
+
+  # doors and windows
+  - "abre las puertas de la Cocina"
+  - "abre Puerta del Garaje"
+  - "cierra Puerta del Garaje"
+  - "está la Puerta del Garaje abierta"
+
+  # locks
+  - "cierra con llave Puerta Principal"
+  - "cerrá con llave Puerta Principal"
+  - "abre Puerta Principal"
+  - "está cerrada con llave la Puerta Principal"
+  - "está abierta la Puerta Principal"
+
+  # generic on/off
+  - "enciende Interruptor dormitorio"
+  - "prende Interruptor dormitorio"
+  - "apaga Interruptor dormitorio"
+
+  # scripts and scenes
+  - "ejecuta Modo sigiloso"
+  - "activa Modo fiesta"
+
+  # timers
+  - "inicia temporizador de 30 segundos"
+  - "inicia temporizador de 1 minuto"
+  - "inicia temporizador de 5 minutos"
+  - "inicia temporizador de 1 minuto y medio"
+  - "inicia temporizador de 10 minutos 45 segundos"
+  - "inicia temporizador de 1 hora"
+  - "inicia temporizador de 3 horas"
+  - "inicia temporizador de 1 hora y media"
+  - "inicia temporizador de 1 hora y 1 minuto"
+  - "inicia temporizador de 1 hora y 8 minutos"
+  - "inicia temporizador de 5 horas y 15 minutos"
+  - "inicia temporizador de 5 horas y media"
+
+  - "cancela el temporizador"
+  - "cancela todos los temporizadores"
+  - "pausa el temporizador"
+  - "continúa el temporizador"
+  - "estado de temporizador"
+  - "estado de mi temporizador"
+  - "cuánto falta para el temporizador"
+
+  # media
+  - "pausa"
+  - "continúa"
+  - "siguiente canción"
+  - "pausa TV"
+  - "continúa TV"
+  - "siguiente canción en TV"
+
+  # temperature
+  - "cuál es la temperatura"
+  - "cuál es la temperatura en Cocina"
+  - "cuál es la temperatura de EcoBee"
+
+  # sensors
+  - "cuál es la Humedad Exterior"

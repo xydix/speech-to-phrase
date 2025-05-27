@@ -1,655 +1,161 @@
-language: en
+---
+language: "en"
 
-# Lists available as {list_name} in sentence templates.
-# A list can either be a fixed set of values, a range, or a wildcard.
-#
-# For a fixed value list, each value of the list must be tested.
-# You will probably want to add test_format_values in the tests to make this
-# easier.
-#
-# For range lists, the minimum and maximum values of the range are automatically
-# tested. The second value in range (minimum + step) is also tested to ensure
-# that tests break if the step size is changed.
-#
-# Wildcards are not technically supported, so you must declare
-# "test_wildcard_values" for each one in the tests. Users will need to
-# re-declare these as fixed value lists in their custom sentences.
 lists:
   color:
-    values:
-      - "white"
-      - "black"
-      - "red"
-      - "orange"
-      - "yellow"
-      - "green"
-      - "blue"
-      - "purple"
-      - "brown"
-      - "pink"
-      - "turquoise"
-  brightness:
-    range:
-      from: 10
-      to: 100
-      step: 10
-  seconds:
-    range:
-      from: 10
-      to: 100
-      step: 5
-  minutes_1:
-    range:
-      from: 1
-      to: 1
-  minutes_small:
-    range:
-      from: 2
-      to: 19
-  minutes_large:
-    range:
-      from: 20
-      to: 100
-      step: 10
-  minutes_extra:
-    values:
-      - in: "45"
-        out: 45
-      - in: "forty five"
-        out: 45
-  minutes_half:
-    values:
-      - in: "half"
-        out: 30
-  hours_half:
-    values:
-      - in: "half"
-        out: 30
-  hours_1:
-    range:
-      from: 1
-      to: 1
-  hours:
-    range:
-      from: 2
-      to: 24
-  cover_classes:
-    values:
-      - in: "blinds"
-        out: "blind"
-      - in: "curtain"
-        out: "curtain"
-      - in: "curtains"
-        out: "curtain"
-      - in: "window"
-        out: "window"
-      - in: "windows"
-        out: "window"
-  cover_states:
-    values:
-      - "open"
-      - "closed"
-  lock_states:
-    values:
-      - "locked"
-      - "unlocked"
-  todo_item:
-    wildcard: true
+    - "white"
+    - "black"
+    - "red"
+    - "orange"
+    - "yellow"
+    - "green"
+    - "blue"
+    - "purple"
+    - "brown"
+    - "pink"
+    - "turquoise"
 
-expansion_rules:
-  timer_set: "(set|start|create)"
+wildcards:
+  - "todo_item"
 
-# -----------------------------------------------------------------------------
+data:
+  # cancel
+  - "never[ ]mind"
 
-# Sentence templates for intents.
-# Format:
-# intents:
-#   <intent name>
-#     data:
-#       - sentences:
-#           - "sentence template 1"
-#           - "sentence template 2"
-#         metadata:
-#           slot_combination: "name of slot combination from intents.yaml"
-#           context_area: true if area of voice satellite is required (must match intents.yaml)
-#         requires_context:
-#           domain: "domain of entities matched with {name}"
-#         slots:
-#           <name of inferred slot>: <slot value>
+  # date and time
+  - "(what's|what is) the [current] time"
+  - "what time is it [[right ]now]"
+  - "(what's|what is) the date [today]"
+  - "(what's|what is) today's date"
 
-intents:
-  # nevermind
-  HassNevermind:
-    data:
-      - sentences:
-          - "never[ ]mind"
-        metadata:
-          slot_combination: "default"
+  # weather
+  - "(what's|what is) the weather [like]"
+  - sentences:
+      - "(what's|what is) the {name} weather [like]"
+      - "(what's|what is) the weather [like] in {name}"
+    domains:
+      - "weather"
 
-  # date, time, weather
-  HassGetCurrentTime:
-    data:
-      - sentences:
-          - "(what's|what is) the [current] time"
-          - "what time is it [[right ]now]"
-        metadata:
-          slot_combination: "default"
+  # lights (area)
+  - "turn (on|off) [the] lights [in here]"
+  - "turn [the] lights (on|off) [in here]"
+  - "turn (on|off) [all|the|all of the] {area} lights"
+  - "turn (on|off) [all|the|all of the] lights in [the] {area}"
+  - "set [the] brightness [in here] to {brightness} percent"
+  - "set [the] brightness of [the] {area} to {brightness} percent"
+  - "set [the] {area} brightness to {brightness} percent"
+  - "set [the] lights [in here] to {color}"
+  - "set [the] color of [the] lights [in here] to {color}"
+  - "set [the] {area} lights to {color}"
+  - "set [the] color of [the] {area} lights to {color}"
+  - "set lights in [the] {area} to {color}"
 
-  HassGetCurrentDate:
-    data:
-      - sentences:
-          - "(what's|what is) the date [today]"
-          - "(what's|what is) today's date"
-        metadata:
-          slot_combination: "default"
+  # lights (name)
+  - sentences:
+      - "set [the] brightness of [the] {name} to {brightness} percent"
+      - "set [the] {name} brightness to {brightness} percent"
+    domains:
+      - "light"
+    light_supports_brightness: true
 
-  HassGetWeather:
-    data:
-      - sentences:
-          - "(what's|what is) the weather [like]"
-        metadata:
-          slot_combination: "default"
+  - sentences:
+      - "set [the] [color of [the]] {name} to {color}"
+      - "set [the] {name} [color] to {color}"
+    domains:
+      - "light"
+    light_supports_color: true
 
-      - sentences:
-          - "(what's|what is) the {name} weather [like]"
-          - "(what's|what is) the weather [like] in {name}"
-        requires_context:
-          domain: weather
-        metadata:
-          slot_combination: "name_only"
+  # doors and windows
+  - "(open|close) [the] (blinds|curtains|windows) in [the] {area}"
+  - "(open|close) [the] {area} (blinds|curtains|windows)"
+  - sentences:
+      - "(open|close) [the] {name}"
+      - "(open|close) [the] {name} in [the] {area}"
+      - "is [the] {name} (open|closed)"
+    domains:
+      - "cover"
 
-  # turn on/off
-  # open/close
-  # lock/unlock
-  HassTurnOn:
-    data:
-      # turn on
-      - sentences:
-          - "turn on [the] lights [in here]"
-        slots:
-          domain: "light"
-        metadata:
-          slot_combination: "domain_light"
-          context_area: true
+  # locks
+  - sentences:
+      - "(lock|unlock) [the] {name}"
+      - "is [the] {name} (locked|unlocked)"
+    domains:
+      - "lock"
 
-      - sentences:
-          - "turn on [the] fans [in here]"
-        slots:
-          domain: "fan"
-        metadata:
-          slot_combination: "domain_fan"
-          context_area: true
+  # generic on/off
+  - sentences:
+      - "turn (on|off) [the] {name}"
+      - "turn [the] {name} (on|off)"
+      - "turn (on|off) [the] {name} in [the] {area}"
+      - "turn [the] {name} in [the] {area} (on|off)"
+    domains:
+      - "light"
+      - "switch"
+      - "fan"
+      - "media_player"
+      - "input_boolean"
 
-      - sentences:
-          - "turn on [the] {name}"
-        requires_context:
-          domain:
-            - "light"
-            - "switch"
-            - "fan"
-            - "media_player"
-            - "input_boolean"
-        metadata:
-          slot_combination: "name_only"
+  # scripts and scenes
+  - sentences:
+      - "run [the] {name} [script]"
+    domains:
+      - "script"
 
-      - sentences:
-          - "open [the] {name}"
-        requires_context:
-          domain: "cover"
-        metadata:
-          slot_combination: "name_cover"
-
-      - sentences:
-          - "turn on [all|the|all of the] {area} lights"
-          - "turn on [all|the|all of the] lights in [the] {area}"
-        slots:
-          domain: "light"
-        metadata:
-          slot_combination: "area_domain_light"
-
-      # TODO: add support in main repo
-      # - sentences:
-      #     - "turn on [all|the|all of the] {area} fans"
-      #     - "turn on [all|the|all of the] fans in [the] {area}"
-      #   slots:
-      #     domain: "fan"
-      #   metadata:
-      #     slot_combination: "area_domain_fan"
-
-      - sentences:
-          - "turn on [the] {name} in [the] {area}"
-        requires_context:
-          domain:
-            - "light"
-            - "switch"
-            - "fan"
-            - "media_player"
-            - "input_boolean"
-        metadata:
-          slot_combination: "name_area"
-
-      - sentences:
-          - "open [the] {name} in [the] {area}"
-        requires_context:
-          domain: "cover"
-        metadata:
-          slot_combination: "name_area_cover"
-
-  # TODO: add support in main repo
-  #     - sentences:
-  #         - "turn on [all|the|all of the] {floor} [floor] lights"
-  #         - "turn on [all|the|all of the] lights (on|in) [the] {floor} [floor]"
-
-      - sentences:
-          - "open [the] {cover_classes:device_class} in [the] {area}"
-          - "open [the] {area} {cover_classes:device_class}"
-        slots:
-          domain: "cover"
-        metadata:
-          slot_combination: "area_device_class_cover"
-
-  # TODO: add support in main repo
-  #     - sentences:
-  #         - "open [the] {cover_classes} (on|in) [the] {floor} [floor]"
-  #         - "open {floor} [floor] {cover_classes}"
-
-      # lock
-      - sentences:
-          - "lock [the] {name}"
-        requires_context:
-          domain: lock
-        metadata:
-          slot_combination: "name_lock"
-
-      # script
-      - sentences:
-          - "run [the] {name} [script]"
-        requires_context:
-          domain: "script"
-        slots:
-          # TODO: fix in main repo
-          domain: "script"
-        metadata:
-          slot_combination: "name_script"
-
-      # scene
-      - sentences:
-          - "activate [the] {name} [scene]"
-        requires_context:
-          domain: "scene"
-        slots:
-          # TODO: fix in main repo
-          domain: "scene"
-        metadata:
-          slot_combination: "name_scene"
-
-  # lights
-  HassLightSet:
-    data:
-      # brightness
-      - sentences:
-          - "set [the] brightness [in here] to {brightness} percent"
-        metadata:
-          context_area: true
-          slot_combination: "brightness_only"
-
-      - sentences:
-          - "set [the] brightness of [the] {name} to {brightness} percent"
-          - "set [the] {name} brightness to {brightness} percent"
-        requires_context:
-          domain: light
-        metadata:
-          slot_combination: "name_brightness"
-
-      - sentences:
-          - "set [the] brightness of [the] {area} to {brightness} percent"
-          - "set [the] {area} brightness to {brightness} percent"
-        metadata:
-          slot_combination: "area_brightness"
-
-      # TODO: Add support in main repo
-      # sentences:
-      #     - "set [the] {floor} brightness to {brightness} percent"
-      #     - "set [the] brightness of [the] {floor} to {brightness} percent"
-      #   metadata:
-      #     slot_combination: floor_brightness
-
-      # color
-      - sentences:
-          - "set [the] lights [in here] to {color}"
-          - "set [[the] color of the] lights [in here] to {color}"
-        metadata:
-          slot_combination: "color_only"
-          context_area: true
-
-      - sentences:
-          - "set [the] [color of [the]] {name} to {color}"
-          - "set [the] {name} [color] to {color}"
-        requires_context:
-          domain: "light"
-        metadata:
-          slot_combination: "name_color"
-
-      - sentences:
-          - "set [the] [color of [the]] {area} lights to {color}"
-          - "set [the] {area} lights to {color}"
-          - "set lights in [the] {area} to {color}"
-        metadata:
-          slot_combination: "area_color"
-
-      # TODO: Add support in main repo
-      # - sentences:
-      #     - "set [the] [color of [the]] {floor} lights to {color}"
-      #     - "set [the] {floor} lights to {color}"
-      #     - "set lights (on|in) [the] {floor} to {color}"
-      #   metadata:
-      #     slot_combination: floor_color
-
-  HassTurnOff:
-    data:
-      # turn off
-      - sentences:
-          - "turn off [the] lights [in here]"
-        slots:
-          domain: "light"
-        metadata:
-          slot_combination: "domain_light"
-          context_area: true
-
-      - sentences:
-          - "turn off [the] fans [in here]"
-        slots:
-          domain: "fan"
-        metadata:
-          slot_combination: "domain_fan"
-          context_area: true
-
-      - sentences:
-          - "turn off [the] {name}"
-        requires_context:
-          domain:
-            - "light"
-            - "switch"
-            - "fan"
-            - "media_player"
-            - "input_boolean"
-        metadata:
-          slot_combination: "name_only"
-
-      - sentences:
-          - "close [the] {name}"
-        requires_context:
-          domain: "cover"
-        metadata:
-          slot_combination: "name_cover"
-
-      - sentences:
-          - "turn off [all|the|all of the] {area} lights"
-          - "turn off [all|the|all of the] lights in [the] {area}"
-        slots:
-          domain: "light"
-        metadata:
-          slot_combination: "area_domain_light"
-
-      # TODO: add support in main repo
-      # - sentences:
-      #     - "turn off [all|the|all of the] {area} fans"
-      #     - "turn off [all|the|all of the] fans in [the] {area}"
-      #   slots:
-      #     domain: "fan"
-      #   metadata:
-      #     slot_combination: "area_domain_fan"
-
-      - sentences:
-          - "turn off [the] {name} in [the] {area}"
-        requires_context:
-          domain:
-            - "light"
-            - "switch"
-            - "fan"
-            - "media_player"
-            - "input_boolean"
-        metadata:
-          slot_combination: "name_area"
-
-      - sentences:
-          - "close [the] {name} in [the] {area}"
-        requires_context:
-          domain: "cover"
-        metadata:
-          slot_combination: "name_area_cover"
-
-  # TODO: add support in main repo
-  #     - sentences:
-  #         - "turn off [all|the|all of the] {floor} [floor] lights"
-  #         - "turn off [all|the|all of the] lights (on|in) [the] {floor} [floor]"
-
-      - sentences:
-          - "close [the] {cover_classes:device_class} in [the] {area}"
-          - "close [the] {area} {cover_classes:device_class}"
-        slots:
-          domain: "cover"
-        metadata:
-          slot_combination: "area_device_class_cover"
-
-  # TODO: add support in main repo
-  #     - sentences:
-  #         - "close [the] {cover_classes} (on|in) [the] {floor} [floor]"
-  #         - "close {floor} [floor] {cover_classes}"
-
-      # lock
-      - sentences:
-          - "unlock [the] {name}"
-        requires_context:
-          domain: lock
-        metadata:
-          slot_combination: "name_lock"
+  - sentences:
+      - "activate [the] {name} [scene]"
+    domains:
+      - "scene"
 
   # timers
-  HassStartTimer:
-    data:
-      # seconds
-      - sentences:
-          - "<timer_set> [a] timer for {seconds} seconds"
-        metadata:
-          slot_combination: "seconds_only"
+  - "(set|start|create) [a] timer for {seconds} seconds"
+  - "(set|start|create) [a] timer for 1 minute"
+  - "(set|start|create) [a] timer for {minutes} minutes"
+  - "(set|start|create) [a] timer for 1 minute and {seconds} seconds"
+  - "(set|start|create) [a] timer for {minutes} minutes and {seconds} seconds"
+  - "(set|start|create) [a] timer for {minutes} and a half minutes"
+  - "(set|start|create) [a] timer for 1 hour"
+  - "(set|start|create) [a] timer for {hours} hours"
+  - "(set|start|create) [a] timer for {hours} and a half hours"
+  - "(set|start|create) [a] timer for 1 hour and 1 minute"
+  - "(set|start|create) [a] timer for 1 hour and {minutes} minutes"
+  - "(set|start|create) [a] timer for {hours} hours and {minutes} minutes"
 
-      - sentences:
-          - "<timer_set> [a] timer for {minutes_1:minutes} minute"
-          - "<timer_set> [a] timer for {minutes_small:minutes} minutes"
-          - "<timer_set> [a] timer for {minutes_large:minutes} minutes"
-          - "<timer_set> [a] timer for {minutes_extra:minutes} minutes"
-        metadata:
-          slot_combination: "minutes_only"
+  - "(cancel|stop) [the|my] timer"
+  - "(cancel|stop) all [[of ](the|my)] timers"
+  - "(pause|resume) [the|my] timer"
+  - "timer status"
+  - "status of [the|my] timer[s]"
+  - "[how much] time [is] left on [the|my] timer[s]"
 
-      - sentences:
-          - "<timer_set> [a] timer for {minutes_1:minutes} and a {minutes_half:seconds} minutes"
-          - "<timer_set> [a] timer for {minutes_small:minutes} and a {minutes_half:seconds} minutes"
-          - "<timer_set> [a] timer for {minutes_large:minutes} and a {minutes_half:seconds} minutes"
-          - "<timer_set> [a] timer for {minutes_extra:minutes} and a {minutes_half:seconds} minutes"
-        metadata:
-          slot_combination: "minutes_half"
-
-      # hours
-      - sentences:
-          - "<timer_set> [a] timer for {hours_1:hours} hour"
-          - "<timer_set> [a] timer for {hours} hours"
-        metadata:
-          slot_combination: "hours_only"
-
-      # hours half
-      - sentences:
-          - "<timer_set> [a] timer for {hours_1:hours} and a {hours_half:minutes} hours"
-          - "<timer_set> [a] timer for {hours} and a {hours_half:minutes} hours"
-        metadata:
-          slot_combination: "hours_half"
-
-      # hours + minutes
-      - sentences:
-          - "<timer_set> [a] timer for {hours_1:hours} hour and {minutes_1:minutes} minute"
-          - "<timer_set> [a] timer for {hours_1:hours} hour and {minutes_small:minutes} minutes"
-          - "<timer_set> [a] timer for {hours_1:hours} hour and {minutes_large:minutes} minutes"
-          - "<timer_set> [a] timer for {hours_1:hours} hour and {minutes_extra:minutes} minutes"
-          - "<timer_set> [a] timer for {hours} hours and {minutes_1:minutes} minute"
-          - "<timer_set> [a] timer for {hours} hours and {minutes_small:minutes} minutes"
-          - "<timer_set> [a] timer for {hours} hours and {minutes_large:minutes} minutes"
-          - "<timer_set> [a] timer for {hours} hours and {minutes_extra:minutes} minutes"
-        metadata:
-          slot_combination: "hours_minutes"
-
-  HassCancelTimer:
-    data:
-      - sentences:
-          - "(cancel|stop) [the|my] timer"
-        metadata:
-          slot_combination: "default"
-
-  HassCancelAllTimers:
-    data:
-      - sentences:
-          - "(cancel|stop) all [[of ](the|my)] timers"
-        metadata:
-          slot_combination: "default"
-
-  HassPauseTimer:
-    data:
-      - sentences:
-          - "pause [the|my] timer"
-        metadata:
-          slot_combination: "default"
-
-  HassUnpauseTimer:
-    data:
-      - sentences:
-          - "resume [the|my] timer"
-        metadata:
-          slot_combination: "default"
-
-  HassTimerStatus:
-    data:
-      - sentences:
-          - "timer status"
-          - "status of [the|my] timer[s]"
-          - "[how much] time [is] left on [the|my] timer[s]"
-        metadata:
-          slot_combination: "default"
-
-  # media players
-  HassMediaPause:
-    data:
-      - sentences:
-          - "pause"
-        metadata:
-          slot_combination: "default"
-          context_area: true
-
-      - sentences:
-          - "pause [the] {name}"
-        requires_context:
-          domain: "media_player"
-        metadata:
-          slot_combination: "name_only"
-
-  HassMediaUnpause:
-    data:
-      - sentences:
-          - "resume"
-        metadata:
-          slot_combination: "default"
-          context_area: true
-
-      - sentences:
-          - "resume [the] {name}"
-        requires_context:
-          domain: media_player
-        metadata:
-          slot_combination: "name_only"
-
-  HassMediaNext:
-    data:
-      - sentences:
-          - "next [(track|item)]"
-          - "skip [[this ](track|song)]"
-        metadata:
-          slot_combination: "default"
-          context_area: true
-
-      - sentences:
-          - "next [(track|item)] on [the] {name}"
-          - "skip [[the ](track|song)] on [the] {name}"
-        requires_context:
-          domain: "media_player"
-        metadata:
-          slot_combination: "name_only"
+  # media
+  - "(pause|resume)"
+  - "next [(track|item)]"
+  - "skip [[this ](track|song)]"
+  - sentences:
+      - "(pause|resume) [the] {name}"
+      - "next [(track|item)] on [the] {name}"
+      - "skip [[the ](track|song)] on [the] {name}"
+    domains:
+      - "media_player"
 
   # temperature
-  HassClimateGetTemperature:
-    data:
-      - sentences:
-          - "(what is|what's) the (temp|temperature)"
-        metadata:
-          context_area: true
-          slot_combination: "default"
+  - "(what is|what's) the (temp|temperature)"
+  - "(what is|what's) the (temp|temperature) in [the] {area}"
+  - "(what is|what's) the {area} (temp|temperature)"
+  - sentences:
+      - "(what is|what's) the {name} (temp|temperature)"
+      - "(what is|what's) the (temp|temperature) of [the] {name}"
+    domains:
+      - "climate"
 
-      - sentences:
-          - "(what is|what's) the {name} (temp|temperature)"
-          - "(what is|what's) the (temp|temperature) of [the] {name}"
-        requires_context:
-          domain: "climate"
-        metadata:
-          slot_combination: "name_only"
-
-      - sentences:
-          - "(what is|what's) the (temp|temperature) in [the] {area}"
-          - "(what is|what's) the {area} (temp|temperature)"
-        metadata:
-          slot_combination: "area_only"
-
-      # - sentences:
-      #     - "(what is|what's) the (temp|temperature) on [the] {floor}"
-      #     - "(what is|what's) the {floor} (temp|temperature)"
-      #   metadata:
-      #     slot_combination: "floor_only"
-
-  # questions
-  HassGetState:
-    data:
-      # doors, etc.
-      - sentences:
-          - "is [the] {name} {cover_states:state}"
-        requires_context:
-          domain: "cover"
-        slots:
-          domain: "cover"
-        metadata:
-          slot_combination: "name_cover"
-
-      # locks
-      - sentences:
-          - "is [the] {name} {lock_states:state}"
-        slots:
-          domain: "lock"
-        requires_context:
-          domain: "lock"
-        metadata:
-          slot_combination: "name_lock"
-
-      # sensors, etc.
-      - sentences:
-          - "what is [the [value of [the]]] {name}"
-        requires_context:
-          domain:
-            - "sensor"
-            - "binary_sensor"
-        metadata:
-          slot_combination: "name_sensor"
+  # sensors
+  - sentences:
+      - "what is [the [value of [the]]] {name}"
+    domains:
+      - "sensor"
 
   # todo
-  HassListAddItem:
-    data:
-      - sentences:
-          - "add {todo_item:item} to [the|my] {name}"
-        requires_context:
-          domain: "todo"
-        metadata:
-          slot_combination: "name_item"
+  - sentences:
+      - "add {todo_item} to [the|my] {name}"
+    domains:
+      - "todo"

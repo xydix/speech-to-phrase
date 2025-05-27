@@ -15,7 +15,8 @@ _CI_TESTS = [
         "hassil_fst",
         "models",
         "validate_yaml",
-        "sentences_recognized",
+        "g2p",
+        "recognize",
     )
 ]
 
