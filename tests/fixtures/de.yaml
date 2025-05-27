@@ -40,7 +40,3 @@ fixtures:
 
     - name: "Haushalt"
       domain: "todo"
-
-  lists:
-    todo_item:
-      - "Putzen"

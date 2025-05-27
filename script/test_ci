@@ -16,7 +16,7 @@ _CI_TESTS = [
         "models",
         "validate_yaml",
         "g2p",
-        "hass_recognize",
+        "recognize",
     )
 ]
 

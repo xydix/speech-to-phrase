@@ -108,10 +108,10 @@ class LanguageData:
                     list_name: {"values": list_values}
                     for list_name, list_values in self.list_values.items()
                 },
-                # **{
-                #     wildcard_name: {"wildcard": True}
-                #     for wildcard_name in self.wildcard_names
-                # },
+                **{
+                    wildcard_name: {"wildcard": True}
+                    for wildcard_name in self.wildcard_names
+                },
             },
             "intents": {
                 "SpeechToPhrase": {

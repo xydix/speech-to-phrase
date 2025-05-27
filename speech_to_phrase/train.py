@@ -132,6 +132,11 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
             ) as custom_sentences_file:
                 merge_dict(sentences_dict, yaml.load(custom_sentences_file) or {})
 
+    # Clean up lists that were wildcards but now have values
+    for list_name, list_info in lists_dict.items():
+        if "values" in list_info:
+            list_info.pop("wildcard", None)
+
     lang_intents = Intents.from_dict(sentences_dict)
     tr_lists = lang_data.add_transformed_slot_lists(lang_intents.slot_lists)
 
