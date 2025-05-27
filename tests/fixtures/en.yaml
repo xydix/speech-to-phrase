@@ -46,7 +46,3 @@ fixtures:
 
     - name: "Shopping List"
       domain: "todo"
-
-  lists:
-    todo_item:
-      - "apples"

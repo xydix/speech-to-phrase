@@ -172,10 +172,6 @@ FIXTURES_SCHEMA = vol.Schema(
             ],
             vol.Optional("floors"): [{vol.Required("name"): vol.Any(str, [str])}],
             vol.Optional("areas"): [{vol.Required("name"): vol.Any(str, [str])}],
-            vol.Optional("lists"): {
-                # list name
-                str: [str]
-            },
         },
     }
 )

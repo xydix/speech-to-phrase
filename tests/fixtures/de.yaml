@@ -37,3 +37,10 @@ fixtures:
 
     - name: "Partymodus"
       domain: "scene"
+
+    - name: "Haushalt"
+      domain: "todo"
+
+  lists:
+    todo_item:
+      - "Putzen"

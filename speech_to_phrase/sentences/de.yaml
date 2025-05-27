@@ -13,6 +13,9 @@ lists:
     - "violett"
     - "braun"
 
+wildcards:
+  - "todo_item"
+
 data:
   # cancel
   - "vergiss es"
@@ -146,3 +149,13 @@ data:
   #     - "what is [the [value of [the]]] {name}"
   #   domains:
   #     - "sensor"
+
+  # todo
+  - sentences:
+      - "füge {todo_item} der {name} [Liste] hinzu"
+      - "füge {todo_item} auf [die] {name} [Liste] hinzu"
+      - "füge {todo_item} auf [die] [Liste] {name} hinzu"
+      - "setze {todo_item} auf [die] {name} [Liste]"
+      - "setze {todo_item} auf [die] [Liste] {name}"
+    domains:
+      - "todo"
