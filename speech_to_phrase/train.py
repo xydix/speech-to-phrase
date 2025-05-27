@@ -133,7 +133,7 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
                 merge_dict(sentences_dict, yaml.load(custom_sentences_file) or {})
 
     # Clean up lists that were wildcards but now have values
-    for list_name, list_info in lists_dict.items():
+    for list_info in lists_dict.values():
         if "values" in list_info:
             list_info.pop("wildcard", None)
 

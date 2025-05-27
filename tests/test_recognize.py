@@ -149,7 +149,7 @@ def test_recognize_wav(lang_resources: Resources) -> None:
             unrecognized_sentences.append(sentence)
 
     assert not unrecognized_sentences, (
-        "Sentences will not be recognized by Speech-to-Phrase: "
+        "Sentences from test WAV file(s) will not be recognized by Speech-to-Phrase: "
         f"language={lang_resources.language}, "
         f"sentences={unrecognized_sentences}"
     )

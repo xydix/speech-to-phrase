@@ -151,29 +151,29 @@ data:
 
   # Turning on lights per area (context awareness) 
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  - "allume[r] (les lumières|la lumière)"
+  - "allume[r] [tous|toutes] (les lumières|la lumière)"
 
   # Turning on lights per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOn.yaml
-  - "allume[r] (les lumières|la lumière) {de_le_floor}"
-  - "allume[r] (les lumières|la lumière) dans {le_floor}"
-  - "allume[r] {le_floor}"
+  - "allume[r] [tous|toutes] (les lumières|la lumière) {de_le_floor}"
+  - "allume[r] [tous|toutes] (les lumières|la lumière) dans {le_floor}"
+  - "allume[r] [tous|toutes] {le_floor}"
 
   # Turning off lights per area
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
-  - "(éteins|éteindre) (les lumières|la lumière) {de_le_area}"
-  - "(éteins|éteindre) (les lumières|la lumière) dans {le_area}"
-  - "(éteins|éteindre) {le_area}"
+  - "(éteins|éteindre) [tous|toutes] (les lumières|la lumière) {de_le_area}"
+  - "(éteins|éteindre) [tous|toutes] (les lumières|la lumière) dans {le_area}"
+  - "(éteins|éteindre) [tous|toutes] {le_area}"
 
   # Turning off lights per area (context awareness)
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
-  - "(éteins|éteindre) (les lumières|la lumière)"
+  - "(éteins|éteindre) [tous|toutes] (les lumières|la lumière)"
 
   # Turning off lights per floor
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassTurnOff.yaml
-  - "(éteins|éteindre) (les lumières|la lumière) {de_le_floor}"
-  - "(éteins|éteindre) (les lumières|la lumière) dans {le_floor}"
-  - "(éteins|éteindre) {le_floor}"
+  - "(éteins|éteindre) [tous|toutes] (les lumières|la lumière) {de_le_floor}"
+  - "(éteins|éteindre) [tous|toutes] (les lumières|la lumière) dans {le_floor}"
+  - "(éteins|éteindre) [tous|toutes] {le_floor}"
 
   # Setting brightness per name
   # Full sentences here https://github.com/home-assistant/intents/blob/main/sentences/fr/light_HassLightSet.yaml
