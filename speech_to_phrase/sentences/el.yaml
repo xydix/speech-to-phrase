@@ -15,6 +15,11 @@ lists:
     - "ροζ"
     - "τουρκουάζ"
 
+expansion_rules:
+  of: "του|της|των"
+  to: "στο[ν]|στη[ν]"
+  the: "ο|η|τ(ον|ην|ο)|τα"
+
 data:
   # cancel
   - "άστο"
@@ -83,7 +88,7 @@ data:
 
   # generic on/off
   - sentences:
-      - "(άναψε|σβήσε) (ο|η|το) {name}"
+      - "(άναψε|σβήσε) <the> {name}"
       # - "turn (on|off) [the] {name} in [the] {area}"
       # - "turn [the] {name} in [the] {area} (on|off)"
     domains:
