@@ -34,6 +34,7 @@ dependencies = [
     "aiohttp>=3,<4",
     "pysilero-vad>=2,<3",
     "pyring-buffer>=1,<2",
+    "ruamel.yaml==0.18.14",
 ]
 
 [project.optional-dependencies]
@@ -48,6 +49,8 @@ dev = [
     "build==1.2.2",
     "home-assistant-intents==2025.5.7",
     "regex==2024.11.6",
+    "voluptuous==0.15.2",
+    "networkx==3.4.2",
 ]
 
 [project.urls]

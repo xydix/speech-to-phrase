@@ -3,6 +3,7 @@
 import hashlib
 import logging
 import re
+from collections.abc import Generator
 from dataclasses import dataclass, field, fields
 from typing import Any, Dict, List, Optional, Set, Union
 
@@ -429,8 +430,47 @@ async def get_hass_info(token: str, uri: str) -> HomeAssistantInfo:
             if msg["success"]:
                 things.trigger_sentences.extend(set(msg["result"]["trigger_sentences"]))
 
+            # Get ask_question answers
+            for entity_id, state in states.items():
+                domain = entity_id.split(".", maxsplit=1)[0]
+                if domain not in ("automation", "script"):
+                    continue
+
+                if (domain == "automation") and (state["state"] != "on"):
+                    # Ignore disabled automations
+                    continue
+
+                await websocket.send_json(
+                    {
+                        "id": next_id(),
+                        "type": f"{domain}/config",
+                        "entity_id": entity_id,
+                    }
+                )
+                msg = await websocket.receive_json()
+                if not msg["success"]:
+                    continue
+
+                entity_config = msg["result"]["config"]
+                for answer_sentence in _find_ask_question_answers(entity_config):
+                    things.trigger_sentences.append(answer_sentence)
+
     return HomeAssistantInfo(
         system_language=system_language,
         things=things,
         pipeline_languages=pipeline_languages,
     )
+
+
+def _find_ask_question_answers(item: Any) -> Generator[str]:
+    """Yields answer sentences from automation or script config for ask_question."""
+    if isinstance(item, dict):
+        if item.get("action") == "assist_satellite.ask_question":
+            for answer in item.get("data", {}).get("answers", []):
+                yield from answer.get("sentences", [])
+        else:
+            for sub_item in item.values():
+                yield from _find_ask_question_answers(sub_item)
+    elif isinstance(item, list):
+        for sub_item in item:
+            yield from _find_ask_question_answers(sub_item)

@@ -20,5 +20,10 @@ _CI_TESTS = [
     )
 ]
 
-context = venv.EnvBuilder().ensure_directories(_VENV_DIR)
-subprocess.check_call([context.env_exe, "-m", "pytest"] + _CI_TESTS + sys.argv[1:])
+if _VENV_DIR.exists():
+    context = venv.EnvBuilder().ensure_directories(_VENV_DIR)
+    python_exe = context.env_exe
+else:
+    python_exe = "python3"
+
+subprocess.check_call([python_exe, "-m", "pytest"] + _CI_TESTS + sys.argv[1:])
