@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.0 (unreleased)
+## 1.4.0
 
 - Add supported features to `light`, `fan`, `cover`, and `media_player` domains (used in `requires_context`)
     - `light_supports_color` (color mode is hs/rgb/rgbw/rgbww/xy)
