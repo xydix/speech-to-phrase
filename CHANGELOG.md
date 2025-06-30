@@ -2,6 +2,7 @@
 
 ## 1.4.0
 
+- Load answers from `assist_satellite.ask_question` in automations and scripts
 - Add supported features to `light`, `fan`, `cover`, and `media_player` domains (used in `requires_context`)
     - `light_supports_color` (color mode is hs/rgb/rgbw/rgbww/xy)
     - `light_supports_brightness` (color mode is hs/rgb/rgbw/rgbww/xy/brightness/white)
