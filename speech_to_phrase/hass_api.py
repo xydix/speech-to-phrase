@@ -110,7 +110,7 @@ class Things:
     entities: List[Entity] = field(default_factory=list)
     areas: List[Area] = field(default_factory=list)
     floors: List[Floor] = field(default_factory=list)
-    trigger_sentences: List[str] = field(default_factory=list)
+    extra_sentences: List[str] = field(default_factory=list)
     _hash: str = ""
 
     def get_hash(self) -> str:
@@ -127,8 +127,8 @@ class Things:
             for floor_hash in sorted(e.get_hash() for e in self.entities):
                 hasher.update(floor_hash.encode("utf-8"))
 
-            for trigger_sentence in sorted(self.trigger_sentences):
-                hasher.update(trigger_sentence.encode("utf-8"))
+            for extra_sentence in sorted(self.extra_sentences):
+                hasher.update(extra_sentence.encode("utf-8"))
 
             self._hash = hasher.hexdigest()
 
@@ -428,7 +428,7 @@ async def get_hass_info(token: str, uri: str) -> HomeAssistantInfo:
             )
             msg = await websocket.receive_json()
             if msg["success"]:
-                things.trigger_sentences.extend(set(msg["result"]["trigger_sentences"]))
+                things.extra_sentences.extend(set(msg["result"]["trigger_sentences"]))
 
             # Get ask_question answers
             for entity_id, state in states.items():
@@ -436,7 +436,7 @@ async def get_hass_info(token: str, uri: str) -> HomeAssistantInfo:
                 if domain not in ("automation", "script"):
                     continue
 
-                if (domain == "automation") and (state["state"] != "on"):
+                if (domain == "automation") and (state.get("state") != "on"):
                     # Ignore disabled automations
                     continue
 
@@ -453,7 +453,11 @@ async def get_hass_info(token: str, uri: str) -> HomeAssistantInfo:
 
                 entity_config = msg["result"]["config"]
                 for answer_sentence in _find_ask_question_answers(entity_config):
-                    things.trigger_sentences.append(answer_sentence)
+                    if "{{" in answer_sentence:
+                        # Skip sentences with HA template variables
+                        continue
+
+                    things.extra_sentences.append(answer_sentence)
 
     return HomeAssistantInfo(
         system_language=system_language,
@@ -467,7 +471,13 @@ def _find_ask_question_answers(item: Any) -> Generator[str]:
     if isinstance(item, dict):
         if item.get("action") == "assist_satellite.ask_question":
             for answer in item.get("data", {}).get("answers", []):
-                yield from answer.get("sentences", [])
+                sentences = answer.get("sentences", [])
+                if isinstance(sentences, str):
+                    # Single sentence
+                    yield sentences
+                else:
+                    # List of sentences
+                    yield from sentences
         else:
             for sub_item in item.values():
                 yield from _find_ask_question_answers(sub_item)

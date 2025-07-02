@@ -133,7 +133,7 @@ async def test_system_and_pipeline_languages() -> None:
         ha_info = await get_hass_info("<token>", "<url>")
         assert ha_info.system_language == "en"
         assert ha_info.pipeline_languages == {"de", "nl"}
-        assert set(ha_info.things.trigger_sentences) == {"trigger 1", "trigger 2"}
+        assert set(ha_info.things.extra_sentences) == {"trigger 1", "trigger 2"}
 
 
 @pytest.mark.asyncio
@@ -638,3 +638,91 @@ async def test_media_player_features() -> None:
         assert not no_extra_media_player.media_player_supports_pause
         assert not no_extra_media_player.media_player_supports_volume_set
         assert not no_extra_media_player.media_player_supports_next_track
+
+
+@pytest.mark.asyncio
+async def test_automation_script_answers() -> None:
+    """Test retrieval of ask_question answers for scripts and automations."""
+    mock_websocket = MockWebsocket(
+        [
+            (None, {"type": "auth_required"}),
+            ("auth", {"type": "auth_ok"}),
+            ("get_config", {"result": {"language": "en"}}),
+            (
+                "assist_pipeline/pipeline/list",
+                {"result": {"pipelines": [{"stt_language": "en"}]}},
+            ),
+            (
+                "homeassistant/expose_entity/list",
+                {"result": {"exposed_entities": {}}},
+            ),
+            (
+                "get_states",
+                {
+                    "result": [
+                        {"entity_id": "automation.test_automation", "state": "on"},
+                        {"entity_id": "script.test_script", "state": "off"},
+                    ]
+                },
+            ),
+            ("config/floor_registry/list", {"result": []}),
+            ("config/area_registry/list", {"result": []}),
+            ("config/entity_registry/get_entries", {"result": {}}),
+            (
+                "conversation/sentences/list",
+                {"result": {"trigger_sentences": []}},
+            ),
+            (
+                "automation/config",
+                {
+                    "result": {
+                        "config": {
+                            "actions": [
+                                {
+                                    "action": "assist_satellite.ask_question",
+                                    "data": {
+                                        "answers": [
+                                            {
+                                                "sentences": [
+                                                    "answer 1",
+                                                    "answer with {{ variable }}",
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                }
+                            ]
+                        }
+                    }
+                },
+            ),
+            (
+                "script/config",
+                {
+                    "result": {
+                        "config": {
+                            "sequence": [
+                                {
+                                    "action": "assist_satellite.ask_question",
+                                    "data": {
+                                        "answers": [
+                                            {
+                                                "sentences": [
+                                                    "answer 2",
+                                                    "answer with {{ variable }}",
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                }
+                            ]
+                        }
+                    }
+                },
+            ),
+        ]
+    )
+
+    with patch("aiohttp.ClientSession", return_value=_make_session(mock_websocket)):
+        ha_info = await get_hass_info("<token>", "<url>")
+        assert set(ha_info.things.extra_sentences) == {"answer 1", "answer 2"}

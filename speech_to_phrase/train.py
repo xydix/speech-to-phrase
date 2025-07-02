@@ -106,11 +106,11 @@ def _create_intents(model: Model, settings: Settings, things: Things) -> Intents
 
     sentences_dict["lists"] = lists_dict
 
-    # Sentence triggers
-    if things.trigger_sentences:
+    # Sentence triggers, ask_question answers, etc.
+    if things.extra_sentences:
         intents_dict = sentences_dict.get("intents", {})
-        intents_dict["TriggerSentences"] = {
-            "data": [{"sentences": things.trigger_sentences}]
+        intents_dict["ExtraSentences"] = {
+            "data": [{"sentences": things.extra_sentences}]
         }
         sentences_dict["intents"] = intents_dict
 

@@ -138,11 +138,11 @@ async def _retrain_once(state: State, force_retrain: bool = False) -> None:
     settings.default_language = hass_info.system_language
     things = hass_info.things
     _LOGGER.debug(
-        "Got %s entities, %s area(s), %s floor(s), %s trigger sentence(s)",
+        "Got %s entities, %s area(s), %s floor(s), %s extra sentence(s)",
         len(things.entities),
         len(things.areas),
         len(things.floors),
-        len(things.trigger_sentences),
+        len(things.extra_sentences),
     )
 
     languages_to_train = list(hass_info.pipeline_languages) + [
