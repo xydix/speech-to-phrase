@@ -47,7 +47,7 @@ dev = [
     "pytest-asyncio==0.25.2",
     "tox==4.23.2",
     "build==1.2.2",
-    "home-assistant-intents==2025.5.7",
+    "home-assistant-intents==2025.6.23",
     "regex==2024.11.6",
     "voluptuous==0.15.2",
     "networkx==3.4.2",
