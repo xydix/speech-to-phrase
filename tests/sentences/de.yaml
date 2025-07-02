@@ -28,6 +28,27 @@ sentences:
   - "aktiviere Batteriewarnung Skript"
   - "aktiviere Partymodus Szene"
 
+  # timers
+  - "starte Timer auf 30 Sekunden"
+  - "setze einen Timer für 1 Minute"
+  - "stelle Timer auf 5 Minuten"
+  - "erstelle einen Timer auf 1 Stunde"
+  - "starte Timer für 3 Stunden"
+  - "setze einen Timer auf 1 Stunde und 1 Minute"
+  - "stelle Timer für 1 Stunde und 5 Minuten"
+  - "erstelle einen Timer auf 3 Stunden und 5 Minuten"
+
+  - "beende Timer"
+  - "stoppe alle Timer"
+  - "pausiere Timer"
+  - "pausiere den Timer"
+  - "setze den Timer fort"
+  - "Timer Status"
+  - "Status des Timers"
+  - "Status meines Timers"
+  - "wie lange läuft der Timer noch"
+  - "wie lange läuft mein Timer noch"
+
   # media
   - "pause"
   - "Weiter"

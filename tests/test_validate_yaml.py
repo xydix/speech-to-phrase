@@ -151,7 +151,7 @@ SENTENCES_SCHEMA = vol.Schema(
                     vol.Optional("media_player_supports_volume_set"): bool,
                     vol.Optional("media_player_supports_next_track"): bool,
                 },
-                vol.All(str, no_alternative_list_references, no_rule_references),
+                vol.All(str, no_alternative_list_references),
             ),
         ],
     }
