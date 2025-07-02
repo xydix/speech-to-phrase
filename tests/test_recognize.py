@@ -2,7 +2,7 @@
 
 import itertools
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Optional
 
 import pytest
 from hassil import Intents, recognize_all
@@ -87,7 +87,7 @@ def lang_resources_fixture(request, shared_lists: dict[str, Any]) -> Resources:
 
 
 def test_recognize(lang_resources: Resources) -> None:
-    stp_sentences_to_check: set[str] = {
+    stp_sentences_to_check: set[Optional[str]] = {
         template.text
         for intent in lang_resources.stp_intents.intents.values()
         for data in intent.data
@@ -98,20 +98,25 @@ def test_recognize(lang_resources: Resources) -> None:
 
         # STP
         result = next(
-            recognize_all(
-                sentence, lang_resources.stp_intents, intent_context=INTENT_CONTEXT
+            iter(
+                recognize_all(
+                    sentence, lang_resources.stp_intents, intent_context=INTENT_CONTEXT
+                )
             ),
             None,
         )
         assert (
             result is not None
         ), f"Sentence not recognized by Speech-to-Phrase: {error_info}"
+        assert result.intent_sentence is not None
         stp_sentences_to_check.discard(result.intent_sentence.text)
 
         # Home Assistant
         result = next(
-            recognize_all(
-                sentence, lang_resources.hass_intents, intent_context=INTENT_CONTEXT
+            iter(
+                recognize_all(
+                    sentence, lang_resources.hass_intents, intent_context=INTENT_CONTEXT
+                )
             ),
             None,
         )
@@ -140,8 +145,10 @@ def test_recognize_wav(lang_resources: Resources) -> None:
         sentence = wav_path.stem
 
         result = next(
-            recognize_all(
-                sentence, lang_resources.stp_intents, intent_context=INTENT_CONTEXT
+            iter(
+                recognize_all(
+                    sentence, lang_resources.stp_intents, intent_context=INTENT_CONTEXT
+                )
             ),
             None,
         )

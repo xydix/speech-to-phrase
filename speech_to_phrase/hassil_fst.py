@@ -538,7 +538,7 @@ def expression_to_fst(
             return expression_to_fst(
                 Alternative(
                     [
-                        Sequence(perm_items)
+                        Sequence(perm_items)  # type: ignore[arg-type]
                         for perm_items in itertools.permutations(grp.items)
                     ]
                 ),

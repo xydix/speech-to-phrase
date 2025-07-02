@@ -219,6 +219,7 @@ class LanguageData:
                             metadata=value.metadata,
                         )
                         for value in slot_list.values
+                        if isinstance(value.text_in, TextChunk)
                         for output_value in tr_list.apply(value.text_in.text)
                     ],
                 )
