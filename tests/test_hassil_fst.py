@@ -383,7 +383,12 @@ lists:
         )
         await tools.async_run_pipeline(
             ["ngramcount", "--order=3", shlex.quote(str(fst_path)), "-"],
-            ["ngrammake", "--method=katz", "-", shlex.quote(str(ngram_fst_path))],
+            [
+                "ngrammake",
+                "--method=kneser_ney",
+                "-",
+                shlex.quote(str(ngram_fst_path)),
+            ],
         )
 
         test_sentences = [

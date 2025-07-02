@@ -785,7 +785,7 @@ def intents_to_fst(
     exclude_intents: Optional[Set[str]] = None,
     include_intents: Optional[Set[str]] = None,
     g2p_info: Optional[G2PInfo] = None,
-    normalize_probabilities: bool = True,
+    normalize_probabilities: bool = False,
 ) -> Fst:
     num_to_words: Optional[NumToWords] = None
     if number_language:

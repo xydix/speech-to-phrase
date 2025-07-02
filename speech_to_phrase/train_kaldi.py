@@ -208,7 +208,7 @@ async def _create_arpa(
     train_dir: Path,
     tools: SpeechTools,
     order: int = 3,
-    method: str = "katz",
+    method: str = "kneser_ney",
 ) -> None:
     """Create n-gram language model from intents."""
     data_dir = train_dir / "data"
@@ -296,8 +296,9 @@ async def _create_fuzzy_fst(fst: Fst, train_dir: Path, tools: SpeechTools) -> No
             if not line:
                 continue
 
-            # Copy transition
-            print(line, file=text_fuzzy_fst_file)
+            # Copy transition without probability
+            parts = line.split()
+            print(*parts[:4], file=text_fuzzy_fst_file)
 
             state = line.split(maxsplit=1)[0]
             if state in states:
