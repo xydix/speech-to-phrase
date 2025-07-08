@@ -72,7 +72,7 @@ async def train_kaldi(
     await _prepare_lang(train_dir, settings.tools)
 
     # 2. Generate G.fst from skill graph
-    await _create_arpa(fst, train_dir, settings.tools)
+    await _create_arpa(fst, train_dir, settings.tools, method=model.arpa_method)
     await _create_fuzzy_fst(fst, train_dir, settings.tools)
 
     # 3. mkgraph.sh

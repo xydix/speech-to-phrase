@@ -15,13 +15,15 @@ sentences:
 
   # lights (area)
   - "enciende las luces"
+  - "enciende la luz"
   - "prende las luces Cocina"
+  - "apaga la luz Cocina"
   - "ajusta el brillo de la Cocina al 50 por ciento"
-  - "ajusta el color de las luces de la Oficina a rojo"
+  - "pon el color de las luces de la Oficina a rojo"
 
   # lights (name)
   - "ajusta el brillo de Lámpara al 100 por ciento"
-  - "ajusta el color de Lámpara a verde"
+  - "pon el color de Lámpara a verde"
 
   # doors and windows
   - "abre las puertas de la Cocina"
@@ -47,23 +49,29 @@ sentences:
 
   # timers
   - "inicia temporizador de 30 segundos"
-  - "inicia temporizador de 1 minuto"
-  - "inicia temporizador de 5 minutos"
+  - "pon temporizador de 1 minuto"
+  - "ajusta temporizador de 5 minutos"
   - "inicia temporizador de 1 minuto y medio"
-  - "inicia temporizador de 10 minutos 45 segundos"
-  - "inicia temporizador de 1 hora"
+  - "pon temporizador de 10 minutos 45 segundos"
+  - "ajusta temporizador de 1 hora"
   - "inicia temporizador de 3 horas"
-  - "inicia temporizador de 1 hora y media"
-  - "inicia temporizador de 1 hora y 1 minuto"
+  - "pon temporizador de 1 hora y media"
+  - "ajusta temporizador de 1 hora y 1 minuto"
   - "inicia temporizador de 1 hora y 8 minutos"
-  - "inicia temporizador de 5 horas y 15 minutos"
-  - "inicia temporizador de 5 horas y media"
+  - "pon temporizador de 5 horas y 15 minutos"
+  - "ajusta temporizador de 5 horas y media"
 
   - "cancela el temporizador"
+  - "cancela temporizador"
   - "cancela todos los temporizadores"
+  - "cancela los temporizadores"
   - "pausa el temporizador"
+  - "pausa temporizador"
   - "continúa el temporizador"
+  - "continúa temporizador"
   - "estado de temporizador"
+  - "estado del temporizador"
+  - "estado temporizador"
   - "estado de mi temporizador"
   - "cuánto falta para el temporizador"
 
@@ -79,6 +87,10 @@ sentences:
   - "cuál es la temperatura"
   - "cuál es la temperatura en Cocina"
   - "cuál es la temperatura de EcoBee"
+  - "qué temperatura hace"
+  - "cuánto calor hace"
+  - "cuánto calor hace en Cocina"
 
   # sensors
   - "cuál es la Humedad Exterior"
+  - "cómo está Humedad Exterior"
