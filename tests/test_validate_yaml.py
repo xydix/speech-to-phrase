@@ -1,6 +1,6 @@
 """Validate sentence YAML files."""
 
-from typing import Any
+from typing import Any, Dict, Optional
 
 import pytest
 import voluptuous as vol
@@ -24,12 +24,24 @@ MODULE_DIR = PROGRAM_DIR / "speech_to_phrase"
 SENTENCES_DIR = MODULE_DIR / "sentences"
 
 
-def _visit_expression(e: Expression, visitor, visitor_arg: Any):
+def _visit_expression(
+    e: Expression,
+    visitor,
+    visitor_arg: Any,
+    expansion_rules: Optional[Dict[str, Sentence]] = None,
+):
     result = visitor(e, visitor_arg)
     if isinstance(e, Group):
         grp: Group = e
         for item in grp.items:
-            _visit_expression(item, visitor, result)
+            _visit_expression(item, visitor, result, expansion_rules=expansion_rules)
+    elif isinstance(e, RuleReference) and expansion_rules:
+        rule_ref: RuleReference = e
+        rule = expansion_rules.get(rule_ref.rule_name)
+        if rule is not None:
+            _visit_expression(
+                rule.expression, visitor, visitor_arg, expansion_rules=expansion_rules
+            )
 
 
 def no_rule_references(sentence: str):
@@ -79,7 +91,7 @@ def no_alternative_list_references(sentence: str):
     return sentence
 
 
-def get_slots(sentence: Sentence) -> set[str]:
+def get_slots(sentence: Sentence, expansion_rules: Dict[str, Sentence]) -> set[str]:
     """Get the used list/slot names in a sentence."""
     slot_names: set[str] = set()
 
@@ -88,7 +100,9 @@ def get_slots(sentence: Sentence) -> set[str]:
             list_ref: ListReference = e
             slot_names.add(list_ref.slot_name)
 
-    _visit_expression(sentence.expression, visitor, None)
+    _visit_expression(
+        sentence.expression, visitor, None, expansion_rules=expansion_rules
+    )
     return slot_names
 
 
@@ -233,12 +247,19 @@ def test_validate_sentences(language: str) -> None:
             f"file={lang_sentences_path}"
         )
 
+    expansion_rules = {
+        rule_name: parse_sentence(rule_body)
+        for rule_name, rule_body in lang_sentences_dict.get(
+            "expansion_rules", {}
+        ).items()
+    }
+
     # Check that {name} is used appropriately
     for sentence_info in lang_sentences_dict["data"]:
         if isinstance(sentence_info, str):
             # Sentence template
             sentence = parse_sentence(sentence_info)
-            assert name_lists.isdisjoint(get_slots(sentence)), (
+            assert name_lists.isdisjoint(get_slots(sentence, expansion_rules)), (
                 "Sentence templates with {name} must be in a block with domains: "
                 f"sentence={sentence_info}, "
                 f"file={lang_sentences_path}"
@@ -253,7 +274,7 @@ def test_validate_sentences(language: str) -> None:
 
         for sentence_text in sentence_info["sentences"]:
             sentence = parse_sentence(sentence_text)
-            assert not name_lists.isdisjoint(get_slots(sentence)), (
+            assert not name_lists.isdisjoint(get_slots(sentence, expansion_rules)), (
                 "Sentences in a block must contain {name}: "
                 f"sentence={sentence_text}, "
                 f"file={lang_sentences_path}"

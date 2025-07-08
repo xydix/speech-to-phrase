@@ -49,6 +49,9 @@ class Model:
     # Coqui STT
     sentence_prob_threshold: Optional[float] = None
 
+    # Shared
+    arpa_method: str = "kneser_ney"
+
 
 MODELS: Dict[str, Model] = {
     Language.ENGLISH.value: Model(
