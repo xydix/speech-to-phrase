@@ -1,1 +1,161 @@
+---
+language: "sv"
 
+lists:
+  color:
+    - "vit"
+    - "svart"
+    - "röd"
+    - "orange"
+    - "gul"
+    - "grön"
+    - "blå"
+    - "lila"
+    - "brun"
+    - "rosa"
+    - "turkos"
+
+wildcards:
+  - "todo_item"
+
+data:
+  # avbryt
+  - "glöm det"
+
+  # datum och tid
+  - "(vad är|vad är klockan)"
+  - "hur mycket är klockan [[just ]nu]"
+  - "(vad är|vilket är) datumet [idag]"
+  - "(vad är|vilket är) dagens datum"
+
+  # väder
+  - "(hur är|vad är) vädret [just nu]"
+  - sentences:
+      - "(hur är|vad är) vädret i {name}"
+      - "(hur är|vad är) {name} väder"
+    domains:
+      - "weather"
+
+  # lampor (områden)
+  - "slå (på|av) [lamporna] [här inne]"
+  - "slå [lamporna] (på|av) [här inne]"
+  - "slå (på|av) [alla|lamporna|alla lampor] i {area}"
+  - "slå (på|av) lamporna i [området|rummet|{area}]"
+  - "ställ in ljusstyrkan [här inne] till {brightness} procent"
+  - "ställ in ljusstyrkan i {area} till {brightness} procent"
+  - "ställ in ljusstyrkan för {area} till {brightness} procent"
+  - "ställ in lamporna [här inne] till {color}"
+  - "ställ in färgen på lamporna [här inne] till {color}"
+  - "ställ in lamporna i {area} till {color}"
+  - "ställ in färgen på lamporna i {area} till {color}"
+  - "ställ in lampor i {area} till {color}"
+
+  # lampor (namngivna)
+  - sentences:
+      - "ställ in ljusstyrkan på {name} till {brightness} procent"
+      - "ställ in {name} ljusstyrka till {brightness} procent"
+    domains:
+      - "light"
+    light_supports_brightness: true
+
+  - sentences:
+      - "ställ in [färgen på] {name} till {color}"
+      - "ställ in {name} färg till {color}"
+    domains:
+      - "light"
+    light_supports_color: true
+
+  # dörrar och fönster
+  - "(öppna|stäng) (persienner|gardiner|fönster) i {area}"
+  - "(öppna|stäng) {area} (persienner|gardiner|fönster)"
+  - sentences:
+      - "(öppna|stäng) {name}"
+      - "(öppna|stäng) {name} i {area}"
+      - "är {name} (öppen|stängd)"
+    domains:
+      - "cover"
+
+  # lås
+  - sentences:
+      - "(lås|lås upp) {name}"
+      - "är {name} (låst|olåst)"
+    domains:
+      - "lock"
+
+  # allmänt på/av
+  - sentences:
+      - "slå (på|av) {name}"
+      - "slå {name} (på|av)"
+      - "slå (på|av) {name} i {area}"
+      - "slå {name} i {area} (på|av)"
+    domains:
+      - "light"
+      - "switch"
+      - "fan"
+      - "media_player"
+      - "input_boolean"
+
+  # script och scener
+  - sentences:
+      - "kör {name} [script|skript]"
+    domains:
+      - "script"
+
+  - sentences:
+      - "aktivera {name} [scen]"
+    domains:
+      - "scene"
+
+  # timers
+  - "(sätt|starta|skapa) en timer på {seconds} sekunder"
+  - "(sätt|starta|skapa) en timer på 1 minut"
+  - "(sätt|starta|skapa) en timer på {minutes} minuter"
+  - "(sätt|starta|skapa) en timer på 1 minut och {seconds} sekunder"
+  - "(sätt|starta|skapa) en timer på {minutes} minuter och {seconds} sekunder"
+  - "(sätt|starta|skapa) en timer på {minutes} och en halv minut"
+  - "(sätt|starta|skapa) en timer på 1 timme"
+  - "(sätt|starta|skapa) en timer på {hours} timmar"
+  - "(sätt|starta|skapa) en timer på {hours} och en halv timme"
+  - "(sätt|starta|skapa) en timer på 1 timme och 1 minut"
+  - "(sätt|starta|skapa) en timer på 1 timme och {minutes} minuter"
+  - "(sätt|starta|skapa) en timer på {hours} timmar och {minutes} minuter"
+
+  - "(avbryt|stoppa) [timern|min timer]"
+  - "(avbryt|stoppa) alla timers"
+  - "(pausa|återuppta) [timern|min timer]"
+  - "timerstatus"
+  - "status på [timern|min timer|mina timers]"
+  - "[hur mycket] tid är kvar på [timern|min timer|mina timers]"
+
+  # media
+  - "(pausa|återuppta)"
+  - "nästa [spår|låt|klipp]"
+  - "hoppa över [denna] [låt|spår]"
+  - sentences:
+      - "(pausa|återuppta) {name}"
+      - "nästa [spår|klipp] på {name}"
+      - "hoppa över [spår|låt] på {name}"
+    domains:
+      - "media_player"
+
+  # temperatur
+  - "(vad är|hur är) temperaturen"
+  - "(vad är|hur är) temperaturen i {area}"
+  - "(vad är|hur är) {area} temperatur"
+  - sentences:
+      - "(vad är|hur är) temperaturen för {name}"
+      - "(vad är|hur är) {name} temperatur"
+    domains:
+      - "climate"
+
+  # sensorer
+  - sentences:
+      - "vad är värdet på {name}"
+    domains:
+      - "sensor"
+
+  # att göra
+  - sentences:
+      - "lägg till {todo_item} i [min|min] {name}"
+    domains:
+      - "todo"
