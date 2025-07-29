@@ -24,11 +24,10 @@ data:
   - "det var inget"
 
   # date and time
-  - "vad är klockan"
-  - "hur mycket är klockan [[just ]nu]"
+  - "(vad är|hur mycket är) klockan [[just ]nu]"
   - "(vad är|vilket är) datumet [idag]"
-  - "(vad är|vilket är) datumet [idag]" #fixa detta
   - "(vad är|vilket är) dagens datum"
+  - "vad är det för datum [idag]"
 
   # weather
   - "(hur är|vad är) vädret [just nu]"
@@ -38,14 +37,17 @@ data:
     domains:
       - "weather"
 
-  # lampor (områden)
+  # lights (area))
   - "slå (på|av) [lamporna] [här inne]"
-  - "slå [lamporna] (på|av) [här inne]"
+  - "(tänd|släck) [lamporna] [här inne]"
+  - "slå [lamporna] (på|av) [här inne]" #tveksam***********
   - "slå (på|av) [alla|lamporna|alla lampor] i {area}"
-  - "slå (på|av) lamporna i [området|rummet|{area}]"
+  - "(tänd|släck) [alla|lamporna|alla lampor] i {area}"
   - "ställ in ljusstyrkan [här inne] till {brightness} procent"
-  - "ställ in ljusstyrkan i {area} till {brightness} procent"
-  - "ställ in ljusstyrkan för {area} till {brightness} procent"
+  - "(höj|sänk) ljusstyrkan [här inne] till {brightness} procent"
+  - "ställ in ljusstyrkan [i|för] {area} till {brightness} procent" #testa detta
+  - "(höj|sänk) ljusstyrkan i {area} till {brightness} procent"
+  - "ställ in ljusstyrkan för {area} till {brightness} procent" #kanske kan tas bort
   - "ställ in lamporna [här inne] till {color}"
   - "ställ in färgen på lamporna [här inne] till {color}"
   - "ställ in lamporna i {area} till {color}"
