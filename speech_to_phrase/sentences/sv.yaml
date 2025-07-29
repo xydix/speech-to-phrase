@@ -19,16 +19,18 @@ wildcards:
   - "todo_item"
 
 data:
-  # avbryt
+  # cancel
   - "glöm det"
+  - "det var inget"
 
-  # datum och tid
-  - "(vad är|vad är klockan)"
+  # date and time
+  - "vad är klockan"
   - "hur mycket är klockan [[just ]nu]"
   - "(vad är|vilket är) datumet [idag]"
+  - "(vad är|vilket är) datumet [idag]" #fixa detta
   - "(vad är|vilket är) dagens datum"
 
-  # väder
+  # weather
   - "(hur är|vad är) vädret [just nu]"
   - sentences:
       - "(hur är|vad är) vädret i {name}"
